@@ -1,0 +1,7 @@
+.streamlit/
+secrets.toml
+*.toml
+__pycache__/
+*.pyc
+.env
+bulwise_analytics.db
