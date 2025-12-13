@@ -481,32 +481,49 @@ if st.session_state.workflow_step == 1:
     )
     
     st.session_state.initial_query = user_query
-
-# Quick start examples
-st.markdown("**Quick Start Examples:**")
-col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    if st.button("📹 Video\nProduction", use_container_width=True):
-        st.session_state['example_query'] = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
-        st.rerun()
-
-with col2:
-    if st.button("✍️ Content\nMarketing", use_container_width=True):
-        st.session_state['example_query'] = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
-        st.rerun()
-
-with col3:
-    if st.button("💻 Software\nDevelopment", use_container_width=True):
-        st.session_state['example_query'] = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
-        st.rerun()
-
-with col4:
-    if st.button("🎙️ Podcast\nProduction", use_container_width=True):
-        st.session_state['example_query'] = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
-        st.rerun()
-
-st.markdown("---")
+    
+    # Quick start examples
+    st.markdown("**Quick Start Examples:**")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        if st.button("📹 Video\nProduction", use_container_width=True):
+            st.session_state['example_query'] = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
+            st.rerun()
+    
+    with col2:
+        if st.button("✍️ Content\nMarketing", use_container_width=True):
+            st.session_state['example_query'] = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
+            st.rerun()
+    
+    with col3:
+        if st.button("💻 Software\nDevelopment", use_container_width=True):
+            st.session_state['example_query'] = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
+            st.rerun()
+    
+    with col4:
+        if st.button("🎙️ Podcast\nProduction", use_container_width=True):
+            st.session_state['example_query'] = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
+            st.rerun()
+    
+    st.markdown("---")
+    
+    # Continue button for Step 1
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        continue_button = st.button(
+            "Continue →",
+            type="primary",
+            use_container_width=True,
+            disabled=not st.session_state.initial_query.strip()
+        )
+        
+        if continue_button:
+            st.session_state.workflow_step = 2
+            # Clear example_query so it doesn't interfere
+            if 'example_query' in st.session_state:
+                del st.session_state['example_query']
+            st.rerun()
 
 # STEP 2: Clarifying Questions
 elif st.session_state.workflow_step == 2:
@@ -582,30 +599,8 @@ elif st.session_state.workflow_step == 2:
             st.session_state.workflow_step = 3
             st.rerun()
 
-# Continue button for Step 1
-if st.session_state.workflow_step == 1:
-    st.markdown("---")
-    
-    col1, col2 = st.columns([3, 1])
-    with col2:
-        continue_button = st.button(
-            "Continue →",
-            type="primary",
-            use_container_width=True,
-            disabled=not st.session_state.initial_query.strip()
-        )
-        
-        if continue_button:
-            st.session_state.workflow_step = 2
-            # Clear example_query so it doesn't interfere
-            if 'example_query' in st.session_state:
-                del st.session_state['example_query']
-            st.rerun()
-
-st.markdown("---")
-
 # STEP 3: Generate Report
-if st.session_state.workflow_step == 3:
+elif st.session_state.workflow_step == 3:
     # Build complete query with clarifying answers
     user_query = st.session_state.initial_query
     
@@ -631,11 +626,10 @@ if st.session_state.workflow_step == 3:
     if st.button("← Edit Request"):
         st.session_state.workflow_step = 1
         st.rerun()
-
-st.markdown("---")
-
-# Check rate limit and display status (only show on step 3)
-if st.session_state.workflow_step == 3:
+    
+    st.markdown("---")
+    
+    # Check rate limit and display status
     allowed, query_count, next_reset = check_rate_limit()
     
     # Display usage status
