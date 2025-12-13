@@ -348,6 +348,57 @@ if not api_key:
         st.info("💡 **No API key?** Get one at [console.anthropic.com](https://console.anthropic.com)")
         st.stop()
 
+# ============================================================================
+# HIDDEN ADMIN SECTION (Password Protected)
+# ============================================================================
+
+# Add small password input in sidebar (only visible if sidebar expanded)
+with st.sidebar:
+    admin_password = st.text_input("🔒", type="password", key="admin_pass", help="Admin access")
+    
+    if admin_password == "bulwise2024":  # Change this password!
+        st.success("✅ Admin access granted")
+        
+        # Show admin panel
+        st.markdown("---")
+        st.markdown("### 📊 Admin Panel")
+        
+        # Download database button
+        if st.button("💾 Download Analytics Database"):
+            try:
+                with open('bulwise_analytics.db', 'rb') as f:
+                    st.download_button(
+                        label="⬇️ Click to Download",
+                        data=f,
+                        file_name='bulwise_analytics.db',
+                        mime='application/octet-stream'
+                    )
+            except FileNotFoundError:
+                st.warning("No database file found yet")
+        
+        # Show quick stats
+        try:
+            conn = sqlite3.connect('bulwise_analytics.db')
+            c = conn.cursor()
+            
+            # Total queries
+            c.execute("SELECT COUNT(*) FROM queries")
+            total = c.fetchone()[0]
+            st.metric("Total Queries", total)
+            
+            # Recent queries
+            c.execute("SELECT user_query, timestamp FROM queries ORDER BY timestamp DESC LIMIT 5")
+            recent = c.fetchall()
+            
+            if recent:
+                st.markdown("**Recent Queries:**")
+                for query, timestamp in recent:
+                    st.text(f"{timestamp[:10]}: {query[:50]}...")
+            
+            conn.close()
+        except Exception as e:
+            st.info("No analytics data yet")
+
 # Header
 st.markdown("# 🎯 Strategic AI Advisory")
 st.markdown("### Get professional recommendations tailored to your needs")
