@@ -846,121 +846,121 @@ TONE GUIDELINES:
 
 DATABASE:
 {json.dumps(database['ai_tools'], indent=2)}"""
-            
-            status_text.text("📊 Researching market data... (30%)")
-            progress_bar.progress(30)
+                
+                status_text.text("📊 Researching market data... (30%)")
+                progress_bar.progress(30)
 
-            status_text.text("🤖 Generating strategic recommendations... (50%)")
-            progress_bar.progress(50)
-            
-            message = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=4000,
-                tools=[{"type": "web_search_20250305", "name": "web_search"}],
-                system=[{
-                    "type": "text",
-                    "text": system_prompt,
-                    "cache_control": {"type": "ephemeral"}
-                }],
-                messages=[{"role": "user", "content": user_query}]
-            )
-            
-            status_text.text("✨ Finalizing report... (80%)")
-            progress_bar.progress(80)
-            
-            # Extract text from response (handling tool use blocks)
-            response_text = ""
-            for block in message.content:
-                if hasattr(block, 'text'):
-                    response_text += block.text
-            
-            status_text.text("✅ Report complete! (100%)")
-            progress_bar.progress(100)
-            
-            # Clear progress indicators after brief pause
-            import time
-            time.sleep(0.5)
-            progress_bar.empty()
-            status_text.empty()
-            
-            # Display the report
-            st.markdown('<div class="whitepaper-section">', unsafe_allow_html=True)
-            st.markdown('<div class="whitepaper-header">Strategic Advisory Report</div>', unsafe_allow_html=True)
-            st.markdown(response_text)
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Log query for analytics
-            log_query(
-                user_query=user_query,
-                recommended_tools=None,
-                response_time=None
-            )
-            
-            # Increment usage counter
-            new_count = increment_usage()
-            
-            # Show success message
-            remaining = 3 - new_count
-            if remaining > 0:
-                st.success(f"✅ Report generated successfully! You have {remaining} reports remaining this month.")
-            else:
-                st.info("✅ Report generated! This was your last free report this month. Resets on " + 
-                       next_reset.strftime('%B %d, %Y'))
-            
-            # Feedback section
-            st.markdown("---")
-            st.markdown("### 💬 Quick Feedback")
-            
-            col1, col2, col3 = st.columns([2, 1, 1])
-            
-            with col1:
-                st.markdown("**Was this report helpful?**")
-            
-            with col2:
-                if st.button("👍 Yes, helpful", key="feedback_yes", use_container_width=True):
-                    log_feedback(user_query, "positive", None)
-                    st.success("Thank you for your feedback!")
-                    st.session_state.feedback_given = True
-            
-            with col3:
-                if st.button("👎 Not helpful", key="feedback_no", use_container_width=True):
-                    st.session_state.show_feedback_form = True
-            
-            # If they clicked "Not helpful", show form for details
-            if st.session_state.get('show_feedback_form', False) and not st.session_state.get('feedback_given', False):
-                feedback_text = st.text_area(
-                    "What could we improve?",
-                    placeholder="Tell us what was missing or could be better...",
-                    key="feedback_details"
+                status_text.text("🤖 Generating strategic recommendations... (50%)")
+                progress_bar.progress(50)
+                
+                message = client.messages.create(
+                    model="claude-sonnet-4-20250514",
+                    max_tokens=4000,
+                    tools=[{"type": "web_search_20250305", "name": "web_search"}],
+                    system=[{
+                        "type": "text",
+                        "text": system_prompt,
+                        "cache_control": {"type": "ephemeral"}
+                    }],
+                    messages=[{"role": "user", "content": user_query}]
                 )
                 
-                if st.button("Submit Feedback", type="primary"):
-                    log_feedback(user_query, "negative", feedback_text)
-                    st.success("Thank you for your feedback! We'll use this to improve.")
-                    st.session_state.feedback_given = True
-                    st.session_state.show_feedback_form = False
-            
-            # Reset workflow for new query
-            if st.button("📝 Generate Another Report", type="primary"):
-                st.session_state.workflow_step = 1
-                st.session_state.initial_query = ''
-                st.session_state.clarifying_answers = {}
-                if 'feedback_given' in st.session_state:
-                    del st.session_state.feedback_given
-                if 'show_feedback_form' in st.session_state:
-                    del st.session_state.show_feedback_form
-                st.rerun()
-            
-        except anthropic.APIError as e:
-            st.error(f"API Error: {str(e)}")
-            if "credit balance" in str(e).lower():
-                st.info("Please add credits to your Anthropic account at console.anthropic.com")
-        except AttributeError as e:
-            st.error("Response parsing error - this is usually due to tool use blocks in the API response")
-            st.info("💡 The response format was unexpected. Please try again. The issue has been logged.")
-        except Exception as e:
-            st.error(f"Unexpected error: {str(e)}")
-            st.info("💡 Please try again. If the issue persists, contact support.")
+                status_text.text("✨ Finalizing report... (80%)")
+                progress_bar.progress(80)
+                
+                # Extract text from response (handling tool use blocks)
+                response_text = ""
+                for block in message.content:
+                    if hasattr(block, 'text'):
+                        response_text += block.text
+                
+                status_text.text("✅ Report complete! (100%)")
+                progress_bar.progress(100)
+                
+                # Clear progress indicators after brief pause
+                import time
+                time.sleep(0.5)
+                progress_bar.empty()
+                status_text.empty()
+                
+                # Display the report
+                st.markdown('<div class="whitepaper-section">', unsafe_allow_html=True)
+                st.markdown('<div class="whitepaper-header">Strategic Advisory Report</div>', unsafe_allow_html=True)
+                st.markdown(response_text)
+                st.markdown('</div>', unsafe_allow_html=True)
+                
+                # Log query for analytics
+                log_query(
+                    user_query=user_query,
+                    recommended_tools=None,
+                    response_time=None
+                )
+                
+                # Increment usage counter
+                new_count = increment_usage()
+                
+                # Show success message
+                remaining = 3 - new_count
+                if remaining > 0:
+                    st.success(f"✅ Report generated successfully! You have {remaining} reports remaining this month.")
+                else:
+                    st.info("✅ Report generated! This was your last free report this month. Resets on " + 
+                           next_reset.strftime('%B %d, %Y'))
+                
+                # Feedback section
+                st.markdown("---")
+                st.markdown("### 💬 Quick Feedback")
+                
+                col1, col2, col3 = st.columns([2, 1, 1])
+                
+                with col1:
+                    st.markdown("**Was this report helpful?**")
+                
+                with col2:
+                    if st.button("👍 Yes, helpful", key="feedback_yes", use_container_width=True):
+                        log_feedback(user_query, "positive", None)
+                        st.success("Thank you for your feedback!")
+                        st.session_state.feedback_given = True
+                
+                with col3:
+                    if st.button("👎 Not helpful", key="feedback_no", use_container_width=True):
+                        st.session_state.show_feedback_form = True
+                
+                # If they clicked "Not helpful", show form for details
+                if st.session_state.get('show_feedback_form', False) and not st.session_state.get('feedback_given', False):
+                    feedback_text = st.text_area(
+                        "What could we improve?",
+                        placeholder="Tell us what was missing or could be better...",
+                        key="feedback_details"
+                    )
+                    
+                    if st.button("Submit Feedback", type="primary"):
+                        log_feedback(user_query, "negative", feedback_text)
+                        st.success("Thank you for your feedback! We'll use this to improve.")
+                        st.session_state.feedback_given = True
+                        st.session_state.show_feedback_form = False
+                
+                # Reset workflow for new query
+                if st.button("📝 Generate Another Report", type="primary"):
+                    st.session_state.workflow_step = 1
+                    st.session_state.initial_query = ''
+                    st.session_state.clarifying_answers = {}
+                    if 'feedback_given' in st.session_state:
+                        del st.session_state.feedback_given
+                    if 'show_feedback_form' in st.session_state:
+                        del st.session_state.show_feedback_form
+                    st.rerun()
+                
+            except anthropic.APIError as e:
+                st.error(f"API Error: {str(e)}")
+                if "credit balance" in str(e).lower():
+                    st.info("Please add credits to your Anthropic account at console.anthropic.com")
+            except AttributeError as e:
+                st.error("Response parsing error - this is usually due to tool use blocks in the API response")
+                st.info("💡 The response format was unexpected. Please try again. The issue has been logged.")
+            except Exception as e:
+                st.error(f"Unexpected error: {str(e)}")
+                st.info("💡 Please try again. If the issue persists, contact support.")
 
 # Footer
 st.markdown("---")
