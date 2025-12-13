@@ -100,6 +100,14 @@ def init_analytics_db():
                   total_queries INTEGER,
                   total_visits INTEGER)''')
     
+    c.execute('''CREATE TABLE IF NOT EXISTS feedback
+                 (feedback_id TEXT PRIMARY KEY,
+                  timestamp TEXT,
+                  user_query TEXT,
+                  sentiment TEXT,
+                  feedback_text TEXT,
+                  user_session_id TEXT)''')
+    
     conn.commit()
     conn.close()
 
@@ -235,6 +243,25 @@ def log_query(user_query, recommended_tools=None, response_time=None):
         
     except Exception as e:
         st.error(f"Analytics logging error: {str(e)}")
+
+def log_feedback(user_query, sentiment, feedback_text):
+    """Log user feedback to analytics database."""
+    try:
+        feedback_id = hashlib.md5(f"{user_query}{datetime.now().timestamp()}".encode()).hexdigest()
+        timestamp = datetime.now().isoformat()
+        browser_id = get_browser_id()
+        
+        conn = sqlite3.connect('bulwise_analytics.db')
+        c = conn.cursor()
+        
+        c.execute("""INSERT INTO feedback VALUES (?, ?, ?, ?, ?, ?)""",
+                  (feedback_id, timestamp, user_query, sentiment, feedback_text, browser_id))
+        
+        conn.commit()
+        conn.close()
+        
+    except Exception as e:
+        st.error(f"Feedback logging error: {str(e)}")
 
 # ============================================================================
 # LOAD DATABASE
@@ -423,14 +450,37 @@ with st.expander("ℹ️ What you'll receive", expanded=False):
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# User input
-user_query = st.text_area(
-    "**📝 Describe Your Requirements:**",
-    value=st.session_state.get('example_query', ''),
-    height=180,
-    placeholder="Example: I'm a marketing consultant working with 5-10 small business clients simultaneously. I need to create weekly content (blog posts, social media, email campaigns) efficiently. Budget is $100-150/month. I have intermediate technical skills and need tools that integrate well together. Timeline: implement within 2 weeks.",
-    help="Be specific about your use case, budget, team size, and timeline for best results."
-)
+# Initialize step tracking
+if 'workflow_step' not in st.session_state:
+    st.session_state.workflow_step = 1
+if 'initial_query' not in st.session_state:
+    st.session_state.initial_query = ''
+if 'clarifying_answers' not in st.session_state:
+    st.session_state.clarifying_answers = {}
+
+# STEP 1: Initial Query
+if st.session_state.workflow_step == 1:
+    st.markdown("""
+    <div style='background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2E7D32; margin-bottom: 1.5rem;'>
+        <h4 style='margin-top: 0; color: #2E7D32;'>💡 For Best Results, Include:</h4>
+        <ul style='margin-bottom: 0;'>
+            <li>What you're trying to accomplish</li>
+            <li>Team size and budget (if relevant)</li>
+            <li>Current blockers or constraints</li>
+            <li>Timeline or urgency</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    user_query = st.text_area(
+        "**📝 Describe Your Situation:**",
+        value=st.session_state.get('example_query', st.session_state.initial_query),
+        height=180,
+        placeholder="Example: I'm a marketing consultant working with 5-10 small business clients simultaneously. I need to create weekly content (blog posts, social media, email campaigns) efficiently. Budget is $100-150/month. I have intermediate technical skills and need tools that integrate well together. Timeline: implement within 2 weeks.",
+        key="initial_query_input"
+    )
+    
+    st.session_state.initial_query = user_query
 
 # Quick start examples
 st.markdown("**Quick Start Examples:**")
@@ -458,50 +508,177 @@ with col4:
 
 st.markdown("---")
 
-# Check rate limit and display status
-allowed, query_count, next_reset = check_rate_limit()
-
-# Display usage status
-col1, col2 = st.columns([3, 1])
-with col1:
-    if allowed:
-        remaining = 3 - query_count
-        if remaining == 3:
-            st.info(f"ℹ️ Free tier: {remaining} advisory reports remaining this month")
-        elif remaining == 2:
-            st.info(f"ℹ️ {remaining} advisory reports remaining this month")
-        else:
-            st.warning(f"⚠️ Only {remaining} advisory report remaining this month. Resets on {next_reset.strftime('%B %d, %Y')}")
-    else:
-        st.error(f"🚫 Monthly limit reached (3 free reports). Resets on {next_reset.strftime('%B %d, %Y')}")
-        st.info("💡 Want unlimited reports? Contact: hello@bulwise.io")
-
-with col2:
-    generate_button = st.button(
-        "📊 Generate Advisory",
-        type="primary",
-        use_container_width=True,
-        disabled=not allowed or not user_query.strip()
-    )
-
-# Generate advisory report
-if generate_button and user_query.strip():
+# STEP 2: Clarifying Questions
+elif st.session_state.workflow_step == 2:
+    st.markdown("### 🔍 Quick Clarifying Questions")
+    st.markdown("*Help us refine your recommendations (optional)*")
+    st.markdown("<br>", unsafe_allow_html=True)
     
-    with st.spinner(""):
-        try:
-            client = anthropic.Anthropic(api_key=api_key)
-            
-            # Create progress tracking
-            progress_container = st.container()
-            with progress_container:
-                progress_bar = st.progress(0)
-                status_text = st.empty()
-            
-            status_text.text("🔍 Analyzing your requirements... (10%)")
-            progress_bar.progress(10)
-            
-            # System prompt (keeping full prompt from original)
-            system_prompt = f"""You are Bulwise, a strategic AI implementation advisory service. Generate professional, data-driven reports for clients seeking AI tool recommendations.
+    # Show what they entered
+    with st.expander("📝 Your Initial Request", expanded=False):
+        st.write(st.session_state.initial_query)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Clarifying questions
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        team_size = st.selectbox(
+            "**Team Size:**",
+            ["Not specified", "Individual (just me)", "Small team (2-10)", "Medium team (11-50)", "Large team (50+)"],
+            index=0,
+            key="team_size_select"
+        )
+        
+        timeline = st.selectbox(
+            "**Implementation Timeline:**",
+            ["Not specified", "Urgent (need now)", "Within 2 weeks", "Within 1 month", "Within 3 months", "Flexible timeline"],
+            index=0,
+            key="timeline_select"
+        )
+    
+    with col2:
+        budget = st.selectbox(
+            "**Monthly Budget Range:**",
+            ["Not specified", "Under $50/month", "$50-$200/month", "$200-$500/month", "$500-$1,000/month", "$1,000+/month"],
+            index=0,
+            key="budget_select"
+        )
+        
+        experience = st.selectbox(
+            "**Technical Experience:**",
+            ["Not specified", "Beginner (need easy tools)", "Intermediate (comfortable with tech)", "Advanced (can handle complexity)"],
+            index=0,
+            key="experience_select"
+        )
+    
+    # Save answers
+    st.session_state.clarifying_answers = {
+        'team_size': team_size if team_size != "Not specified" else None,
+        'budget': budget if budget != "Not specified" else None,
+        'timeline': timeline if timeline != "Not specified" else None,
+        'experience': experience if experience != "Not specified" else None
+    }
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Navigation buttons
+    col1, col2, col3 = st.columns([1, 1, 1])
+    
+    with col1:
+        if st.button("← Back", use_container_width=True):
+            st.session_state.workflow_step = 1
+            st.rerun()
+    
+    with col2:
+        if st.button("Skip Questions →", use_container_width=True):
+            st.session_state.clarifying_answers = {}
+            st.session_state.workflow_step = 3
+            st.rerun()
+    
+    with col3:
+        if st.button("Continue →", type="primary", use_container_width=True):
+            st.session_state.workflow_step = 3
+            st.rerun()
+
+# Continue button for Step 1
+if st.session_state.workflow_step == 1:
+    st.markdown("---")
+    
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        continue_button = st.button(
+            "Continue →",
+            type="primary",
+            use_container_width=True,
+            disabled=not st.session_state.initial_query.strip()
+        )
+        
+        if continue_button:
+            st.session_state.workflow_step = 2
+            # Clear example_query so it doesn't interfere
+            if 'example_query' in st.session_state:
+                del st.session_state['example_query']
+            st.rerun()
+
+st.markdown("---")
+
+# STEP 3: Generate Report
+if st.session_state.workflow_step == 3:
+    # Build complete query with clarifying answers
+    user_query = st.session_state.initial_query
+    
+    if any(st.session_state.clarifying_answers.values()):
+        clarifications = []
+        if st.session_state.clarifying_answers.get('team_size'):
+            clarifications.append(f"Team size: {st.session_state.clarifying_answers['team_size']}")
+        if st.session_state.clarifying_answers.get('budget'):
+            clarifications.append(f"Budget: {st.session_state.clarifying_answers['budget']}")
+        if st.session_state.clarifying_answers.get('timeline'):
+            clarifications.append(f"Timeline: {st.session_state.clarifying_answers['timeline']}")
+        if st.session_state.clarifying_answers.get('experience'):
+            clarifications.append(f"Technical experience: {st.session_state.clarifying_answers['experience']}")
+        
+        user_query += "\n\nAdditional context: " + "; ".join(clarifications)
+    
+    # Show summary
+    st.markdown("### 📋 Review Your Request")
+    with st.expander("View full request", expanded=True):
+        st.write(user_query)
+    
+    # Back button
+    if st.button("← Edit Request"):
+        st.session_state.workflow_step = 1
+        st.rerun()
+
+st.markdown("---")
+
+# Check rate limit and display status (only show on step 3)
+if st.session_state.workflow_step == 3:
+    allowed, query_count, next_reset = check_rate_limit()
+    
+    # Display usage status
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        if allowed:
+            remaining = 3 - query_count
+            if remaining == 3:
+                st.info(f"ℹ️ Free tier: {remaining} advisory reports remaining this month")
+            elif remaining == 2:
+                st.info(f"ℹ️ {remaining} advisory reports remaining this month")
+            else:
+                st.warning(f"⚠️ Only {remaining} advisory report remaining this month. Resets on {next_reset.strftime('%B %d, %Y')}")
+        else:
+            st.error(f"🚫 Monthly limit reached (3 free reports). Resets on {next_reset.strftime('%B %d, %Y')}")
+            st.info("💡 Want unlimited reports? Contact: hello@bulwise.io")
+    
+    with col2:
+        generate_button = st.button(
+            "📊 Generate Advisory",
+            type="primary",
+            use_container_width=True,
+            disabled=not allowed or not user_query.strip()
+        )
+    
+    # Generate advisory report
+    if generate_button and user_query.strip():
+        
+        with st.spinner(""):
+            try:
+                client = anthropic.Anthropic(api_key=api_key)
+                
+                # Create progress tracking
+                progress_container = st.container()
+                with progress_container:
+                    progress_bar = st.progress(0)
+                    status_text = st.empty()
+                
+                status_text.text("🔍 Analyzing your requirements... (10%)")
+                progress_bar.progress(10)
+                
+                # System prompt (keeping full prompt from original)
+                system_prompt = f"""You are Bulwise, a strategic AI implementation advisory service. Generate professional, data-driven reports for clients seeking AI tool recommendations.
 
 You have access to:
 1. A comprehensive database of {len(database['ai_tools'])} AI tools with detailed specifications
@@ -735,6 +912,50 @@ DATABASE:
             else:
                 st.info("✅ Report generated! This was your last free report this month. Resets on " + 
                        next_reset.strftime('%B %d, %Y'))
+            
+            # Feedback section
+            st.markdown("---")
+            st.markdown("### 💬 Quick Feedback")
+            
+            col1, col2, col3 = st.columns([2, 1, 1])
+            
+            with col1:
+                st.markdown("**Was this report helpful?**")
+            
+            with col2:
+                if st.button("👍 Yes, helpful", key="feedback_yes", use_container_width=True):
+                    log_feedback(user_query, "positive", None)
+                    st.success("Thank you for your feedback!")
+                    st.session_state.feedback_given = True
+            
+            with col3:
+                if st.button("👎 Not helpful", key="feedback_no", use_container_width=True):
+                    st.session_state.show_feedback_form = True
+            
+            # If they clicked "Not helpful", show form for details
+            if st.session_state.get('show_feedback_form', False) and not st.session_state.get('feedback_given', False):
+                feedback_text = st.text_area(
+                    "What could we improve?",
+                    placeholder="Tell us what was missing or could be better...",
+                    key="feedback_details"
+                )
+                
+                if st.button("Submit Feedback", type="primary"):
+                    log_feedback(user_query, "negative", feedback_text)
+                    st.success("Thank you for your feedback! We'll use this to improve.")
+                    st.session_state.feedback_given = True
+                    st.session_state.show_feedback_form = False
+            
+            # Reset workflow for new query
+            if st.button("📝 Generate Another Report", type="primary"):
+                st.session_state.workflow_step = 1
+                st.session_state.initial_query = ''
+                st.session_state.clarifying_answers = {}
+                if 'feedback_given' in st.session_state:
+                    del st.session_state.feedback_given
+                if 'show_feedback_form' in st.session_state:
+                    del st.session_state.show_feedback_form
+                st.rerun()
             
         except anthropic.APIError as e:
             st.error(f"API Error: {str(e)}")
