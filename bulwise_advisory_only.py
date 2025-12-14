@@ -364,11 +364,42 @@ def generate_professional_pptx(report_text, user_query):
         content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
         tf = content_box.text_frame
         tf.word_wrap = True
-        tf.text = content_text[:500]  # Limit length
+        tf.text = content_text[:1500]  # Increased from 500 to 1500
         for paragraph in tf.paragraphs:
-            paragraph.font.size = Pt(16)
+            paragraph.font.size = Pt(14)  # Reduced from 16 to fit more
             paragraph.font.color.rgb = DARK_GRAY
-            paragraph.space_before = Pt(12)
+            paragraph.space_before = Pt(8)  # Reduced from 12
+    
+    # Slide 2.5: Methodology & Analysis (NEW)
+    if 'METHODOLOGY & ANALYSIS' in sections or 'METHODOLOGY AND ANALYSIS' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Methodology & Analysis"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        method_key = 'METHODOLOGY & ANALYSIS' if 'METHODOLOGY & ANALYSIS' in sections else 'METHODOLOGY AND ANALYSIS'
+        method_text = sections[method_key]
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        tf = content_box.text_frame
+        tf.word_wrap = True
+        
+        for line in method_text.split('\n')[:30]:
+            if line.strip() and not line.startswith('#'):
+                p = tf.add_paragraph()
+                p.text = line.strip('- ').strip()
+                p.font.size = Pt(12)
+                p.font.color.rgb = DARK_GRAY
+                p.space_before = Pt(5)
     
     # Slide 3: Recommended Tools
     if 'STRATEGIC RECOMMENDATIONS' in sections:
@@ -492,6 +523,34 @@ def generate_professional_pptx(report_text, user_query):
                     arrow = slide.shapes.add_connector(1, start_x + box_width/2, arrow_start_y, start_x + box_width/2, arrow_end_y)
                     arrow.line.color.rgb = BRAND_GREEN
                     arrow.line.width = Pt(3)
+        
+        # Add Implementation Details slide (NEW - shows full roadmap text)
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Implementation Details"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        tf = content_box.text_frame
+        tf.word_wrap = True
+        
+        for line in roadmap_text.split('\n')[:30]:
+            if line.strip() and not line.startswith('#'):
+                p = tf.add_paragraph()
+                p.text = line.strip('- ').strip()
+                p.font.size = Pt(11)
+                p.font.color.rgb = DARK_GRAY
+                p.space_before = Pt(4)
     
     # Slide 5: Financial Analysis
     if 'FINANCIAL ANALYSIS' in sections:
@@ -517,14 +576,14 @@ def generate_professional_pptx(report_text, user_query):
         tf = content_box.text_frame
         tf.word_wrap = True
         
-        # Extract key financial points
-        for line in finance_text.split('\n')[:10]:  # First 10 lines
+        # Extract key financial points - increased from 10 to 25 lines
+        for line in finance_text.split('\n')[:25]:
             if line.strip() and not line.startswith('#'):
                 p = tf.add_paragraph()
                 p.text = line.strip('- ').strip()
-                p.font.size = Pt(14)
+                p.font.size = Pt(12)  # Reduced from 14 to fit more
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(8)
+                p.space_before = Pt(6)  # Reduced from 8
                 p.level = 1 if line.startswith('**') else 0
     
     # Slide 6: Risk Assessment
@@ -552,13 +611,43 @@ def generate_professional_pptx(report_text, user_query):
         tf = content_box.text_frame
         tf.word_wrap = True
         
-        for line in risk_text.split('\n')[:12]:
+        for line in risk_text.split('\n')[:25]:  # Increased from 12 to 25
             if line.strip() and not line.startswith('#'):
                 p = tf.add_paragraph()
                 p.text = line.strip('- ').strip()
-                p.font.size = Pt(13)
+                p.font.size = Pt(12)  # Reduced from 13 to fit more
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(6)
+                p.space_before = Pt(5)  # Reduced from 6
+    
+    # Slide 7: Alternative Scenarios (NEW)
+    if 'ALTERNATIVE SCENARIOS' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Alternative Scenarios"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        scenarios_text = sections['ALTERNATIVE SCENARIOS']
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        tf = content_box.text_frame
+        tf.word_wrap = True
+        
+        for line in scenarios_text.split('\n')[:30]:
+            if line.strip() and not line.startswith('#'):
+                p = tf.add_paragraph()
+                p.text = line.strip('- ').strip()
+                p.font.size = Pt(11)
+                p.font.color.rgb = DARK_GRAY
+                p.space_before = Pt(4)
     
     # Final Slide: Next Steps
     slide = prs.slides.add_slide(prs.slide_layouts[6])
@@ -804,6 +893,33 @@ if st.session_state.workflow_step == 1:
     </div>
     """, unsafe_allow_html=True)
     
+    # Quick start examples - MOVED BEFORE TEXT AREA
+    st.markdown("**Quick Start Examples:**")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        if st.button("📹 Video\nProduction", use_container_width=True, key="ex_video"):
+            st.session_state.initial_query = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
+            st.rerun()
+    
+    with col2:
+        if st.button("✍️ Content\nMarketing", use_container_width=True, key="ex_content"):
+            st.session_state.initial_query = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
+            st.rerun()
+    
+    with col3:
+        if st.button("💻 Software\nDevelopment", use_container_width=True, key="ex_dev"):
+            st.session_state.initial_query = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
+            st.rerun()
+    
+    with col4:
+        if st.button("🎙️ Podcast\nProduction", use_container_width=True, key="ex_podcast"):
+            st.session_state.initial_query = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
+            st.rerun()
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Text area - now AFTER examples
     user_query = st.text_area(
         "**📝 Describe Your Situation:**",
         value=st.session_state.initial_query,
@@ -813,40 +929,8 @@ if st.session_state.workflow_step == 1:
         help="Click 'Continue →' button below when ready to proceed"
     )
     
-    # Only update initial_query if user manually edited (not from button click)
-    if 'example_clicked' not in st.session_state:
-        st.session_state.initial_query = user_query
-    else:
-        # Example button was clicked, don't overwrite
-        del st.session_state.example_clicked
-    
-    # Quick start examples
-    st.markdown("**Quick Start Examples:**")
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        if st.button("📹 Video\nProduction", use_container_width=True, key="ex_video"):
-            st.session_state.initial_query = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
-            st.session_state.example_clicked = True
-            st.rerun()
-    
-    with col2:
-        if st.button("✍️ Content\nMarketing", use_container_width=True, key="ex_content"):
-            st.session_state.initial_query = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
-            st.session_state.example_clicked = True
-            st.rerun()
-    
-    with col3:
-        if st.button("💻 Software\nDevelopment", use_container_width=True, key="ex_dev"):
-            st.session_state.initial_query = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
-            st.session_state.example_clicked = True
-            st.rerun()
-    
-    with col4:
-        if st.button("🎙️ Podcast\nProduction", use_container_width=True, key="ex_podcast"):
-            st.session_state.initial_query = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
-            st.session_state.example_clicked = True
-            st.rerun()
+    # Update session state from user input
+    st.session_state.initial_query = user_query
     
     st.markdown("---")
     
