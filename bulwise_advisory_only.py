@@ -6,6 +6,11 @@ import hashlib
 import sqlite3
 import re
 import os
+from pptx import Presentation
+from pptx.util import Inches, Pt
+from pptx.enum.text import PP_ALIGN
+from pptx.dml.color import RGBColor
+import io
 
 # Page configuration
 st.set_page_config(
@@ -264,6 +269,334 @@ def log_feedback(user_query, sentiment, feedback_text):
         st.error(f"Feedback logging error: {str(e)}")
 
 # ============================================================================
+# POWERPOINT GENERATION
+# ============================================================================
+
+def generate_professional_pptx(report_text, user_query):
+    """Generate a professional PowerPoint presentation from the report."""
+    
+    # Create presentation
+    prs = Presentation()
+    prs.slide_width = Inches(10)
+    prs.slide_height = Inches(7.5)
+    
+    # Define color scheme - Professional green/gray
+    BRAND_GREEN = RGBColor(46, 125, 50)  # #2E7D32
+    DARK_GRAY = RGBColor(51, 51, 51)
+    LIGHT_GRAY = RGBColor(245, 245, 245)
+    
+    # Parse sections from report
+    sections = {}
+    current_section = None
+    current_content = []
+    
+    for line in report_text.split('\n'):
+        if line.startswith('## '):
+            if current_section:
+                sections[current_section] = '\n'.join(current_content)
+            current_section = line.replace('## ', '').strip()
+            current_content = []
+        else:
+            current_content.append(line)
+    
+    if current_section:
+        sections[current_section] = '\n'.join(current_content)
+    
+    # Slide 1: Title Slide
+    slide = prs.slides.add_slide(prs.slide_layouts[6])  # Blank layout
+    
+    # Add background color
+    background = slide.background
+    fill = background.fill
+    fill.solid()
+    fill.fore_color.rgb = LIGHT_GRAY
+    
+    # Title
+    title_box = slide.shapes.add_textbox(Inches(0.5), Inches(2.5), Inches(9), Inches(1))
+    title_frame = title_box.text_frame
+    title_frame.text = "Strategic AI Implementation Advisory"
+    title_p = title_frame.paragraphs[0]
+    title_p.font.size = Pt(44)
+    title_p.font.bold = True
+    title_p.font.color.rgb = BRAND_GREEN
+    title_p.alignment = PP_ALIGN.CENTER
+    
+    # Subtitle with query
+    subtitle_box = slide.shapes.add_textbox(Inches(1), Inches(3.8), Inches(8), Inches(1.5))
+    subtitle_frame = subtitle_box.text_frame
+    subtitle_frame.word_wrap = True
+    subtitle_frame.text = f'"{user_query[:150]}..."' if len(user_query) > 150 else f'"{user_query}"'
+    subtitle_p = subtitle_frame.paragraphs[0]
+    subtitle_p.font.size = Pt(18)
+    subtitle_p.font.color.rgb = DARK_GRAY
+    subtitle_p.alignment = PP_ALIGN.CENTER
+    
+    # Date and branding
+    date_box = slide.shapes.add_textbox(Inches(0.5), Inches(6.5), Inches(9), Inches(0.5))
+    date_frame = date_box.text_frame
+    date_frame.text = f"Bulwise Advisory Report | {datetime.now().strftime('%B %d, %Y')}"
+    date_p = date_frame.paragraphs[0]
+    date_p.font.size = Pt(14)
+    date_p.font.color.rgb = DARK_GRAY
+    date_p.alignment = PP_ALIGN.CENTER
+    
+    # Slide 2: Executive Summary
+    if 'EXECUTIVE SUMMARY' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        # Header bar
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        # Title in header
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Executive Summary"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        # Content
+        content_text = sections['EXECUTIVE SUMMARY'].strip()
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        tf = content_box.text_frame
+        tf.word_wrap = True
+        tf.text = content_text[:500]  # Limit length
+        for paragraph in tf.paragraphs:
+            paragraph.font.size = Pt(16)
+            paragraph.font.color.rgb = DARK_GRAY
+            paragraph.space_before = Pt(12)
+    
+    # Slide 3: Recommended Tools
+    if 'STRATEGIC RECOMMENDATIONS' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        # Header
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Recommended Technology Stack"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        # Extract tool names (look for **Tool Name** patterns)
+        tools_section = sections['STRATEGIC RECOMMENDATIONS']
+        tool_lines = [line for line in tools_section.split('\n') if line.strip().startswith('- **') or line.strip().startswith('**')]
+        
+        # Create table for tools
+        if tool_lines:
+            rows = min(len(tool_lines) + 1, 6)  # Max 5 tools + header
+            cols = 2
+            
+            left = Inches(0.75)
+            top = Inches(1.5)
+            width = Inches(8.5)
+            height = Inches(4.5)
+            
+            table = slide.shapes.add_table(rows, cols, left, top, width, height).table
+            
+            # Header row
+            table.cell(0, 0).text = "Tool"
+            table.cell(0, 1).text = "Purpose"
+            
+            for i in range(cols):
+                cell = table.cell(0, i)
+                cell.fill.solid()
+                cell.fill.fore_color.rgb = BRAND_GREEN
+                paragraph = cell.text_frame.paragraphs[0]
+                paragraph.font.size = Pt(14)
+                paragraph.font.bold = True
+                paragraph.font.color.rgb = RGBColor(255, 255, 255)
+            
+            # Tool rows
+            for idx, tool_line in enumerate(tool_lines[:5], 1):
+                # Extract tool name
+                tool_name = tool_line.split('**')[1] if '**' in tool_line else tool_line.strip('- ')
+                purpose = tool_line.split('(')[1].split(')')[0] if '(' in tool_line else "AI Tool"
+                
+                table.cell(idx, 0).text = tool_name
+                table.cell(idx, 1).text = purpose
+                
+                for i in range(cols):
+                    cell = table.cell(idx, i)
+                    paragraph = cell.text_frame.paragraphs[0]
+                    paragraph.font.size = Pt(12)
+                    paragraph.font.color.rgb = DARK_GRAY
+    
+    # Slide 4: Implementation Roadmap
+    if 'IMPLEMENTATION ROADMAP' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        # Header
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Implementation Roadmap"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        # Parse phases
+        roadmap_text = sections['IMPLEMENTATION ROADMAP']
+        phases = []
+        for line in roadmap_text.split('\n'):
+            if 'Phase' in line and ':' in line:
+                phases.append(line.strip('# ').strip())
+        
+        # Create boxes for each phase
+        if phases:
+            box_width = Inches(2.5)
+            box_height = Inches(1.2)
+            spacing = Inches(0.3)
+            start_y = Inches(1.8)
+            start_x = Inches(0.75)
+            
+            for idx, phase in enumerate(phases[:3]):  # Max 3 phases
+                y_pos = start_y + (idx * (box_height + spacing))
+                
+                # Phase box
+                shape = slide.shapes.add_shape(1, start_x, y_pos, box_width, box_height)
+                shape.fill.solid()
+                shape.fill.fore_color.rgb = BRAND_GREEN if idx == 0 else LIGHT_GRAY
+                shape.line.color.rgb = BRAND_GREEN
+                shape.line.width = Pt(2)
+                
+                # Phase text
+                tf = shape.text_frame
+                tf.text = phase
+                tf.word_wrap = True
+                p = tf.paragraphs[0]
+                p.font.size = Pt(14)
+                p.font.bold = True
+                p.font.color.rgb = RGBColor(255, 255, 255) if idx == 0 else DARK_GRAY
+                p.alignment = PP_ALIGN.CENTER
+                
+                # Arrow to next phase
+                if idx < len(phases) - 1 and idx < 2:
+                    arrow_start_y = y_pos + box_height + Inches(0.05)
+                    arrow_end_y = arrow_start_y + Inches(0.2)
+                    arrow = slide.shapes.add_connector(1, start_x + box_width/2, arrow_start_y, start_x + box_width/2, arrow_end_y)
+                    arrow.line.color.rgb = BRAND_GREEN
+                    arrow.line.width = Pt(3)
+    
+    # Slide 5: Financial Analysis
+    if 'FINANCIAL ANALYSIS' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        # Header
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Financial Analysis"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        # Content
+        finance_text = sections['FINANCIAL ANALYSIS']
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        tf = content_box.text_frame
+        tf.word_wrap = True
+        
+        # Extract key financial points
+        for line in finance_text.split('\n')[:10]:  # First 10 lines
+            if line.strip() and not line.startswith('#'):
+                p = tf.add_paragraph()
+                p.text = line.strip('- ').strip()
+                p.font.size = Pt(14)
+                p.font.color.rgb = DARK_GRAY
+                p.space_before = Pt(8)
+                p.level = 1 if line.startswith('**') else 0
+    
+    # Slide 6: Risk Assessment
+    if 'RISK ASSESSMENT' in sections or 'RISK ASSESSMENT & MITIGATION' in sections:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        
+        # Header
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = BRAND_GREEN
+        header.line.color.rgb = BRAND_GREEN
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = "Risk Assessment & Mitigation"
+        p = tf.paragraphs[0]
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.color.rgb = RGBColor(255, 255, 255)
+        
+        # Content
+        risk_key = 'RISK ASSESSMENT & MITIGATION' if 'RISK ASSESSMENT & MITIGATION' in sections else 'RISK ASSESSMENT'
+        risk_text = sections[risk_key]
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        tf = content_box.text_frame
+        tf.word_wrap = True
+        
+        for line in risk_text.split('\n')[:12]:
+            if line.strip() and not line.startswith('#'):
+                p = tf.add_paragraph()
+                p.text = line.strip('- ').strip()
+                p.font.size = Pt(13)
+                p.font.color.rgb = DARK_GRAY
+                p.space_before = Pt(6)
+    
+    # Final Slide: Next Steps
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    
+    # Background
+    background = slide.background
+    fill = background.fill
+    fill.solid()
+    fill.fore_color.rgb = BRAND_GREEN
+    
+    # Title
+    title_box = slide.shapes.add_textbox(Inches(0.5), Inches(2.5), Inches(9), Inches(1))
+    tf = title_box.text_frame
+    tf.text = "Ready to Implement?"
+    p = tf.paragraphs[0]
+    p.font.size = Pt(40)
+    p.font.bold = True
+    p.font.color.rgb = RGBColor(255, 255, 255)
+    p.alignment = PP_ALIGN.CENTER
+    
+    # Contact
+    contact_box = slide.shapes.add_textbox(Inches(0.5), Inches(4), Inches(9), Inches(2))
+    tf = contact_box.text_frame
+    tf.text = "Get personalized implementation support\n\nhello@bulwise.io\nbulwise.io"
+    for paragraph in tf.paragraphs:
+        paragraph.font.size = Pt(20)
+        paragraph.font.color.rgb = RGBColor(255, 255, 255)
+        paragraph.alignment = PP_ALIGN.CENTER
+        paragraph.space_before = Pt(10)
+    
+    # Save to BytesIO
+    pptx_io = io.BytesIO()
+    prs.save(pptx_io)
+    pptx_io.seek(0)
+    
+    return pptx_io
+
+# ============================================================================
 # LOAD DATABASE
 # ============================================================================
 
@@ -323,6 +656,15 @@ st.markdown("""
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         margin-top: 2rem;
+        /* Enable copy/paste */
+        user-select: text !important;
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+    }
+    
+    .whitepaper-section * {
+        user-select: text !important;
     }
     
     .whitepaper-header {
@@ -431,23 +773,6 @@ st.markdown("# 🎯 Strategic AI Advisory")
 st.markdown("### Get professional recommendations tailored to your needs")
 st.markdown("---")
 
-# Info expander
-with st.expander("ℹ️ What you'll receive", expanded=False):
-    st.markdown("""
-    **Your personalized advisory report includes:**
-    
-    - 📊 Analyst note with strategic overview
-    - 📋 Executive summary and methodology
-    - 🛠️ Tool recommendations with detailed rationale
-    - 📅 Implementation roadmap with timeline
-    - 💰 Cost analysis and ROI projections
-    - ⚠️ Risk assessment and success factors
-    - 🔄 Alternative scenarios for different budgets
-    - 📈 Market research and industry benchmarks
-    
-    *Report generation takes 30-60 seconds with real-time progress tracking.*
-    """)
-
 st.markdown("<br>", unsafe_allow_html=True)
 
 # Initialize step tracking
@@ -460,6 +785,13 @@ if 'clarifying_answers' not in st.session_state:
 
 # STEP 1: Initial Query
 if st.session_state.workflow_step == 1:
+    # ChatGPT Differentiator
+    st.markdown("""
+    <div style='background: #f0f7ff; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #2E7D32; margin-bottom: 1.5rem;'>
+        <strong>🎯 Why Bulwise?</strong> Turn your AI question into a boardroom-ready strategic advisory report with implementation details, not just suggestions.
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.markdown("""
     <div style='background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #2E7D32; margin-bottom: 1.5rem;'>
         <h4 style='margin-top: 0; color: #2E7D32;'>💡 For Best Results, Include:</h4>
@@ -474,10 +806,11 @@ if st.session_state.workflow_step == 1:
     
     user_query = st.text_area(
         "**📝 Describe Your Situation:**",
-        value=st.session_state.get('example_query', st.session_state.initial_query),
+        value=st.session_state.initial_query,
         height=180,
         placeholder="Example: I'm a marketing consultant working with 5-10 small business clients simultaneously. I need to create weekly content (blog posts, social media, email campaigns) efficiently. Budget is $100-150/month. I have intermediate technical skills and need tools that integrate well together. Timeline: implement within 2 weeks.",
-        key="initial_query_input"
+        key="initial_query_input",
+        help="Click 'Continue →' button below when ready to proceed"
     )
     
     st.session_state.initial_query = user_query
@@ -488,22 +821,22 @@ if st.session_state.workflow_step == 1:
     
     with col1:
         if st.button("📹 Video\nProduction", use_container_width=True):
-            st.session_state['example_query'] = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
+            st.session_state.initial_query = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
             st.rerun()
     
     with col2:
         if st.button("✍️ Content\nMarketing", use_container_width=True):
-            st.session_state['example_query'] = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
+            st.session_state.initial_query = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
             st.rerun()
     
     with col3:
         if st.button("💻 Software\nDevelopment", use_container_width=True):
-            st.session_state['example_query'] = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
+            st.session_state.initial_query = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
             st.rerun()
     
     with col4:
         if st.button("🎙️ Podcast\nProduction", use_container_width=True):
-            st.session_state['example_query'] = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
+            st.session_state.initial_query = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
             st.rerun()
     
     st.markdown("---")
@@ -520,9 +853,6 @@ if st.session_state.workflow_step == 1:
         
         if continue_button:
             st.session_state.workflow_step = 2
-            # Clear example_query so it doesn't interfere
-            if 'example_query' in st.session_state:
-                del st.session_state['example_query']
             st.rerun()
 
 # STEP 2: Clarifying Questions
@@ -671,7 +1001,7 @@ elif st.session_state.workflow_step == 3:
                 status_text.text("🔍 Analyzing your requirements... (10%)")
                 progress_bar.progress(10)
                 
-                # System prompt (keeping full prompt from original)
+                # System prompt - UPDATED with user validation, data sources upfront, no emojis, visualizations, enhanced costs
                 system_prompt = f"""You are Bulwise, a strategic AI implementation advisory service. Generate professional, data-driven reports for clients seeking AI tool recommendations.
 
 You have access to:
@@ -683,24 +1013,39 @@ CRITICAL: Format your response as a professional whitepaper-style advisory repor
 ---
 
 ## ANALYST NOTE
-[Brief professional note (2-3 sentences) welcoming the client, emphasizing the data-driven strategic nature of this recommendation, and expressing willingness to answer follow-up questions. Keep warm and professional.]
+[Brief professional note (2-3 sentences) welcoming the client, emphasizing the data-driven strategic nature of this recommendation, and expressing willingness to answer follow-up questions. Keep warm and professional. NO EMOJIS.]
+
+---
+
+## REQUIREMENTS VALIDATION
+[NEW - #4: Before proceeding with analysis, confirm your understanding of the client's needs]
+
+Based on your request, I understand you are seeking to:
+- **Primary Goal:** [State what you understand they want to accomplish]
+- **Team Context:** [Solo, small team, enterprise - based on their input]
+- **Budget Range:** [If mentioned, confirm. If not mentioned, note "Budget not specified - recommendations will span multiple price points"]
+- **Timeline:** [If mentioned, confirm. If not, note "Timeline not specified"]
+- **Key Constraints:** [Any blockers or limitations they mentioned]
+
+If any of these assumptions are incorrect, please let me know. Proceeding with analysis based on these parameters.
 
 ---
 
 ## EXECUTIVE SUMMARY
 [2-3 sentences providing high-level overview of the recommendation and expected outcomes]
 
+**Data Foundation:** [NEW - #5: Move data sources upfront]
+This analysis draws from {len(database['ai_tools'])} AI tools across 15+ categories in our proprietary database, supplemented by current market research from Gartner, Forrester, IDC, and industry-specific sources. All statistics and benchmarks are cited with sources.
+
 ---
 
 ## METHODOLOGY & ANALYSIS
+
 **Requirements Analysis:**
 [Summarize the client's stated needs, constraints, and objectives]
 
 **Evaluation Criteria:**
 [List the key factors considered in tool selection: budget alignment, technical requirements, workflow integration, scalability, etc.]
-
-**Data Sources:**
-[Note that recommendations are based on comprehensive database analysis of {len(database['ai_tools'])} tools across 15+ categories, plus current market research from credible sources]
 
 ---
 
@@ -722,6 +1067,27 @@ For each tool, provide:
 - **Strategic Rationale:** Why this tool fits the client's needs (2-3 sentences with specific data points, referencing market position if available)
 - **Key Capabilities:** Bullet list of relevant features
 - **Pricing:** Specific tier recommendation with justification
+- **Official Website:** [Include the tool's website URL]
+
+### Technology Stack Visualization
+[NEW - #14: ASCII diagram showing how tools connect]
+
+```
+Data Flow Architecture:
+
+[Input Source] → [Primary Tool] → [Enhancement Tool] → [Output/Storage]
+                      ↓
+                [Supporting Tool]
+                      ↓
+                [Quality Control]
+
+Example:
+User Content → ChatGPT (Generation) → Grammarly (Polish) → Notion (Storage)
+                      ↓
+                  Midjourney (Visuals)
+                      ↓
+                  Canva (Assembly)
+```
 
 ### Tool Integration Workflow
 [Provide step-by-step explanation of how these tools work together in practice, including data flow and handoffs between systems]
@@ -729,6 +1095,23 @@ For each tool, provide:
 ---
 
 ## IMPLEMENTATION ROADMAP
+
+### Visual Timeline
+[NEW - #15: Mermaid diagram]
+
+```mermaid
+graph LR
+    A[Week 1-2: Foundation] --> B[Week 3-4: Integration]
+    B --> C[Month 2: Optimization]
+    C --> D[Month 3+: Scaling]
+    
+    A --> A1[Tool Setup]
+    A --> A2[Team Training]
+    B --> B1[Workflow Integration]
+    B --> B2[Testing]
+    C --> C1[Process Refinement]
+    C --> C2[Advanced Features]
+```
 
 ### Phase 1: Foundation (Week 1-2)
 [Initial setup steps and quick wins]
@@ -743,17 +1126,41 @@ For each tool, provide:
 
 ## FINANCIAL ANALYSIS
 
-### Cost Breakdown
-[Detailed monthly cost projection for each tool, including tier recommendations]
+### Detailed Cost Breakdown
+[NEW - #16: Enhanced with per-tool details]
 
-**Total Monthly Investment:** $[X]
-**Annual Projection:** $[Y]
+**Monthly Costs by Tool:**
+
+| Tool | Recommended Tier | Monthly Cost | Annual Cost | Notes |
+|------|-----------------|--------------|-------------|-------|
+| [Tool 1] | [Tier name] | $XX | $XXX | [Why this tier] |
+| [Tool 2] | [Tier name] | $XX | $XXX | [Why this tier] |
+| [Tool 3] | [Tier name] | $XX | $XXX | [Why this tier] |
+
+**Cost Summary:**
+- **Total Monthly Investment:** $[X]
+- **Annual Projection:** $[Y]
+- **Cost Per User (if team):** $[Z]
+
+**Payment Options:**
+- Monthly billing: $[X]/month
+- Annual billing: $[Y]/year (save $[Z] vs monthly)
 
 ### Expected ROI
 [Quantify time savings, efficiency gains, or revenue impact where possible, using industry benchmarks from market research WITH SOURCES. Be realistic and conservative.]
 
+**ROI Calculation:**
+- Time saved per week: [X] hours
+- Value per hour: $[Y]
+- Monthly value: $[Z]
+- Break-even point: [X] months
+
 ### Cost Optimization Strategies
 [Suggest ways to reduce costs or maximize value]
+- Annual payment discounts
+- Team vs individual plans
+- Free tier alternatives for testing
+- Bundled vs a la carte pricing
 
 ---
 
@@ -775,8 +1182,18 @@ For each tool, provide:
 ### Budget-Constrained Alternative
 [If budget is reduced by 30-50%, what would you recommend?]
 
+**Modified Stack (Reduced Budget):**
+- Total monthly cost: $[X]
+- Key tradeoffs: [What you lose]
+- Still achieves: [Core objectives maintained]
+
 ### Premium Alternative
 [If budget allows 50-100% more investment, what enhanced capabilities could be added?]
+
+**Enhanced Stack (Increased Budget):**
+- Total monthly cost: $[X]
+- Additional capabilities: [What you gain]
+- Recommended for: [When premium makes sense]
 
 ### Different Scale Scenario
 [How would recommendations change for 2x team size or 2x content volume?]
@@ -788,11 +1205,22 @@ For each tool, provide:
 ### Tool Comparison Matrix
 [Create a simple text-based comparison of recommended tools vs alternatives on key criteria]
 
+| Criteria | [Recommended Tool 1] | [Alternative] | Winner |
+|----------|---------------------|---------------|--------|
+| Price | $XX/month | $XX/month | [Tool] |
+| Features | [Key features] | [Key features] | [Tool] |
+| Ease of Use | [Rating] | [Rating] | [Tool] |
+| Integration | [Rating] | [Rating] | [Tool] |
+
 ### Industry Benchmarks
 [Include relevant statistics from market research about typical costs, implementation times, adoption rates - WITH SOURCES]
 
 ### Reference Documentation
 [List official documentation, case studies, or resources for each recommended tool]
+
+**Tool Resources:**
+- **[Tool 1]:** [Official docs URL], [Getting started guide URL]
+- **[Tool 2]:** [Official docs URL], [Getting started guide URL]
 
 ---
 
@@ -843,6 +1271,9 @@ TONE GUIDELINES:
 - Accessible to both technical and non-technical readers
 - Conservative on ROI projections (under-promise, over-deliver)
 - Analyst Note should be warm and welcoming while maintaining professionalism
+- **NO EMOJIS** - Maintain professional consulting-firm tone throughout [NEW - #7]
+- Use formal section headers without decorative elements
+- Focus on substance over style
 
 DATABASE:
 {json.dumps(database['ai_tools'], indent=2)}"""
@@ -873,6 +1304,16 @@ DATABASE:
                 for block in message.content:
                     if hasattr(block, 'text'):
                         response_text += block.text
+                
+                # Clean response text - remove artifacts and fix formatting
+                # Remove common debug/artifact patterns
+                response_text = re.sub(r'```[\w]*\n.*?```', '', response_text, flags=re.DOTALL)  # Remove code blocks that might contain paths
+                response_text = re.sub(r'/[^\s]+\.py', '', response_text)  # Remove file paths
+                response_text = re.sub(r'<think>.*?</think>', '', response_text, flags=re.DOTALL)  # Remove thinking tags
+                
+                # Fix currency markdown - ensure $ symbols display correctly
+                # Streamlit markdown handles $ fine, but double-check escaping if needed
+                response_text = response_text.replace('\\$', '$')  # Remove any over-escaping
                 
                 status_text.text("✅ Report complete! (100%)")
                 progress_bar.progress(100)
@@ -908,6 +1349,29 @@ DATABASE:
                            next_reset.strftime('%B %d, %Y'))
                 
                 # Feedback section
+                st.markdown("---")
+                
+                # Export options
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    # PowerPoint export
+                    try:
+                        pptx_file = generate_professional_pptx(response_text, user_query)
+                        st.download_button(
+                            label="📊 Export as Presentation (.pptx)",
+                            data=pptx_file,
+                            file_name=f"bulwise_advisory_{datetime.now().strftime('%Y%m%d')}.pptx",
+                            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                            use_container_width=True
+                        )
+                    except Exception as e:
+                        st.error(f"PowerPoint export error: {str(e)}")
+                
+                with col2:
+                    # PDF export placeholder for future
+                    st.button("📄 Export as PDF (Coming Soon)", disabled=True, use_container_width=True)
+                
                 st.markdown("---")
                 st.markdown("### 💬 Quick Feedback")
                 
@@ -950,6 +1414,22 @@ DATABASE:
                     if 'show_feedback_form' in st.session_state:
                         del st.session_state.show_feedback_form
                     st.rerun()
+                
+                # Consultancy CTA
+                st.markdown("---")
+                st.markdown("""
+                <div style='background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%); padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;'>
+                    <h3 style='color: white; margin-top: 0;'>Need Implementation Support?</h3>
+                    <p style='color: #E8F5E9; font-size: 1.1rem; margin-bottom: 1.5rem;'>
+                        Get personalized 1:1 consultation to help you implement these recommendations
+                    </p>
+                    <a href='mailto:hello@bulwise.io?subject=Implementation%20Consultation%20Request' 
+                       style='background: white; color: #2E7D32; padding: 0.75rem 2rem; border-radius: 8px; 
+                              text-decoration: none; font-weight: 600; display: inline-block;'>
+                        📞 Book a Consultation
+                    </a>
+                </div>
+                """, unsafe_allow_html=True)
                 
             except anthropic.APIError as e:
                 st.error(f"API Error: {str(e)}")
