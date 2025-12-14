@@ -14,7 +14,7 @@ import io
 
 # Page configuration
 st.set_page_config(
-    page_title="Bulwise - Strategic AI Advisory",
+    page_title="Bulwise - Strategic AI Stack Advisory",
     page_icon="🎯",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -769,7 +769,7 @@ with st.sidebar:
             st.info("No analytics data yet")
 
 # Header
-st.markdown("# 🎯 Strategic AI Advisory")
+st.markdown("# 🎯 Strategic AI Stack Advisory")
 st.markdown("### Get professional recommendations tailored to your needs")
 st.markdown("---")
 
@@ -813,30 +813,39 @@ if st.session_state.workflow_step == 1:
         help="Click 'Continue →' button below when ready to proceed"
     )
     
-    st.session_state.initial_query = user_query
+    # Only update initial_query if user manually edited (not from button click)
+    if 'example_clicked' not in st.session_state:
+        st.session_state.initial_query = user_query
+    else:
+        # Example button was clicked, don't overwrite
+        del st.session_state.example_clicked
     
     # Quick start examples
     st.markdown("**Quick Start Examples:**")
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if st.button("📹 Video\nProduction", use_container_width=True):
+        if st.button("📹 Video\nProduction", use_container_width=True, key="ex_video"):
             st.session_state.initial_query = "I run a digital agency and need to produce 10-15 professional video content pieces monthly for enterprise clients. Need AI tools for script writing, video generation, voiceovers, and editing. Budget: $200-300/month. Team of 3 people with mixed technical skills."
+            st.session_state.example_clicked = True
             st.rerun()
     
     with col2:
-        if st.button("✍️ Content\nMarketing", use_container_width=True):
+        if st.button("✍️ Content\nMarketing", use_container_width=True, key="ex_content"):
             st.session_state.initial_query = "E-commerce business needing to scale content creation: product descriptions, blog posts, email campaigns, and social media. Team of 2 marketers. Budget: $75-100/month."
+            st.session_state.example_clicked = True
             st.rerun()
     
     with col3:
-        if st.button("💻 Software\nDevelopment", use_container_width=True):
+        if st.button("💻 Software\nDevelopment", use_container_width=True, key="ex_dev"):
             st.session_state.initial_query = "Software development team of 5 engineers working on full-stack web applications. Need AI assistants for code generation, debugging, documentation, and code review. Budget: $100-150/month total."
+            st.session_state.example_clicked = True
             st.rerun()
     
     with col4:
-        if st.button("🎙️ Podcast\nProduction", use_container_width=True):
+        if st.button("🎙️ Podcast\nProduction", use_container_width=True, key="ex_podcast"):
             st.session_state.initial_query = "Starting a weekly B2B podcast. Need tools for recording, editing, transcription, show notes generation, and distribution. Solo operation with limited technical background. Budget: $50-75/month."
+            st.session_state.example_clicked = True
             st.rerun()
     
     st.markdown("---")
@@ -1284,17 +1293,42 @@ DATABASE:
                 status_text.text("🤖 Generating strategic recommendations... (50%)")
                 progress_bar.progress(50)
                 
-                message = client.messages.create(
-                    model="claude-sonnet-4-20250514",
-                    max_tokens=4000,
-                    tools=[{"type": "web_search_20250305", "name": "web_search"}],
-                    system=[{
-                        "type": "text",
-                        "text": system_prompt,
-                        "cache_control": {"type": "ephemeral"}
-                    }],
-                    messages=[{"role": "user", "content": user_query}]
-                )
+                # Retry logic for API overload errors
+                max_retries = 3
+                retry_count = 0
+                message = None
+                
+                while retry_count < max_retries:
+                    try:
+                        if retry_count > 0:
+                            status_text.text(f"⏳ API busy, retrying ({retry_count}/{max_retries})... (50%)")
+                        
+                        message = client.messages.create(
+                            model="claude-sonnet-4-20250514",
+                            max_tokens=4000,
+                            tools=[{"type": "web_search_20250305", "name": "web_search"}],
+                            system=[{
+                                "type": "text",
+                                "text": system_prompt,
+                                "cache_control": {"type": "ephemeral"}
+                            }],
+                            messages=[{"role": "user", "content": user_query}]
+                        )
+                        break  # Success! Exit retry loop
+                        
+                    except anthropic.APIError as e:
+                        if "overloaded" in str(e).lower() and retry_count < max_retries - 1:
+                            retry_count += 1
+                            wait_time = 5 * retry_count  # 5s, 10s, 15s
+                            status_text.text(f"⏳ API overloaded, waiting {wait_time}s before retry {retry_count}/{max_retries}...")
+                            import time
+                            time.sleep(wait_time)
+                        else:
+                            # Not an overload error, or out of retries
+                            raise
+                
+                if message is None:
+                    raise Exception("Failed to generate report after multiple retries")
                 
                 status_text.text("✨ Finalizing report... (80%)")
                 progress_bar.progress(80)
@@ -1432,9 +1466,16 @@ DATABASE:
                 """, unsafe_allow_html=True)
                 
             except anthropic.APIError as e:
-                st.error(f"API Error: {str(e)}")
-                if "credit balance" in str(e).lower():
+                if "overloaded" in str(e).lower():
+                    st.error("⚠️ Anthropic API is experiencing high traffic")
+                    st.info("💡 The API is temporarily overloaded. Please try again in 1-2 minutes. Your query has been saved.")
+                    st.markdown(f"**Your query:** {user_query[:200]}...")
+                elif "credit balance" in str(e).lower():
+                    st.error(f"API Error: {str(e)}")
                     st.info("Please add credits to your Anthropic account at console.anthropic.com")
+                else:
+                    st.error(f"API Error: {str(e)}")
+                    st.info("💡 Please try again in a moment.")
             except AttributeError as e:
                 st.error("Response parsing error - this is usually due to tool use blocks in the API response")
                 st.info("💡 The response format was unexpected. Please try again. The issue has been logged.")
