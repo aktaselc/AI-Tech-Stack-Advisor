@@ -11,7 +11,6 @@ from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
 import io
-from streamlit_mermaid import st_mermaid
 
 # Page configuration
 st.set_page_config(
@@ -354,14 +353,20 @@ def generate_professional_pptx(report_text, user_query):
     p.alignment = PP_ALIGN.CENTER
     
     # User query subtitle
-    query_box = slide.shapes.add_textbox(Inches(0.8), Inches(3.5), Inches(8.4), Inches(2))
+    query_box = slide.shapes.add_textbox(Inches(1), Inches(3.5), Inches(8), Inches(2.5))
     tf = query_box.text_frame
     tf.word_wrap = True
-    tf.text = user_query
+    tf.vertical_anchor = 1  # Top align
+    
+    # Truncate if very long
+    display_query = user_query if len(user_query) <= 300 else user_query[:300] + "..."
+    tf.text = display_query
+    
     p = tf.paragraphs[0]
-    p.font.size = Pt(16)
+    p.font.size = Pt(15)
     p.font.color.rgb = DARK_GRAY
     p.alignment = PP_ALIGN.CENTER
+    p.line_spacing = 1.2
     
     # Date
     date_box = slide.shapes.add_textbox(Inches(0.5), Inches(6.5), Inches(9), Inches(0.5))
@@ -380,19 +385,25 @@ def generate_professional_pptx(report_text, user_query):
         add_header_slide(slide, "Executive Summary")
         
         content = clean_text(sections['EXECUTIVE SUMMARY'])
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.8))
         tf = content_box.text_frame
         tf.word_wrap = True
+        tf.vertical_anchor = 1  # Top align
+        
+        # Limit content to prevent overflow
+        max_chars = 1200
+        truncated_content = content[:max_chars] + ("..." if len(content) > max_chars else "")
         
         # Split into paragraphs
-        for para in content.split('\n\n'):
+        for para in truncated_content.split('\n\n'):
             if para.strip():
                 p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
                 p.text = para.strip()
-                p.font.size = Pt(14)
+                p.font.size = Pt(13)
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(10)
-                p.space_after = Pt(10)
+                p.space_before = Pt(8)
+                p.space_after = Pt(8)
+                p.line_spacing = 1.2
     
     # ============================================================================
     # SLIDE 3: RECOMMENDED TOOLS - DETAILED
@@ -422,22 +433,39 @@ def generate_professional_pptx(report_text, user_query):
         # Create detailed slides for each tool
         for tool_name, tool_content in tool_sections[:6]:  # Max 6 tools
             slide = prs.slides.add_slide(prs.slide_layouts[6])
-            add_header_slide(slide, f"Tool Recommendation: {tool_name}")
+            
+            # Truncate tool name if too long for title
+            display_name = tool_name[:40] + "..." if len(tool_name) > 40 else tool_name
+            add_header_slide(slide, f"Tool: {display_name}")
             
             # Clean and parse content
             clean_content = clean_text(tool_content)
             
-            content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
+            content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.8))
             tf = content_box.text_frame
             tf.word_wrap = True
+            tf.vertical_anchor = 1  # Top align
             
             lines = [l for l in clean_content.split('\n') if l.strip()]
-            for line in lines[:25]:  # Max 25 lines per tool
+            char_count = 0
+            max_chars = 1200  # Character limit per slide
+            
+            for line in lines:
+                if char_count >= max_chars:
+                    break
+                
+                # Truncate individual lines that are too long
+                display_line = line.strip()
+                if len(display_line) > 120:
+                    display_line = display_line[:120] + "..."
+                
                 p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
-                p.text = line.strip()
-                p.font.size = Pt(12)
+                p.text = display_line
+                p.font.size = Pt(11)
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(6)
+                p.space_before = Pt(4)
+                
+                char_count += len(display_line)
     
     # ============================================================================
     # SLIDE: IMPLEMENTATION ROADMAP
@@ -467,41 +495,46 @@ def generate_professional_pptx(report_text, user_query):
         
         # Display phases in boxes
         y_start = Inches(1.5)
-        for idx, (phase_name, phase_content) in enumerate(phases[:4]):
+        max_phases = min(len(phases), 4)  # Max 4 phases to prevent overflow
+        
+        for idx, (phase_name, phase_content) in enumerate(phases[:max_phases]):
             # Phase box
             box = slide.shapes.add_shape(
                 1,  # Rectangle
                 Inches(0.75),
-                y_start + (idx * Inches(1.4)),
+                y_start + (idx * Inches(1.3)),
                 Inches(8.5),
-                Inches(1.2)
+                Inches(1.1)
             )
             box.fill.solid()
             box.fill.fore_color.rgb = LIGHT_GRAY if idx % 2 else WHITE
             box.line.color.rgb = BRAND_GREEN
             box.line.width = Pt(2)
             
-            # Phase title
+            # Phase title - truncate if too long
             tf = box.text_frame
             tf.word_wrap = True
+            tf.vertical_anchor = 1  # Top
             p = tf.paragraphs[0]
-            p.text = phase_name
-            p.font.size = Pt(14)
+            p.text = phase_name[:80]  # Truncate long titles
+            p.font.size = Pt(13)
             p.font.bold = True
             p.font.color.rgb = BRAND_GREEN
-            p.space_after = Pt(8)
+            p.space_after = Pt(6)
             
-            # Phase content (first 2 lines)
+            # Phase content (first 2 lines only, truncated)
             content_lines = [l.strip() for l in phase_content.split('\n') if l.strip()][:2]
             for line in content_lines:
                 p = tf.add_paragraph()
-                p.text = line
-                p.font.size = Pt(11)
+                # Truncate long lines
+                display_line = line[:90] + "..." if len(line) > 90 else line
+                p.text = display_line
+                p.font.size = Pt(10)
                 p.font.color.rgb = DARK_GRAY
                 p.space_before = Pt(2)
     
     # ============================================================================
-    # SLIDE: FINANCIAL ANALYSIS
+    # SLIDE: FINANCIAL ANALYSIS - WITH TABLE
     # ============================================================================
     if 'FINANCIAL ANALYSIS' in sections:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
@@ -509,25 +542,125 @@ def generate_professional_pptx(report_text, user_query):
         
         content = clean_text(sections['FINANCIAL ANALYSIS'])
         
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
-        tf = content_box.text_frame
-        tf.word_wrap = True
+        # Try to extract cost data for table
+        monthly_costs = []
+        total_monthly = None
+        annual_total = None
         
-        lines = [l for l in content.split('\n') if l.strip()]
-        for line in lines[:30]:
-            p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
-            p.text = line.strip()
+        # Look for tool costs in format "Tool Name: $XX/month" or similar
+        for line in content.split('\n'):
+            # Extract monthly total
+            if 'total monthly' in line.lower() and '$' in line:
+                numbers = re.findall(r'\$(\d+(?:,\d{3})*(?:\.\d{2})?)', line)
+                if numbers:
+                    total_monthly = numbers[0].replace(',', '')
             
-            # Make section headers bold
-            if ':' in line and len(line.split(':')[0]) < 40:
+            # Extract annual total
+            if 'annual' in line.lower() and '$' in line:
+                numbers = re.findall(r'\$(\d+(?:,\d{3})*(?:\.\d{2})?)', line)
+                if numbers:
+                    annual_total = numbers[0].replace(',', '')
+            
+            # Extract individual tool costs (lines with $ and month/mo)
+            if '$' in line and ('month' in line.lower() or '/mo' in line.lower()):
+                # Try to extract tool name and cost
+                parts = line.split(':')
+                if len(parts) >= 2:
+                    tool = parts[0].strip().strip('-•').strip()
+                    cost_match = re.search(r'\$(\d+(?:,\d{3})*(?:\.\d{2})?)', parts[1])
+                    if cost_match and len(monthly_costs) < 8:  # Max 8 tools
+                        monthly_costs.append((tool, f"${cost_match.group(1)}"))
+        
+        # Create table if we have cost data
+        if monthly_costs:
+            rows = len(monthly_costs) + 2  # Tools + header + total
+            cols = 2
+            
+            left = Inches(1)
+            top = Inches(1.5)
+            width = Inches(8)
+            height = Inches(4.5)
+            
+            table = slide.shapes.add_table(rows, cols, left, top, width, height).table
+            
+            # Set column widths
+            table.columns[0].width = Inches(5)
+            table.columns[1].width = Inches(3)
+            
+            # Header row
+            table.cell(0, 0).text = "Item"
+            table.cell(0, 1).text = "Monthly Cost"
+            
+            for i in range(cols):
+                cell = table.cell(0, i)
+                cell.fill.solid()
+                cell.fill.fore_color.rgb = BRAND_GREEN
+                for paragraph in cell.text_frame.paragraphs:
+                    paragraph.font.size = Pt(14)
+                    paragraph.font.bold = True
+                    paragraph.font.color.rgb = WHITE
+                    paragraph.alignment = PP_ALIGN.CENTER
+            
+            # Tool rows
+            for idx, (tool, cost) in enumerate(monthly_costs, 1):
+                table.cell(idx, 0).text = tool[:60]  # Truncate if too long
+                table.cell(idx, 1).text = cost
+                
+                for i in range(cols):
+                    cell = table.cell(idx, i)
+                    for paragraph in cell.text_frame.paragraphs:
+                        paragraph.font.size = Pt(12)
+                        paragraph.font.color.rgb = DARK_GRAY
+                        if i == 1:  # Cost column
+                            paragraph.alignment = PP_ALIGN.CENTER
+            
+            # Total row
+            total_row = len(monthly_costs) + 1
+            table.cell(total_row, 0).text = "TOTAL MONTHLY"
+            table.cell(total_row, 1).text = f"${total_monthly}" if total_monthly else "See report"
+            
+            for i in range(cols):
+                cell = table.cell(total_row, i)
+                cell.fill.solid()
+                cell.fill.fore_color.rgb = LIGHT_GRAY
+                for paragraph in cell.text_frame.paragraphs:
+                    paragraph.font.size = Pt(13)
+                    paragraph.font.bold = True
+                    paragraph.font.color.rgb = BRAND_GREEN
+                    if i == 1:
+                        paragraph.alignment = PP_ALIGN.CENTER
+            
+            # Add annual total below table if available
+            if annual_total:
+                text_box = slide.shapes.add_textbox(Inches(1), Inches(6.2), Inches(8), Inches(0.5))
+                tf = text_box.text_frame
+                tf.text = f"Annual Projection: ${annual_total}"
+                p = tf.paragraphs[0]
+                p.font.size = Pt(14)
                 p.font.bold = True
-                p.font.size = Pt(13)
                 p.font.color.rgb = BRAND_GREEN
-            else:
-                p.font.size = Pt(12)
-                p.font.color.rgb = DARK_GRAY
+                p.alignment = PP_ALIGN.CENTER
+        
+        else:
+            # Fallback: display as text if can't parse table
+            content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
+            tf = content_box.text_frame
+            tf.word_wrap = True
             
-            p.space_before = Pt(5)
+            lines = [l for l in content.split('\n') if l.strip()]
+            for line in lines[:20]:  # Limit lines to prevent overflow
+                p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
+                p.text = line.strip()[:100]  # Truncate long lines
+                
+                if ':' in line and len(line.split(':')[0]) < 40:
+                    p.font.bold = True
+                    p.font.size = Pt(12)
+                    p.font.color.rgb = BRAND_GREEN
+                else:
+                    p.font.size = Pt(11)
+                    p.font.color.rgb = DARK_GRAY
+                
+                p.space_before = Pt(4)
     
     # ============================================================================
     # SLIDE: RISK ASSESSMENT
@@ -540,21 +673,32 @@ def generate_professional_pptx(report_text, user_query):
     
     if risk_key:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
-        add_header_slide(slide, "Risk Assessment & Mitigation")
+        add_header_slide(slide, "Risk Assessment")
         
         content = clean_text(sections[risk_key])
         
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.8))
         tf = content_box.text_frame
         tf.word_wrap = True
+        tf.vertical_anchor = 1  # Top
         
         lines = [l for l in content.split('\n') if l.strip()]
-        for line in lines[:30]:
+        char_count = 0
+        max_chars = 1000
+        
+        for line in lines:
+            if char_count >= max_chars:
+                break
+            
             p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
-            p.text = line.strip()
-            p.font.size = Pt(12)
+            # Truncate long lines
+            display_line = line.strip()[:110] + ("..." if len(line.strip()) > 110 else "")
+            p.text = display_line
+            p.font.size = Pt(11)
             p.font.color.rgb = DARK_GRAY
-            p.space_before = Pt(5)
+            p.space_before = Pt(4)
+            
+            char_count += len(display_line)
     
     # ============================================================================
     # SLIDE: ALTERNATIVE SCENARIOS
@@ -565,25 +709,35 @@ def generate_professional_pptx(report_text, user_query):
         
         content = clean_text(sections['ALTERNATIVE SCENARIOS'])
         
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.8))
         tf = content_box.text_frame
         tf.word_wrap = True
+        tf.vertical_anchor = 1  # Top
         
         lines = [l for l in content.split('\n') if l.strip()]
-        for line in lines[:30]:
+        char_count = 0
+        max_chars = 1000
+        
+        for line in lines:
+            if char_count >= max_chars:
+                break
+            
             p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
-            p.text = line.strip()
+            # Truncate long lines
+            display_line = line.strip()[:110] + ("..." if len(line.strip()) > 110 else "")
+            p.text = display_line
             
             # Make scenario headers bold
-            if 'Alternative' in line or 'Scenario' in line:
+            if 'Alternative' in display_line or 'Scenario' in display_line:
                 p.font.bold = True
-                p.font.size = Pt(13)
+                p.font.size = Pt(12)
                 p.font.color.rgb = BRAND_GREEN
             else:
-                p.font.size = Pt(12)
+                p.font.size = Pt(11)
                 p.font.color.rgb = DARK_GRAY
             
-            p.space_before = Pt(5)
+            p.space_before = Pt(4)
+            char_count += len(display_line)
     
     # ============================================================================
     # FINAL SLIDE: NEXT STEPS
@@ -621,19 +775,32 @@ def generate_professional_pptx(report_text, user_query):
     return pptx_io
 
 def render_report_with_mermaid(report_text):
-    """Render report text with proper Mermaid diagram rendering."""
+    """Render report text with Mermaid diagrams using HTML iframe."""
     
-    # Split text by mermaid code blocks
-    parts = re.split(r'```mermaid\n(.*?)```', report_text, flags=re.DOTALL)
+    # Split by mermaid blocks
+    pattern = r'```\s*mermaid\s*\n(.*?)```'
+    parts = re.split(pattern, report_text, flags=re.DOTALL | re.IGNORECASE)
     
     for i, part in enumerate(parts):
         if i % 2 == 0:
             # Regular markdown content
             if part.strip():
-                st.markdown(part)
+                st.markdown(part, unsafe_allow_html=True)
         else:
-            # Mermaid diagram content
-            st_mermaid(part.strip(), height=400)
+            # Mermaid diagram - render with HTML
+            mermaid_code = part.strip()
+            html = f"""
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <script type="module">
+                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+                    mermaid.initialize({{ startOnLoad: true, theme: 'default' }});
+                </script>
+                <div class="mermaid">
+                {mermaid_code}
+                </div>
+            </div>
+            """
+            st.markdown(html, unsafe_allow_html=True)
 
 # ============================================================================
 # LOAD DATABASE
@@ -1373,15 +1540,17 @@ DATABASE:
                     if hasattr(block, 'text'):
                         response_text += block.text
                 
-                # Clean response text - remove artifacts and fix formatting
-                # Remove common debug/artifact patterns
-                response_text = re.sub(r'```[\w]*\n.*?```', '', response_text, flags=re.DOTALL)  # Remove code blocks that might contain paths
-                response_text = re.sub(r'/[^\s]+\.py', '', response_text)  # Remove file paths
-                response_text = re.sub(r'<think>.*?</think>', '', response_text, flags=re.DOTALL)  # Remove thinking tags
+                # Clean response text - remove artifacts but PRESERVE mermaid blocks
+                # Remove file paths
+                response_text = re.sub(r'/[^\s]+\.py', '', response_text)
+                # Remove thinking tags
+                response_text = re.sub(r'<think>.*?</think>', '', response_text, flags=re.DOTALL)
+                # Fix currency markdown
+                response_text = response_text.replace('\\$', '$')
                 
-                # Fix currency markdown - ensure $ symbols display correctly
-                # Streamlit markdown handles $ fine, but double-check escaping if needed
-                response_text = response_text.replace('\\$', '$')  # Remove any over-escaping
+                # Store in session state so it persists after download
+                st.session_state.generated_report = response_text
+                st.session_state.report_query = user_query
                 
                 status_text.text("✅ Report complete! (100%)")
                 progress_bar.progress(100)
@@ -1391,12 +1560,6 @@ DATABASE:
                 time.sleep(0.5)
                 progress_bar.empty()
                 status_text.empty()
-                
-                # Display the report
-                st.markdown('<div class="whitepaper-section">', unsafe_allow_html=True)
-                st.markdown('<div class="whitepaper-header">Strategic Advisory Report</div>', unsafe_allow_html=True)
-                render_report_with_mermaid(response_text)
-                st.markdown('</div>', unsafe_allow_html=True)
                 
                 # Log query for analytics
                 log_query(
@@ -1416,88 +1579,7 @@ DATABASE:
                     st.info("✅ Report generated! This was your last free report this month. Resets on " + 
                            next_reset.strftime('%B %d, %Y'))
                 
-                # Feedback section
-                st.markdown("---")
-                
-                # Export options
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    # PowerPoint export
-                    try:
-                        pptx_file = generate_professional_pptx(response_text, user_query)
-                        st.download_button(
-                            label="📊 Export as Presentation (.pptx)",
-                            data=pptx_file,
-                            file_name=f"bulwise_advisory_{datetime.now().strftime('%Y%m%d')}.pptx",
-                            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                            use_container_width=True
-                        )
-                    except Exception as e:
-                        st.error(f"PowerPoint export error: {str(e)}")
-                
-                with col2:
-                    # PDF export placeholder for future
-                    st.button("📄 Export as PDF (Coming Soon)", disabled=True, use_container_width=True)
-                
-                st.markdown("---")
-                st.markdown("### 💬 Quick Feedback")
-                
-                col1, col2, col3 = st.columns([2, 1, 1])
-                
-                with col1:
-                    st.markdown("**Was this report helpful?**")
-                
-                with col2:
-                    if st.button("👍 Yes, helpful", key="feedback_yes", use_container_width=True):
-                        log_feedback(user_query, "positive", None)
-                        st.success("Thank you for your feedback!")
-                        st.session_state.feedback_given = True
-                
-                with col3:
-                    if st.button("👎 Not helpful", key="feedback_no", use_container_width=True):
-                        st.session_state.show_feedback_form = True
-                
-                # If they clicked "Not helpful", show form for details
-                if st.session_state.get('show_feedback_form', False) and not st.session_state.get('feedback_given', False):
-                    feedback_text = st.text_area(
-                        "What could we improve?",
-                        placeholder="Tell us what was missing or could be better...",
-                        key="feedback_details"
-                    )
-                    
-                    if st.button("Submit Feedback", type="primary"):
-                        log_feedback(user_query, "negative", feedback_text)
-                        st.success("Thank you for your feedback! We'll use this to improve.")
-                        st.session_state.feedback_given = True
-                        st.session_state.show_feedback_form = False
-                
-                # Reset workflow for new query
-                if st.button("📝 Generate Another Report", type="primary"):
-                    st.session_state.workflow_step = 1
-                    st.session_state.initial_query = ''
-                    st.session_state.clarifying_answers = {}
-                    if 'feedback_given' in st.session_state:
-                        del st.session_state.feedback_given
-                    if 'show_feedback_form' in st.session_state:
-                        del st.session_state.show_feedback_form
-                    st.rerun()
-                
-                # Consultancy CTA
-                st.markdown("---")
-                st.markdown("""
-                <div style='background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%); padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;'>
-                    <h3 style='color: white; margin-top: 0;'>Need Implementation Support?</h3>
-                    <p style='color: #E8F5E9; font-size: 1.1rem; margin-bottom: 1.5rem;'>
-                        Get personalized 1:1 consultation to help you implement these recommendations
-                    </p>
-                    <a href='mailto:hello@bulwise.io?subject=Implementation%20Consultation%20Request' 
-                       style='background: white; color: #2E7D32; padding: 0.75rem 2rem; border-radius: 8px; 
-                              text-decoration: none; font-weight: 600; display: inline-block;'>
-                        📞 Book a Consultation
-                    </a>
-                </div>
-                """, unsafe_allow_html=True)
+                # Report will display below via persistent display section
                 
             except anthropic.APIError as e:
                 if "overloaded" in str(e).lower():
@@ -1516,6 +1598,108 @@ DATABASE:
             except Exception as e:
                 st.error(f"Unexpected error: {str(e)}")
                 st.info("💡 Please try again. If the issue persists, contact support.")
+
+# ============================================================================
+# DISPLAY REPORT (PERSISTS AFTER DOWNLOAD)
+# ============================================================================
+
+# Display report if it exists in session state (survives download button clicks)
+if 'generated_report' in st.session_state and st.session_state.generated_report:
+    response_text = st.session_state.generated_report
+    user_query = st.session_state.get('report_query', '')
+    
+    # Display the report
+    st.markdown('<div class="whitepaper-section">', unsafe_allow_html=True)
+    st.markdown('<div class="whitepaper-header">Strategic Advisory Report</div>', unsafe_allow_html=True)
+    render_report_with_mermaid(response_text)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Export options
+    st.markdown("---")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # PowerPoint export
+        try:
+            pptx_file = generate_professional_pptx(response_text, user_query)
+            st.download_button(
+                label="📊 Export as Presentation (.pptx)",
+                data=pptx_file,
+                file_name=f"bulwise_advisory_{datetime.now().strftime('%Y%m%d')}.pptx",
+                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                use_container_width=True,
+                key="download_pptx"
+            )
+        except Exception as e:
+            st.error(f"PowerPoint export error: {str(e)}")
+    
+    with col2:
+        # PDF export placeholder
+        st.button("📄 Export as PDF (Coming Soon)", disabled=True, use_container_width=True, key="download_pdf_disabled")
+    
+    # Feedback section
+    st.markdown("---")
+    st.markdown("### 💬 Quick Feedback")
+    
+    col1, col2, col3 = st.columns([2, 1, 1])
+    
+    with col1:
+        st.markdown("**Was this report helpful?**")
+    
+    with col2:
+        if st.button("👍 Yes, helpful", key="feedback_yes_persist", use_container_width=True):
+            log_feedback(user_query, "positive", None)
+            st.success("Thank you for your feedback!")
+            st.session_state.feedback_given = True
+    
+    with col3:
+        if st.button("👎 Not helpful", key="feedback_no_persist", use_container_width=True):
+            st.session_state.show_feedback_form = True
+    
+    # Feedback form
+    if st.session_state.get('show_feedback_form', False) and not st.session_state.get('feedback_given', False):
+        feedback_text = st.text_area(
+            "What could we improve?",
+            placeholder="Tell us what was missing or could be better...",
+            key="feedback_details_persist"
+        )
+        
+        if st.button("Submit Feedback", type="primary", key="submit_feedback_persist"):
+            log_feedback(user_query, "negative", feedback_text)
+            st.success("Thank you for your feedback! We'll use this to improve.")
+            st.session_state.feedback_given = True
+            st.session_state.show_feedback_form = False
+    
+    # Generate another report button
+    if st.button("📝 Generate Another Report", type="primary", key="generate_another"):
+        st.session_state.workflow_step = 1
+        st.session_state.initial_query = ''
+        st.session_state.clarifying_answers = {}
+        if 'generated_report' in st.session_state:
+            del st.session_state.generated_report
+        if 'report_query' in st.session_state:
+            del st.session_state.report_query
+        if 'feedback_given' in st.session_state:
+            del st.session_state.feedback_given
+        if 'show_feedback_form' in st.session_state:
+            del st.session_state.show_feedback_form
+        st.rerun()
+    
+    # Consultancy CTA
+    st.markdown("---")
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%); padding: 2rem; border-radius: 12px; text-align: center; margin: 2rem 0;'>
+        <h3 style='color: white; margin-top: 0;'>Need Implementation Support?</h3>
+        <p style='color: #E8F5E9; font-size: 1.1rem; margin-bottom: 1.5rem;'>
+            Get personalized 1:1 consultation to help you implement these recommendations
+        </p>
+        <a href='mailto:hello@bulwise.io?subject=Implementation%20Consultation%20Request' 
+           style='background: white; color: #2E7D32; padding: 0.75rem 2rem; border-radius: 8px; 
+                  text-decoration: none; font-weight: 600; display: inline-block;'>
+            📞 Book a Consultation
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
