@@ -12,6 +12,25 @@ from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
 import io
 
+# Try to import streamlit-mermaid, fallback to code display if not available
+try:
+    from streamlit_mermaid import st_mermaid
+    MERMAID_AVAILABLE = True
+except ImportError:
+    MERMAID_AVAILABLE = False
+
+# Try to import reportlab for PDF generation
+try:
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import letter, A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
+    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
+    PDF_AVAILABLE = True
+except ImportError:
+    PDF_AVAILABLE = False
+
 # Page configuration
 st.set_page_config(
     page_title="Bulwise - Strategic AI Stack Advisory",
@@ -774,8 +793,303 @@ def generate_professional_pptx(report_text, user_query):
     
     return pptx_io
 
+# ============================================================================
+# PDF GENERATION FUNCTION
+# ============================================================================
+
+def generate_professional_pdf(report_text, user_query):
+    """Generate a professional PDF document from the report."""
+    
+    if not PDF_AVAILABLE:
+        return None
+    
+    # Create PDF in memory
+    pdf_buffer = io.BytesIO()
+    
+    # Create PDF document
+    doc = SimpleDocTemplate(
+        pdf_buffer,
+        pagesize=letter,
+        rightMargin=0.75*inch,
+        leftMargin=0.75*inch,
+        topMargin=1*inch,
+        bottomMargin=0.75*inch
+    )
+    
+    # Define colors
+    BRAND_GREEN = colors.HexColor('#2E7D32')
+    DARK_GRAY = colors.HexColor('#333333')
+    LIGHT_GRAY = colors.HexColor('#F5F5F5')
+    
+    # Define styles
+    styles = getSampleStyleSheet()
+    
+    # Custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=24,
+        textColor=BRAND_GREEN,
+        spaceAfter=30,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    heading1_style = ParagraphStyle(
+        'CustomHeading1',
+        parent=styles['Heading1'],
+        fontSize=16,
+        textColor=BRAND_GREEN,
+        spaceAfter=12,
+        spaceBefore=20,
+        fontName='Helvetica-Bold'
+    )
+    
+    heading2_style = ParagraphStyle(
+        'CustomHeading2',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=BRAND_GREEN,
+        spaceAfter=10,
+        spaceBefore=15,
+        fontName='Helvetica-Bold'
+    )
+    
+    body_style = ParagraphStyle(
+        'CustomBody',
+        parent=styles['BodyText'],
+        fontSize=11,
+        textColor=DARK_GRAY,
+        spaceAfter=12,
+        alignment=TA_JUSTIFY,
+        leading=14
+    )
+    
+    bullet_style = ParagraphStyle(
+        'CustomBullet',
+        parent=styles['BodyText'],
+        fontSize=10,
+        textColor=DARK_GRAY,
+        leftIndent=20,
+        spaceAfter=6,
+        leading=13
+    )
+    
+    # Build PDF content
+    content = []
+    
+    # Title page
+    content.append(Spacer(1, 1*inch))
+    content.append(Paragraph("Strategic AI Implementation Advisory", title_style))
+    content.append(Spacer(1, 0.3*inch))
+    
+    # User query
+    query_text = user_query if len(user_query) <= 500 else user_query[:500] + "..."
+    content.append(Paragraph(query_text, body_style))
+    content.append(Spacer(1, 0.3*inch))
+    
+    # Date
+    date_text = f"Bulwise Advisory Report | {datetime.now().strftime('%B %d, %Y')}"
+    content.append(Paragraph(date_text, body_style))
+    content.append(PageBreak())
+    
+    # Parse and add report sections
+    sections = {}
+    current_section = None
+    current_content = []
+    
+    for line in report_text.split('\n'):
+        if line.startswith('## '):
+            if current_section:
+                sections[current_section] = '\n'.join(current_content)
+            current_section = line.replace('## ', '').strip()
+            current_content = []
+        else:
+            current_content.append(line)
+    
+    if current_section:
+        sections[current_section] = '\n'.join(current_content)
+    
+    # Add each section to PDF
+    for section_title, section_content in sections.items():
+        # Skip mermaid code blocks
+        if 'IMPLEMENTATION ROADMAP' in section_title:
+            # Remove mermaid blocks for PDF
+            section_content = re.sub(r'```\s*mermaid.*?```', '[Visual Timeline - See Online Report]', section_content, flags=re.DOTALL)
+        
+        # Section heading
+        content.append(Paragraph(section_title, heading1_style))
+        
+        # Clean markdown from content
+        clean_content = section_content
+        # Remove bold markers but keep the text
+        clean_content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', clean_content)
+        # Remove italic markers
+        clean_content = re.sub(r'\*(.*?)\*', r'<i>\1</i>', clean_content)
+        # Remove headers
+        clean_content = re.sub(r'^###\s+(.+)$', r'<b>\1</b>', clean_content, flags=re.MULTILINE)
+        
+        # Split into paragraphs
+        paragraphs = clean_content.split('\n\n')
+        
+        for para in paragraphs:
+            if para.strip():
+                # Handle bullet points
+                if para.strip().startswith('-') or para.strip().startswith('•'):
+                    lines = para.split('\n')
+                    for line in lines:
+                        if line.strip():
+                            bullet_text = line.strip().lstrip('-•').strip()
+                            content.append(Paragraph(f"• {bullet_text}", bullet_style))
+                else:
+                    # Regular paragraph
+                    # Handle URLs
+                    para_with_links = re.sub(
+                        r'(https?://[^\s]+)',
+                        r'<link href="\1" color="blue">\1</link>',
+                        para.strip()
+                    )
+                    content.append(Paragraph(para_with_links, body_style))
+        
+        content.append(Spacer(1, 0.2*inch))
+    
+    # Build PDF
+    doc.build(content)
+    
+    # Get PDF data
+    pdf_buffer.seek(0)
+    return pdf_buffer
+
+def validate_report_quality(report_text):
+    """
+    Validate report quality and return quality score with specific feedback.
+    Returns: (score, issues_list, warnings_list)
+    """
+    
+    issues = []
+    warnings = []
+    score = 100
+    
+    # Required sections
+    required_sections = [
+        'EXECUTIVE SUMMARY',
+        'STRATEGIC RECOMMENDATIONS',
+        'IMPLEMENTATION ROADMAP',
+        'FINANCIAL ANALYSIS',
+        'RISK ASSESSMENT'
+    ]
+    
+    missing_sections = []
+    for section in required_sections:
+        if section not in report_text:
+            missing_sections.append(section)
+            score -= 15
+    
+    if missing_sections:
+        issues.append(f"Missing critical sections: {', '.join(missing_sections)}")
+    
+    # Check for tool recommendations with URLs
+    tool_count = len(re.findall(r'\*\*([^*]+)\*\*\s*\([^)]+\)', report_text))
+    url_count = len(re.findall(r'https?://[^\s\)]+', report_text))
+    
+    if tool_count == 0:
+        issues.append("No tools recommended")
+        score -= 20
+    elif tool_count < 3:
+        warnings.append(f"Only {tool_count} tools recommended (recommend 3-5)")
+        score -= 5
+    
+    if tool_count > 0 and url_count < tool_count:
+        warnings.append(f"{tool_count - url_count} tools missing URLs")
+        score -= 10
+    
+    # Check section lengths
+    sections = {}
+    current_section = None
+    current_content = []
+    
+    for line in report_text.split('\n'):
+        if line.startswith('## '):
+            if current_section:
+                sections[current_section] = '\n'.join(current_content)
+            current_section = line.replace('## ', '').strip()
+            current_content = []
+        else:
+            current_content.append(line)
+    
+    if current_section:
+        sections[current_section] = '\n'.join(current_content)
+    
+    # Check Executive Summary length
+    if 'EXECUTIVE SUMMARY' in sections:
+        exec_summary_len = len(sections['EXECUTIVE SUMMARY'].strip())
+        if exec_summary_len < 200:
+            warnings.append(f"Executive Summary too brief ({exec_summary_len} chars, recommend 300+)")
+            score -= 5
+    
+    # Check for cost information
+    if 'FINANCIAL ANALYSIS' in sections:
+        financial_text = sections['FINANCIAL ANALYSIS']
+        if '$' not in financial_text:
+            issues.append("Financial Analysis missing specific costs")
+            score -= 10
+        
+        # Check for monthly/annual costs
+        if 'month' not in financial_text.lower():
+            warnings.append("Financial Analysis missing monthly breakdown")
+            score -= 5
+    
+    # Check for implementation timeline
+    if 'IMPLEMENTATION ROADMAP' in sections:
+        roadmap = sections['IMPLEMENTATION ROADMAP']
+        phase_count = len(re.findall(r'Phase \d+', roadmap))
+        if phase_count == 0:
+            warnings.append("Implementation Roadmap missing phase structure")
+            score -= 5
+        elif phase_count < 3:
+            warnings.append(f"Only {phase_count} phases (recommend 3-4)")
+    
+    # Check for risk mitigation
+    if 'RISK ASSESSMENT' in sections:
+        risk_text = sections['RISK ASSESSMENT']
+        if 'mitigation' not in risk_text.lower() and 'mitigate' not in risk_text.lower():
+            warnings.append("Risk Assessment missing mitigation strategies")
+            score -= 5
+    
+    # Ensure score doesn't go below 0
+    score = max(0, score)
+    
+    return score, issues, warnings
+
+def display_quality_badge(score):
+    """Display quality score as colored badge."""
+    
+    if score >= 90:
+        color = "#2E7D32"  # Green
+        label = "Excellent"
+        emoji = "🏆"
+    elif score >= 75:
+        color = "#558B2F"  # Light green
+        label = "Good"
+        emoji = "✅"
+    elif score >= 60:
+        color = "#FFA000"  # Orange
+        label = "Acceptable"
+        emoji = "⚠️"
+    else:
+        color = "#D32F2F"  # Red
+        label = "Needs Improvement"
+        emoji = "❌"
+    
+    return f"""
+    <div style="background: {color}; color: white; padding: 0.5rem 1rem; border-radius: 8px; 
+                display: inline-block; font-weight: bold; margin: 1rem 0;">
+        {emoji} Quality Score: {score}/100 - {label}
+    </div>
+    """
+
 def render_report_with_mermaid(report_text):
-    """Render report text with Mermaid diagrams using HTML iframe."""
+    """Render report text with Mermaid diagrams and tool logos."""
     
     # Split by mermaid blocks
     pattern = r'```\s*mermaid\s*\n(.*?)```'
@@ -783,24 +1097,70 @@ def render_report_with_mermaid(report_text):
     
     for i, part in enumerate(parts):
         if i % 2 == 0:
-            # Regular markdown content
+            # Regular markdown content - enhance with logos
             if part.strip():
-                st.markdown(part, unsafe_allow_html=True)
+                # Add logos to tool recommendations
+                enhanced_part = add_tool_logos(part)
+                st.markdown(enhanced_part, unsafe_allow_html=True)
         else:
-            # Mermaid diagram - render with HTML
+            # Mermaid diagram content
             mermaid_code = part.strip()
-            html = f"""
-            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                <script type="module">
-                    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-                    mermaid.initialize({{ startOnLoad: true, theme: 'default' }});
-                </script>
-                <div class="mermaid">
-                {mermaid_code}
-                </div>
-            </div>
-            """
-            st.markdown(html, unsafe_allow_html=True)
+            
+            if MERMAID_AVAILABLE:
+                # Use streamlit-mermaid library
+                try:
+                    st_mermaid(mermaid_code, height=500)
+                except Exception as e:
+                    # Fallback to styled code block
+                    st.markdown("### 📊 Visual Timeline")
+                    st.code(mermaid_code, language="mermaid")
+            else:
+                # Library not available - show as styled code
+                st.markdown("### 📊 Implementation Timeline")
+                st.info("💡 Interactive diagram - see details below")
+                
+                # Parse and display in a more readable format
+                lines = mermaid_code.split('\n')
+                for line in lines:
+                    if line.strip() and not line.strip().startswith('graph'):
+                        # Clean up the mermaid syntax
+                        cleaned = line.replace('-->', '→').replace('[', '**').replace(']', '**')
+                        st.markdown(f"- {cleaned.strip()}")
+
+def add_tool_logos(text):
+    """Add logos to tool names in markdown text."""
+    
+    # Pattern to find tool recommendations with websites
+    # Looks for: **ToolName** followed by website URL
+    pattern = r'\*\*([^*]+)\*\*\s*\([^)]+\)([^#]*?)(?:Official Website|Website):\s*\*?\*?(https?://[^\s\)]+)'
+    
+    def replace_with_logo(match):
+        tool_name = match.group(1).strip()
+        content = match.group(2)
+        url = match.group(3).strip().rstrip('*').rstrip(')')
+        
+        # Extract domain for favicon
+        domain_match = re.search(r'https?://(?:www\.)?([^/]+)', url)
+        if domain_match:
+            domain = domain_match.group(1)
+            # Use DuckDuckGo's favicon service (free, no API key needed)
+            logo_url = f"https://icons.duckduckgo.com/ip3/{domain}.ico"
+            
+            # Return enhanced HTML with logo
+            return f'''
+<div style="border-left: 4px solid #2E7D32; padding-left: 1rem; margin: 1.5rem 0;">
+    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <img src="{logo_url}" width="24" height="24" style="border-radius: 4px;" onerror="this.style.display='none'">
+        <strong style="font-size: 1.1rem; color: #2E7D32;">{tool_name}</strong>
+    </div>
+    {content}
+    <p><strong>Official Website:</strong> <a href="{url}" target="_blank" style="color: #2E7D32;">{url}</a></p>
+</div>
+'''
+        return match.group(0)
+    
+    enhanced = re.sub(pattern, replace_with_logo, text, flags=re.DOTALL)
+    return enhanced
 
 # ============================================================================
 # LOAD DATABASE
@@ -1067,17 +1427,18 @@ if st.session_state.workflow_step == 1:
 
 # STEP 2: Clarifying Questions
 elif st.session_state.workflow_step == 2:
-    st.markdown("### 🔍 Quick Clarifying Questions")
-    st.markdown("*Help us refine your recommendations (optional)*")
+    st.markdown("### 🔍 Refine Your Requirements")
+    st.markdown("*These optional details help us provide more precise recommendations*")
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Show what they entered
     with st.expander("📝 Your Initial Request", expanded=False):
         st.write(st.session_state.initial_query)
     
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("---")
     
-    # Clarifying questions
+    # Group 1: Team & Scale
+    st.markdown("#### 👥 Team & Scale")
     col1, col2 = st.columns(2)
     
     with col1:
@@ -1085,38 +1446,115 @@ elif st.session_state.workflow_step == 2:
             "**Team Size:**",
             ["Not specified", "Individual (just me)", "Small team (2-10)", "Medium team (11-50)", "Large team (50+)"],
             index=0,
-            key="team_size_select"
-        )
-        
-        timeline = st.selectbox(
-            "**Implementation Timeline:**",
-            ["Not specified", "Urgent (need now)", "Within 2 weeks", "Within 1 month", "Within 3 months", "Flexible timeline"],
-            index=0,
-            key="timeline_select"
+            key="team_size_select",
+            help="Helps us recommend tools with appropriate collaboration features and pricing tiers"
         )
     
     with col2:
+        use_case_type = st.selectbox(
+            "**Primary Use Case:**",
+            ["Not specified", "Content creation", "Software development", "Marketing & sales", "Data analysis", "Customer support", "Design & creative", "Other"],
+            index=0,
+            key="use_case_select",
+            help="Helps us prioritize tools relevant to your specific workflow"
+        )
+    
+    st.markdown("---")
+    
+    # Group 2: Budget & Timeline
+    st.markdown("#### 💰 Budget & Timeline")
+    col1, col2 = st.columns(2)
+    
+    with col1:
         budget = st.selectbox(
             "**Monthly Budget Range:**",
             ["Not specified", "Under $50/month", "$50-$200/month", "$200-$500/month", "$500-$1,000/month", "$1,000+/month"],
             index=0,
-            key="budget_select"
+            key="budget_select",
+            help="Your budget range helps us recommend cost-effective solutions that fit your constraints"
         )
-        
+    
+    with col2:
+        timeline = st.selectbox(
+            "**Implementation Timeline:**",
+            ["Not specified", "Urgent (need now)", "Within 2 weeks", "Within 1 month", "Within 3 months", "Flexible timeline"],
+            index=0,
+            key="timeline_select",
+            help="Urgency affects complexity of tools we recommend (simpler for urgent needs)"
+        )
+    
+    st.markdown("---")
+    
+    # Group 3: Technical Preferences
+    st.markdown("#### ⚙️ Technical Preferences")
+    col1, col2 = st.columns(2)
+    
+    with col1:
         experience = st.selectbox(
             "**Technical Experience:**",
             ["Not specified", "Beginner (need easy tools)", "Intermediate (comfortable with tech)", "Advanced (can handle complexity)"],
             index=0,
-            key="experience_select"
+            key="experience_select",
+            help="Determines the learning curve we factor into recommendations"
         )
     
-    # Save answers
+    with col2:
+        integration_need = st.selectbox(
+            "**Integration Requirements:**",
+            ["Not specified", "Must integrate with existing tools", "Standalone tools preferred", "Either works"],
+            index=0,
+            key="integration_select",
+            help="Helps us prioritize tools with strong API support and integrations if needed"
+        )
+    
+    st.markdown("---")
+    
+    # Group 4: Specific Constraints (Optional)
+    with st.expander("🎯 Additional Constraints (Optional)", expanded=False):
+        st.markdown("*These help us tailor recommendations even further*")
+        
+        data_privacy = st.selectbox(
+            "**Data Privacy Requirements:**",
+            ["Not specified", "Standard cloud services OK", "Need data residency options", "Must be on-premise/self-hosted"],
+            index=0,
+            key="privacy_select",
+            help="Important for regulated industries or sensitive data"
+        )
+        
+        existing_tools = st.text_input(
+            "**Current Tools (if any):**",
+            placeholder="e.g., Slack, Google Workspace, Salesforce",
+            key="existing_tools_input",
+            help="Helps us suggest tools that integrate well with your current stack"
+        )
+        
+        must_have_features = st.text_area(
+            "**Must-Have Features:**",
+            placeholder="e.g., Mobile app, offline mode, custom branding",
+            height=80,
+            key="must_have_input",
+            help="Specific features that are non-negotiable for your use case"
+        )
+    
+    # Save all answers
     st.session_state.clarifying_answers = {
         'team_size': team_size if team_size != "Not specified" else None,
+        'use_case_type': use_case_type if use_case_type != "Not specified" else None,
         'budget': budget if budget != "Not specified" else None,
         'timeline': timeline if timeline != "Not specified" else None,
-        'experience': experience if experience != "Not specified" else None
+        'experience': experience if experience != "Not specified" else None,
+        'integration_need': integration_need if integration_need != "Not specified" else None,
+        'data_privacy': data_privacy if data_privacy != "Not specified" else None,
+        'existing_tools': existing_tools if existing_tools.strip() else None,
+        'must_have_features': must_have_features if must_have_features.strip() else None
     }
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Show what's been specified
+    specified_count = sum(1 for v in st.session_state.clarifying_answers.values() if v)
+    if specified_count > 0:
+        st.info(f"✅ You've specified {specified_count} details to refine your recommendations")
     
     st.markdown("<br>", unsafe_allow_html=True)
     
@@ -1129,7 +1567,7 @@ elif st.session_state.workflow_step == 2:
             st.rerun()
     
     with col2:
-        if st.button("Skip Questions →", use_container_width=True):
+        if st.button("Skip All →", use_container_width=True):
             st.session_state.clarifying_answers = {}
             st.session_state.workflow_step = 3
             st.rerun()
@@ -1146,14 +1584,30 @@ elif st.session_state.workflow_step == 3:
     
     if any(st.session_state.clarifying_answers.values()):
         clarifications = []
+        
+        # Core details
         if st.session_state.clarifying_answers.get('team_size'):
             clarifications.append(f"Team size: {st.session_state.clarifying_answers['team_size']}")
+        if st.session_state.clarifying_answers.get('use_case_type'):
+            clarifications.append(f"Primary use case: {st.session_state.clarifying_answers['use_case_type']}")
         if st.session_state.clarifying_answers.get('budget'):
             clarifications.append(f"Budget: {st.session_state.clarifying_answers['budget']}")
         if st.session_state.clarifying_answers.get('timeline'):
             clarifications.append(f"Timeline: {st.session_state.clarifying_answers['timeline']}")
         if st.session_state.clarifying_answers.get('experience'):
             clarifications.append(f"Technical experience: {st.session_state.clarifying_answers['experience']}")
+        
+        # Technical preferences
+        if st.session_state.clarifying_answers.get('integration_need'):
+            clarifications.append(f"Integration preference: {st.session_state.clarifying_answers['integration_need']}")
+        if st.session_state.clarifying_answers.get('data_privacy'):
+            clarifications.append(f"Data privacy: {st.session_state.clarifying_answers['data_privacy']}")
+        
+        # Specific details
+        if st.session_state.clarifying_answers.get('existing_tools'):
+            clarifications.append(f"Current tools: {st.session_state.clarifying_answers['existing_tools']}")
+        if st.session_state.clarifying_answers.get('must_have_features'):
+            clarifications.append(f"Must-have features: {st.session_state.clarifying_answers['must_have_features']}")
         
         user_query += "\n\nAdditional context: " + "; ".join(clarifications)
     
@@ -1277,7 +1731,9 @@ For each tool, provide:
 - **Strategic Rationale:** Why this tool fits the client's needs (2-3 sentences with specific data points, referencing market position if available)
 - **Key Capabilities:** Bullet list of relevant features
 - **Pricing:** Specific tier recommendation with justification
-- **Official Website:** [Include the tool's website URL]
+- **Official Website:** [REQUIRED - Always include the tool's official website URL from the database. Format as: https://toolname.com]
+
+**CRITICAL:** Every tool recommendation MUST include its official website URL. Look up the URL in the database and include it prominently.
 
 ### Technology Stack Visualization
 [NEW - #14: ASCII diagram showing how tools connect]
@@ -1611,6 +2067,27 @@ if 'generated_report' in st.session_state and st.session_state.generated_report:
     # Display the report
     st.markdown('<div class="whitepaper-section">', unsafe_allow_html=True)
     st.markdown('<div class="whitepaper-header">Strategic Advisory Report</div>', unsafe_allow_html=True)
+    
+    # Quality validation
+    quality_score, quality_issues, quality_warnings = validate_report_quality(response_text)
+    st.markdown(display_quality_badge(quality_score), unsafe_allow_html=True)
+    
+    # Show quality feedback if there are issues
+    if quality_issues or quality_warnings:
+        with st.expander("📊 Quality Report Details", expanded=False):
+            if quality_issues:
+                st.markdown("**⚠️ Critical Issues:**")
+                for issue in quality_issues:
+                    st.markdown(f"- {issue}")
+            
+            if quality_warnings:
+                st.markdown("**💡 Suggestions for Improvement:**")
+                for warning in quality_warnings:
+                    st.markdown(f"- {warning}")
+            
+            st.info("💡 The report has been generated, but addressing these items would improve quality.")
+    
+    # Display report content
     render_report_with_mermaid(response_text)
     st.markdown('</div>', unsafe_allow_html=True)
     
@@ -1634,8 +2111,23 @@ if 'generated_report' in st.session_state and st.session_state.generated_report:
             st.error(f"PowerPoint export error: {str(e)}")
     
     with col2:
-        # PDF export placeholder
-        st.button("📄 Export as PDF (Coming Soon)", disabled=True, use_container_width=True, key="download_pdf_disabled")
+        # PDF export
+        try:
+            pdf_file = generate_professional_pdf(response_text, user_query)
+            if pdf_file and PDF_AVAILABLE:
+                st.download_button(
+                    label="📄 Export as PDF",
+                    data=pdf_file,
+                    file_name=f"bulwise_advisory_{datetime.now().strftime('%Y%m%d')}.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                    key="download_pdf"
+                )
+            else:
+                st.button("📄 Export as PDF (Installing...)", disabled=True, use_container_width=True, key="download_pdf_disabled")
+        except Exception as e:
+            st.button("📄 Export as PDF (Error)", disabled=True, use_container_width=True, key="download_pdf_error")
+            st.caption(f"PDF generation error: {str(e)}")
     
     # Feedback section
     st.markdown("---")
