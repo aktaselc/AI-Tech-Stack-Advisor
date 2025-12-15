@@ -11,6 +11,7 @@ from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
 import io
+from streamlit_mermaid import st_mermaid
 
 # Page configuration
 st.set_page_config(
@@ -273,7 +274,7 @@ def log_feedback(user_query, sentiment, feedback_text):
 # ============================================================================
 
 def generate_professional_pptx(report_text, user_query):
-    """Generate a professional PowerPoint presentation from the report."""
+    """Generate a professional PowerPoint presentation from the report with clean formatting."""
     
     # Create presentation
     prs = Presentation()
@@ -284,6 +285,36 @@ def generate_professional_pptx(report_text, user_query):
     BRAND_GREEN = RGBColor(46, 125, 50)  # #2E7D32
     DARK_GRAY = RGBColor(51, 51, 51)
     LIGHT_GRAY = RGBColor(245, 245, 245)
+    WHITE = RGBColor(255, 255, 255)
+    
+    def clean_text(text):
+        """Remove markdown formatting for clean PowerPoint text."""
+        # Remove bold markers
+        text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+        # Remove italic markers
+        text = re.sub(r'\*(.*?)\*', r'\1', text)
+        # Remove headers
+        text = re.sub(r'^#+\s+', '', text, flags=re.MULTILINE)
+        # Remove bullet points
+        text = re.sub(r'^\s*[-•]\s+', '', text, flags=re.MULTILINE)
+        # Remove extra whitespace
+        text = re.sub(r'\n\s*\n', '\n', text)
+        return text.strip()
+    
+    def add_header_slide(slide, title_text, bg_color=BRAND_GREEN):
+        """Add consistent header bar to slide."""
+        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
+        header.fill.solid()
+        header.fill.fore_color.rgb = bg_color
+        header.line.color.rgb = bg_color
+        
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.2), Inches(9), Inches(0.5))
+        tf = title_box.text_frame
+        tf.text = title_text
+        p = tf.paragraphs[0]
+        p.font.size = Pt(32)
+        p.font.bold = True
+        p.font.color.rgb = WHITE
     
     # Parse sections from report
     sections = {}
@@ -302,379 +333,283 @@ def generate_professional_pptx(report_text, user_query):
     if current_section:
         sections[current_section] = '\n'.join(current_content)
     
-    # Slide 1: Title Slide
-    slide = prs.slides.add_slide(prs.slide_layouts[6])  # Blank layout
+    # ============================================================================
+    # SLIDE 1: TITLE SLIDE
+    # ============================================================================
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
     
-    # Add background color
     background = slide.background
     fill = background.fill
     fill.solid()
     fill.fore_color.rgb = LIGHT_GRAY
     
-    # Title
-    title_box = slide.shapes.add_textbox(Inches(0.5), Inches(2.5), Inches(9), Inches(1))
-    title_frame = title_box.text_frame
-    title_frame.text = "Strategic AI Implementation Advisory"
-    title_p = title_frame.paragraphs[0]
-    title_p.font.size = Pt(44)
-    title_p.font.bold = True
-    title_p.font.color.rgb = BRAND_GREEN
-    title_p.alignment = PP_ALIGN.CENTER
+    # Main title
+    title_box = slide.shapes.add_textbox(Inches(0.5), Inches(2), Inches(9), Inches(1))
+    tf = title_box.text_frame
+    tf.text = "Strategic AI Implementation Advisory"
+    p = tf.paragraphs[0]
+    p.font.size = Pt(48)
+    p.font.bold = True
+    p.font.color.rgb = BRAND_GREEN
+    p.alignment = PP_ALIGN.CENTER
     
-    # Subtitle with query
-    subtitle_box = slide.shapes.add_textbox(Inches(1), Inches(3.8), Inches(8), Inches(1.5))
-    subtitle_frame = subtitle_box.text_frame
-    subtitle_frame.word_wrap = True
-    subtitle_frame.text = f'"{user_query[:150]}..."' if len(user_query) > 150 else f'"{user_query}"'
-    subtitle_p = subtitle_frame.paragraphs[0]
-    subtitle_p.font.size = Pt(18)
-    subtitle_p.font.color.rgb = DARK_GRAY
-    subtitle_p.alignment = PP_ALIGN.CENTER
+    # User query subtitle
+    query_box = slide.shapes.add_textbox(Inches(0.8), Inches(3.5), Inches(8.4), Inches(2))
+    tf = query_box.text_frame
+    tf.word_wrap = True
+    tf.text = user_query
+    p = tf.paragraphs[0]
+    p.font.size = Pt(16)
+    p.font.color.rgb = DARK_GRAY
+    p.alignment = PP_ALIGN.CENTER
     
-    # Date and branding
+    # Date
     date_box = slide.shapes.add_textbox(Inches(0.5), Inches(6.5), Inches(9), Inches(0.5))
-    date_frame = date_box.text_frame
-    date_frame.text = f"Bulwise Advisory Report | {datetime.now().strftime('%B %d, %Y')}"
-    date_p = date_frame.paragraphs[0]
-    date_p.font.size = Pt(14)
-    date_p.font.color.rgb = DARK_GRAY
-    date_p.alignment = PP_ALIGN.CENTER
+    tf = date_box.text_frame
+    tf.text = f"Bulwise Advisory Report | {datetime.now().strftime('%B %d, %Y')}"
+    p = tf.paragraphs[0]
+    p.font.size = Pt(14)
+    p.font.color.rgb = DARK_GRAY
+    p.alignment = PP_ALIGN.CENTER
     
-    # Slide 2: Executive Summary
+    # ============================================================================
+    # SLIDE 2: EXECUTIVE SUMMARY
+    # ============================================================================
     if 'EXECUTIVE SUMMARY' in sections:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
+        add_header_slide(slide, "Executive Summary")
         
-        # Header bar
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
-        
-        # Title in header
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Executive Summary"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        # Content
-        content_text = sections['EXECUTIVE SUMMARY'].strip()
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        content = clean_text(sections['EXECUTIVE SUMMARY'])
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
         tf = content_box.text_frame
         tf.word_wrap = True
-        tf.text = content_text[:1500]  # Increased from 500 to 1500
-        for paragraph in tf.paragraphs:
-            paragraph.font.size = Pt(14)  # Reduced from 16 to fit more
-            paragraph.font.color.rgb = DARK_GRAY
-            paragraph.space_before = Pt(8)  # Reduced from 12
+        
+        # Split into paragraphs
+        for para in content.split('\n\n'):
+            if para.strip():
+                p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
+                p.text = para.strip()
+                p.font.size = Pt(14)
+                p.font.color.rgb = DARK_GRAY
+                p.space_before = Pt(10)
+                p.space_after = Pt(10)
     
-    # Slide 2.5: Methodology & Analysis (NEW)
-    if 'METHODOLOGY & ANALYSIS' in sections or 'METHODOLOGY AND ANALYSIS' in sections:
-        slide = prs.slides.add_slide(prs.slide_layouts[6])
+    # ============================================================================
+    # SLIDE 3: RECOMMENDED TOOLS - DETAILED
+    # ============================================================================
+    if 'STRATEGIC RECOMMENDATIONS' in sections:
+        content = sections['STRATEGIC RECOMMENDATIONS']
         
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
+        # Extract individual tool sections
+        tool_sections = []
+        current_tool = None
+        current_tool_content = []
         
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Methodology & Analysis"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
+        for line in content.split('\n'):
+            # Look for tool names (lines with ** at start and end on same line)
+            if line.strip().startswith('**') and '**' in line[2:]:
+                if current_tool:
+                    tool_sections.append((current_tool, '\n'.join(current_tool_content)))
+                # Extract tool name
+                current_tool = line.strip().split('**')[1]
+                current_tool_content = []
+            elif current_tool:
+                current_tool_content.append(line)
         
-        method_key = 'METHODOLOGY & ANALYSIS' if 'METHODOLOGY & ANALYSIS' in sections else 'METHODOLOGY AND ANALYSIS'
-        method_text = sections[method_key]
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
-        tf = content_box.text_frame
-        tf.word_wrap = True
+        if current_tool:
+            tool_sections.append((current_tool, '\n'.join(current_tool_content)))
         
-        for line in method_text.split('\n')[:30]:
-            if line.strip() and not line.startswith('#'):
-                p = tf.add_paragraph()
-                p.text = line.strip('- ').strip()
+        # Create detailed slides for each tool
+        for tool_name, tool_content in tool_sections[:6]:  # Max 6 tools
+            slide = prs.slides.add_slide(prs.slide_layouts[6])
+            add_header_slide(slide, f"Tool Recommendation: {tool_name}")
+            
+            # Clean and parse content
+            clean_content = clean_text(tool_content)
+            
+            content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
+            tf = content_box.text_frame
+            tf.word_wrap = True
+            
+            lines = [l for l in clean_content.split('\n') if l.strip()]
+            for line in lines[:25]:  # Max 25 lines per tool
+                p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
+                p.text = line.strip()
                 p.font.size = Pt(12)
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(5)
+                p.space_before = Pt(6)
     
-    # Slide 3: Recommended Tools
-    if 'STRATEGIC RECOMMENDATIONS' in sections:
-        slide = prs.slides.add_slide(prs.slide_layouts[6])
-        
-        # Header
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
-        
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Recommended Technology Stack"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        # Extract tool names (look for **Tool Name** patterns)
-        tools_section = sections['STRATEGIC RECOMMENDATIONS']
-        tool_lines = [line for line in tools_section.split('\n') if line.strip().startswith('- **') or line.strip().startswith('**')]
-        
-        # Create table for tools
-        if tool_lines:
-            rows = min(len(tool_lines) + 1, 6)  # Max 5 tools + header
-            cols = 2
-            
-            left = Inches(0.75)
-            top = Inches(1.5)
-            width = Inches(8.5)
-            height = Inches(4.5)
-            
-            table = slide.shapes.add_table(rows, cols, left, top, width, height).table
-            
-            # Header row
-            table.cell(0, 0).text = "Tool"
-            table.cell(0, 1).text = "Purpose"
-            
-            for i in range(cols):
-                cell = table.cell(0, i)
-                cell.fill.solid()
-                cell.fill.fore_color.rgb = BRAND_GREEN
-                paragraph = cell.text_frame.paragraphs[0]
-                paragraph.font.size = Pt(14)
-                paragraph.font.bold = True
-                paragraph.font.color.rgb = RGBColor(255, 255, 255)
-            
-            # Tool rows
-            for idx, tool_line in enumerate(tool_lines[:5], 1):
-                # Extract tool name
-                tool_name = tool_line.split('**')[1] if '**' in tool_line else tool_line.strip('- ')
-                purpose = tool_line.split('(')[1].split(')')[0] if '(' in tool_line else "AI Tool"
-                
-                table.cell(idx, 0).text = tool_name
-                table.cell(idx, 1).text = purpose
-                
-                for i in range(cols):
-                    cell = table.cell(idx, i)
-                    paragraph = cell.text_frame.paragraphs[0]
-                    paragraph.font.size = Pt(12)
-                    paragraph.font.color.rgb = DARK_GRAY
-    
-    # Slide 4: Implementation Roadmap
+    # ============================================================================
+    # SLIDE: IMPLEMENTATION ROADMAP
+    # ============================================================================
     if 'IMPLEMENTATION ROADMAP' in sections:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
+        add_header_slide(slide, "Implementation Roadmap")
         
-        # Header
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
+        content = clean_text(sections['IMPLEMENTATION ROADMAP'])
         
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Implementation Roadmap"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        # Parse phases
-        roadmap_text = sections['IMPLEMENTATION ROADMAP']
+        # Extract phases
         phases = []
-        for line in roadmap_text.split('\n'):
+        current_phase = None
+        current_phase_content = []
+        
+        for line in content.split('\n'):
             if 'Phase' in line and ':' in line:
-                phases.append(line.strip('# ').strip())
+                if current_phase:
+                    phases.append((current_phase, '\n'.join(current_phase_content)))
+                current_phase = line.strip()
+                current_phase_content = []
+            elif current_phase:
+                current_phase_content.append(line)
         
-        # Create boxes for each phase
-        if phases:
-            box_width = Inches(2.5)
-            box_height = Inches(1.2)
-            spacing = Inches(0.3)
-            start_y = Inches(1.8)
-            start_x = Inches(0.75)
+        if current_phase:
+            phases.append((current_phase, '\n'.join(current_phase_content)))
+        
+        # Display phases in boxes
+        y_start = Inches(1.5)
+        for idx, (phase_name, phase_content) in enumerate(phases[:4]):
+            # Phase box
+            box = slide.shapes.add_shape(
+                1,  # Rectangle
+                Inches(0.75),
+                y_start + (idx * Inches(1.4)),
+                Inches(8.5),
+                Inches(1.2)
+            )
+            box.fill.solid()
+            box.fill.fore_color.rgb = LIGHT_GRAY if idx % 2 else WHITE
+            box.line.color.rgb = BRAND_GREEN
+            box.line.width = Pt(2)
             
-            for idx, phase in enumerate(phases[:3]):  # Max 3 phases
-                y_pos = start_y + (idx * (box_height + spacing))
-                
-                # Phase box
-                shape = slide.shapes.add_shape(1, start_x, y_pos, box_width, box_height)
-                shape.fill.solid()
-                shape.fill.fore_color.rgb = BRAND_GREEN if idx == 0 else LIGHT_GRAY
-                shape.line.color.rgb = BRAND_GREEN
-                shape.line.width = Pt(2)
-                
-                # Phase text
-                tf = shape.text_frame
-                tf.text = phase
-                tf.word_wrap = True
-                p = tf.paragraphs[0]
-                p.font.size = Pt(14)
-                p.font.bold = True
-                p.font.color.rgb = RGBColor(255, 255, 255) if idx == 0 else DARK_GRAY
-                p.alignment = PP_ALIGN.CENTER
-                
-                # Arrow to next phase
-                if idx < len(phases) - 1 and idx < 2:
-                    arrow_start_y = y_pos + box_height + Inches(0.05)
-                    arrow_end_y = arrow_start_y + Inches(0.2)
-                    arrow = slide.shapes.add_connector(1, start_x + box_width/2, arrow_start_y, start_x + box_width/2, arrow_end_y)
-                    arrow.line.color.rgb = BRAND_GREEN
-                    arrow.line.width = Pt(3)
-        
-        # Add Implementation Details slide (NEW - shows full roadmap text)
-        slide = prs.slides.add_slide(prs.slide_layouts[6])
-        
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
-        
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Implementation Details"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
-        tf = content_box.text_frame
-        tf.word_wrap = True
-        
-        for line in roadmap_text.split('\n')[:30]:
-            if line.strip() and not line.startswith('#'):
+            # Phase title
+            tf = box.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            p.text = phase_name
+            p.font.size = Pt(14)
+            p.font.bold = True
+            p.font.color.rgb = BRAND_GREEN
+            p.space_after = Pt(8)
+            
+            # Phase content (first 2 lines)
+            content_lines = [l.strip() for l in phase_content.split('\n') if l.strip()][:2]
+            for line in content_lines:
                 p = tf.add_paragraph()
-                p.text = line.strip('- ').strip()
+                p.text = line
                 p.font.size = Pt(11)
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(4)
+                p.space_before = Pt(2)
     
-    # Slide 5: Financial Analysis
+    # ============================================================================
+    # SLIDE: FINANCIAL ANALYSIS
+    # ============================================================================
     if 'FINANCIAL ANALYSIS' in sections:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
+        add_header_slide(slide, "Financial Analysis")
         
-        # Header
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
+        content = clean_text(sections['FINANCIAL ANALYSIS'])
         
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Financial Analysis"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        # Content
-        finance_text = sections['FINANCIAL ANALYSIS']
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
         tf = content_box.text_frame
         tf.word_wrap = True
         
-        # Extract key financial points - increased from 10 to 25 lines
-        for line in finance_text.split('\n')[:25]:
-            if line.strip() and not line.startswith('#'):
-                p = tf.add_paragraph()
-                p.text = line.strip('- ').strip()
-                p.font.size = Pt(12)  # Reduced from 14 to fit more
+        lines = [l for l in content.split('\n') if l.strip()]
+        for line in lines[:30]:
+            p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
+            p.text = line.strip()
+            
+            # Make section headers bold
+            if ':' in line and len(line.split(':')[0]) < 40:
+                p.font.bold = True
+                p.font.size = Pt(13)
+                p.font.color.rgb = BRAND_GREEN
+            else:
+                p.font.size = Pt(12)
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(6)  # Reduced from 8
-                p.level = 1 if line.startswith('**') else 0
+            
+            p.space_before = Pt(5)
     
-    # Slide 6: Risk Assessment
-    if 'RISK ASSESSMENT' in sections or 'RISK ASSESSMENT & MITIGATION' in sections:
+    # ============================================================================
+    # SLIDE: RISK ASSESSMENT
+    # ============================================================================
+    risk_key = None
+    for key in ['RISK ASSESSMENT & MITIGATION', 'RISK ASSESSMENT AND MITIGATION', 'RISK ASSESSMENT']:
+        if key in sections:
+            risk_key = key
+            break
+    
+    if risk_key:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
+        add_header_slide(slide, "Risk Assessment & Mitigation")
         
-        # Header
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
+        content = clean_text(sections[risk_key])
         
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Risk Assessment & Mitigation"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        # Content
-        risk_key = 'RISK ASSESSMENT & MITIGATION' if 'RISK ASSESSMENT & MITIGATION' in sections else 'RISK ASSESSMENT'
-        risk_text = sections[risk_key]
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
         tf = content_box.text_frame
         tf.word_wrap = True
         
-        for line in risk_text.split('\n')[:25]:  # Increased from 12 to 25
-            if line.strip() and not line.startswith('#'):
-                p = tf.add_paragraph()
-                p.text = line.strip('- ').strip()
-                p.font.size = Pt(12)  # Reduced from 13 to fit more
-                p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(5)  # Reduced from 6
+        lines = [l for l in content.split('\n') if l.strip()]
+        for line in lines[:30]:
+            p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
+            p.text = line.strip()
+            p.font.size = Pt(12)
+            p.font.color.rgb = DARK_GRAY
+            p.space_before = Pt(5)
     
-    # Slide 7: Alternative Scenarios (NEW)
+    # ============================================================================
+    # SLIDE: ALTERNATIVE SCENARIOS
+    # ============================================================================
     if 'ALTERNATIVE SCENARIOS' in sections:
         slide = prs.slides.add_slide(prs.slide_layouts[6])
+        add_header_slide(slide, "Alternative Scenarios")
         
-        header = slide.shapes.add_shape(1, Inches(0), Inches(0), Inches(10), Inches(0.8))
-        header.fill.solid()
-        header.fill.fore_color.rgb = BRAND_GREEN
-        header.line.color.rgb = BRAND_GREEN
+        content = clean_text(sections['ALTERNATIVE SCENARIOS'])
         
-        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.15), Inches(9), Inches(0.5))
-        tf = title_box.text_frame
-        tf.text = "Alternative Scenarios"
-        p = tf.paragraphs[0]
-        p.font.size = Pt(28)
-        p.font.bold = True
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        
-        scenarios_text = sections['ALTERNATIVE SCENARIOS']
-        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.5), Inches(8.5), Inches(5))
+        content_box = slide.shapes.add_textbox(Inches(0.75), Inches(1.2), Inches(8.5), Inches(5.5))
         tf = content_box.text_frame
         tf.word_wrap = True
         
-        for line in scenarios_text.split('\n')[:30]:
-            if line.strip() and not line.startswith('#'):
-                p = tf.add_paragraph()
-                p.text = line.strip('- ').strip()
-                p.font.size = Pt(11)
+        lines = [l for l in content.split('\n') if l.strip()]
+        for line in lines[:30]:
+            p = tf.add_paragraph() if len(tf.paragraphs) > 1 or tf.paragraphs[0].text else tf.paragraphs[0]
+            p.text = line.strip()
+            
+            # Make scenario headers bold
+            if 'Alternative' in line or 'Scenario' in line:
+                p.font.bold = True
+                p.font.size = Pt(13)
+                p.font.color.rgb = BRAND_GREEN
+            else:
+                p.font.size = Pt(12)
                 p.font.color.rgb = DARK_GRAY
-                p.space_before = Pt(4)
+            
+            p.space_before = Pt(5)
     
-    # Final Slide: Next Steps
+    # ============================================================================
+    # FINAL SLIDE: NEXT STEPS
+    # ============================================================================
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     
-    # Background
     background = slide.background
     fill = background.fill
     fill.solid()
     fill.fore_color.rgb = BRAND_GREEN
     
-    # Title
     title_box = slide.shapes.add_textbox(Inches(0.5), Inches(2.5), Inches(9), Inches(1))
     tf = title_box.text_frame
     tf.text = "Ready to Implement?"
     p = tf.paragraphs[0]
-    p.font.size = Pt(40)
+    p.font.size = Pt(44)
     p.font.bold = True
-    p.font.color.rgb = RGBColor(255, 255, 255)
+    p.font.color.rgb = WHITE
     p.alignment = PP_ALIGN.CENTER
     
-    # Contact
     contact_box = slide.shapes.add_textbox(Inches(0.5), Inches(4), Inches(9), Inches(2))
     tf = contact_box.text_frame
     tf.text = "Get personalized implementation support\n\nhello@bulwise.io\nbulwise.io"
     for paragraph in tf.paragraphs:
         paragraph.font.size = Pt(20)
-        paragraph.font.color.rgb = RGBColor(255, 255, 255)
+        paragraph.font.color.rgb = WHITE
         paragraph.alignment = PP_ALIGN.CENTER
         paragraph.space_before = Pt(10)
     
@@ -684,6 +619,21 @@ def generate_professional_pptx(report_text, user_query):
     pptx_io.seek(0)
     
     return pptx_io
+
+def render_report_with_mermaid(report_text):
+    """Render report text with proper Mermaid diagram rendering."""
+    
+    # Split text by mermaid code blocks
+    parts = re.split(r'```mermaid\n(.*?)```', report_text, flags=re.DOTALL)
+    
+    for i, part in enumerate(parts):
+        if i % 2 == 0:
+            # Regular markdown content
+            if part.strip():
+                st.markdown(part)
+        else:
+            # Mermaid diagram content
+            st_mermaid(part.strip(), height=400)
 
 # ============================================================================
 # LOAD DATABASE
@@ -893,7 +843,7 @@ if st.session_state.workflow_step == 1:
     </div>
     """, unsafe_allow_html=True)
     
-    # Quick start examples - MOVED BEFORE TEXT AREA
+    # Quick start examples - BEFORE TEXT AREA
     st.markdown("**Quick Start Examples:**")
     col1, col2, col3, col4 = st.columns(4)
     
@@ -919,18 +869,18 @@ if st.session_state.workflow_step == 1:
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Text area - now AFTER examples
+    # Text area - Force display of current session state by NOT using key parameter
     user_query = st.text_area(
         "**📝 Describe Your Situation:**",
         value=st.session_state.initial_query,
         height=180,
         placeholder="Example: I'm a marketing consultant working with 5-10 small business clients simultaneously. I need to create weekly content (blog posts, social media, email campaigns) efficiently. Budget is $100-150/month. I have intermediate technical skills and need tools that integrate well together. Timeline: implement within 2 weeks.",
-        key="initial_query_input",
         help="Click 'Continue →' button below when ready to proceed"
     )
     
-    # Update session state from user input
-    st.session_state.initial_query = user_query
+    # Always update from user input (allows manual editing)
+    if user_query != st.session_state.initial_query:
+        st.session_state.initial_query = user_query
     
     st.markdown("---")
     
@@ -1445,7 +1395,7 @@ DATABASE:
                 # Display the report
                 st.markdown('<div class="whitepaper-section">', unsafe_allow_html=True)
                 st.markdown('<div class="whitepaper-header">Strategic Advisory Report</div>', unsafe_allow_html=True)
-                st.markdown(response_text)
+                render_report_with_mermaid(response_text)
                 st.markdown('</div>', unsafe_allow_html=True)
                 
                 # Log query for analytics
