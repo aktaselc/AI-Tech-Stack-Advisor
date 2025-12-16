@@ -1,18 +1,13 @@
 """
 BulWise - AI Stack Advisory Platform
-Version 2.1 - With User Feedback Updates
+Version 2.2 - UI Refinements
 
-Updates in this version:
-- Example use cases on main page
-- % completion during generation
-- Analytics tracking and download (owner view)
-- Recommended Stack section below executive summary
-- ROI analysis removed
-- Risk assessment in color-coded table
-- Clear success metrics descriptions
-- Only 2 related AI opportunities
-- Mermaid chart restored
-- AI architecture diagram restored
+Updates:
+- Removed "Strategic Advisory Report" title
+- Simplified recommended stack format
+- Fixed mermaid diagram height
+- Added timeline diagram for implementation phases
+- Added % completion to follow-up question generation
 """
 
 import streamlit as st
@@ -198,52 +193,113 @@ Your role is to provide a comprehensive, actionable advisory report that is:
 [2-3 paragraphs: problem, solution, expected impact]
 
 ### 2. Recommended Stack
-[REQUIRED - Simple bulleted list of recommended AI tools]
+[REQUIRED - Ultra-simple format with ONLY tool names and categories]
 
-Format as a clean list:
+Format as:
 ```
 **Recommended AI Stack:**
 
-• **[Tool Name]** ([Category]) - $X/month
-  Brief one-line why this tool
+• Perplexity Pro (Search)
+• Claude Pro (LLM)
+• Beautiful.ai (Presentation)
+• Zapier Professional (Automation)
 
-• **[Tool Name]** ([Category]) - $Y/month  
-  Brief one-line why this tool
-
-• **[Tool Name]** ([Category]) - $Z/month
-  Brief one-line why this tool
-
-**Total Monthly Cost:** $XXX
-**Total Annual Cost:** $X,XXX
+**Total Monthly Cost:** $72
+**Total Annual Cost:** $864
 ```
 
-Keep it simple - just tool name, category, price, and one line of justification.
+CRITICAL: Only show tool name and (category). Nothing else. No prices next to tools, no descriptions. Just clean list.
 
-### 3. AI Architecture Flow (Mermaid Diagram)
+### 3. Implementation Timeline
+[REQUIRED - Visual timeline showing phases and milestones]
+
+Create a Mermaid Gantt chart showing the implementation timeline:
+
+```mermaid
+gantt
+    title Implementation Timeline
+    dateFormat  YYYY-MM-DD
+    
+    section Phase 1: Setup
+    Account Setup           :p1, 2024-01-01, 7d
+    Tool Configuration      :p2, after p1, 7d
+    
+    section Phase 2: Integration
+    Connect Tools          :p3, after p2, 7d
+    Test Workflows         :p4, after p3, 7d
+    
+    section Phase 3: Optimization
+    Refine Processes       :p5, after p4, 14d
+    Team Training          :p6, after p5, 7d
+    
+    section Phase 4: Production
+    Go Live               :p7, after p6, 7d
+    Monitor & Improve     :p8, after p7, 30d
+```
+
+Then provide a text breakdown:
+
+**Implementation Phases:**
+
+**Phase 1: Setup (Weeks 1-2)**
+What you'll achieve:
+- All accounts created and configured
+- Team members have access
+- Basic understanding of each tool
+
+Key milestone: ✓ Ready to start connecting tools
+
+**Phase 2: Integration (Weeks 3-4)**
+What you'll achieve:
+- Tools connected and data flowing
+- First successful end-to-end test
+- Documented workflow process
+
+Key milestone: ✓ Complete workflow working
+
+**Phase 3: Optimization (Weeks 5-6)**
+What you'll achieve:
+- Processes refined based on testing
+- Team trained and comfortable
+- Automated processes running smoothly
+
+Key milestone: ✓ Team independently using system
+
+**Phase 4: Production (Weeks 7+)**
+What you'll achieve:
+- Fully operational system
+- Regular output generation
+- Continuous improvement process
+
+Key milestone: ✓ Measurable business impact
+
+### 4. AI Architecture Flow (Mermaid Diagram)
 [REQUIRED - Create a Mermaid flowchart showing the complete workflow]
 
-Use Mermaid syntax to create a visual flowchart:
+Use Mermaid syntax to create a visual flowchart. IMPORTANT: Keep it readable with 6-8 nodes maximum:
+
 ```mermaid
-graph TD
-    A[User Input: Describe query] --> B[Tool 1: Perplexity Pro]
-    B --> C[Data Collection: JSON format]
-    C --> D[Tool 2: Claude Pro]
-    D --> E[Analysis: Structured output]
-    E --> F[Tool 3: Beautiful.ai]
-    F --> G[Final Output: Presentation]
+graph TB
+    A[User Input:<br/>Describe query] --> B[Perplexity Pro:<br/>Search & collect data]
+    B --> C[Claude Pro:<br/>Analyze & structure]
+    C --> D[Beautiful.ai:<br/>Create presentation]
+    D --> E[Final Output:<br/>Professional report]
     
-    style A fill:#e1f5ff
-    style G fill:#c8e6c9
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style E fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style B fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style D fill:#fff3e0,stroke:#f57c00,stroke-width:2px
 ```
 
 Requirements:
 - Use actual tool names (not generic "LLM")
-- Show data formats between steps
-- Use colors: start nodes (#e1f5ff), end nodes (#c8e6c9)
-- Keep it clear and readable
-- Show the complete flow from input to output
+- Maximum 6-8 nodes for readability
+- Use colors: start (#e3f2fd), process (#fff3e0), end (#c8e6c9)
+- Include brief description in each node using <br/> for line breaks
+- Show linear or simple branching flow only
 
-### 4. Detailed Architecture Breakdown
+### 5. Detailed Architecture Breakdown
 [REQUIRED - Text-based detailed breakdown]
 
 Format:
@@ -287,7 +343,7 @@ Process: [How it creates final output]
 Output: [Final deliverable format]
 ```
 
-### 5. Detailed Tool Analysis
+### 6. Detailed Tool Analysis
 For each recommended tool:
 - Tool name and category
 - Why it's recommended (specific to use case)
@@ -297,7 +353,7 @@ For each recommended tool:
 - Setup complexity (beginner/intermediate/advanced)
 - Alternative options at different price points
 
-### 6. Implementation Roadmap
+### 7. Implementation Roadmap
 [Detailed day-by-day plan]
 
 Format for each task:
@@ -338,38 +394,17 @@ You'll use this [output] in [next task] on [Week X, Day Y]
 ───────────────────────────────────────
 ```
 
-Break into daily milestones:
-- Day 1: Account setup for Tool A
-- Day 2: Test Tool A with sample data
-- Day 3: Account setup for Tool B  
-- Day 4: Connect Tool A → Tool B
-- Day 5: Test complete workflow
-
-### 7. Risk Assessment & Mitigation
+### 8. Risk Assessment & Mitigation
 
 [REQUIRED - Present as a structured table with color-coded risk levels]
-
-Create a clear table showing risks and mitigations:
 
 | Risk | Likelihood | Impact | Mitigation Strategy |
 |------|-----------|--------|---------------------|
 | [Specific risk] | 🔴 High / 🟡 Medium / 🟢 Low | 🔴 High / 🟡 Medium / 🟢 Low | [Specific mitigation steps] |
 
-Example:
-| Risk | Likelihood | Impact | Mitigation Strategy |
-|------|-----------|--------|---------------------|
-| API rate limits exceeded during peak usage | 🟡 Medium | 🔴 High | Implement request queuing; upgrade to enterprise tier if needed; monitor usage daily |
-| Team lacks technical skills for setup | 🔴 High | 🟡 Medium | Provide hands-on training sessions; create video tutorials; assign technical champion |
-| Data security concerns with cloud tools | 🟡 Medium | 🔴 High | Review vendor SOC2 compliance; implement data encryption; use on-premise options for sensitive data |
-
-Use color coding:
-- 🔴 High: Critical, needs immediate attention
-- 🟡 Medium: Important, monitor closely  
-- 🟢 Low: Minor, routine monitoring
-
 Include 4-6 most relevant risks for the use case.
 
-### 8. Success Metrics
+### 9. Success Metrics
 
 [REQUIRED - Provide clear, understandable metrics with explanations]
 
@@ -384,25 +419,11 @@ Format:
    - **Why it matters:** [Business impact]
    
    Example: After 3 months, you should see [specific outcome]
-
-**2. [Metric Name]**
-   - **What it is:** [Clear explanation]
-   - **How to measure:** [Specific method]
-   - **Target:** [Specific goal]
-   - **Why it matters:** [Business impact]
 ```
 
-Example metrics with clear explanations:
-- **Time Savings:** Measure hours saved per week compared to manual process
-- **Cost Reduction:** Calculate monthly cost savings vs previous solution
-- **Quality Improvement:** Track accuracy rate or error reduction percentage
-- **User Adoption:** Monitor how many team members actively use the tools
-- **Output Volume:** Count deliverables produced (reports, analyses, etc.)
+AVOID vague metrics. ALWAYS explain HOW to measure and WHY it matters.
 
-AVOID vague metrics like "relevance score average" without explanation.
-ALWAYS explain HOW to identify the target and WHY it matters.
-
-### 9. Financial Summary
+### 10. Financial Summary
 
 [Simple cost breakdown - NO ROI analysis]
 
@@ -430,11 +451,9 @@ Format:
 - [Another tip]
 ```
 
-DO NOT include ROI calculations or payback period analysis.
+### 11. Related AI Opportunities
 
-### 10. Related AI Opportunities
-
-[REQUIRED - Show exactly 2 adjacent use cases, not more]
+[REQUIRED - Show exactly 2 adjacent use cases]
 
 Format:
 ```
@@ -444,11 +463,11 @@ Format:
 
 **What it is:** [2-3 sentence description]
 
-**How it connects:** [2 sentences explaining the connection to current use case]
+**How it connects:** [2 sentences explaining the connection]
 
 **Recommended tools:**
-• [Tool 1] ([Category]): $X/month - [Why relevant]
-• [Tool 2] ([Category]): $Y/month - [Why relevant]
+• [Tool 1] (Category) - $X/month
+• [Tool 2] (Category) - $Y/month
 
 **Setup time:** [X weeks]
 **Potential impact:** [Specific business value]
@@ -462,8 +481,8 @@ Format:
 **How it connects:** [2 sentences explaining connection]
 
 **Recommended tools:**
-• [Tool 1] ([Category]): $X/month - [Why relevant]
-• [Tool 2] ([Category]): $Y/month - [Why relevant]
+• [Tool 1] (Category) - $X/month
+• [Tool 2] (Category) - $Y/month
 
 **Setup time:** [X weeks]
 **Potential impact:** [Specific business value]
@@ -473,9 +492,7 @@ Format:
 *Want recommendations for additional use cases? Just ask in the follow-up section below!*
 ```
 
-CRITICAL: Show EXACTLY 2 opportunities, not 3-5. Keep them highly relevant.
-
-### 11. Next Steps
+### 12. Next Steps
 
 [Immediate actionable items]
 - [ ] [Specific first action]
@@ -485,11 +502,27 @@ CRITICAL: Show EXACTLY 2 opportunities, not 3-5. Keep them highly relevant.
 ## CRITICAL REQUIREMENTS
 
 ### Mermaid Diagrams
-- ALWAYS include a Mermaid flowchart in the AI Architecture Flow section
+- ALWAYS include TWO Mermaid diagrams:
+  1. Timeline (Gantt chart) at the beginning
+  2. Architecture flow (flowchart) after timeline
 - Use proper Mermaid syntax
-- Show complete workflow with actual tool names
+- Keep architecture flow to 6-8 nodes maximum for readability
 - Use colors for visual appeal
-- Keep it readable and not overly complex
+- Architecture should show linear workflow with actual tool names
+
+### Recommended Stack Format
+CRITICAL: Only show tool name and (category). Example:
+```
+• Perplexity Pro (Search)
+• Claude Pro (LLM)
+```
+
+NOT:
+```
+• Perplexity Pro (Search) - $20/month - Why this tool
+```
+
+Keep it ultra-clean and simple.
 
 ### Context-Aware Customization
 
@@ -500,51 +533,28 @@ Adapt based on user context:
 - Assume limited budget
 - Focus on self-implementation
 - Include free/low-cost alternatives
-- Emphasize ease of setup
 
 **If primary_audience = "C-suite executives":**
 - Minimize technical jargon
 - Focus on business outcomes
-- Emphasize ROI and competitive advantage
-- Include change management considerations
+- Emphasize competitive advantage
 
 **If primary_audience = "Technical team":**
 - Include technical details
-- Show API documentation links
-- Provide integration code examples
+- Provide integration specifics
 - Use appropriate technical terminology
-
-**If report_purpose = "Investment decision":**
-- Emphasize competitive analysis
-- Include market sizing
-- Detailed financial analysis
-- Risk assessment prominent
-
-**If report_purpose = "Executive presentation":**
-- Lead with executive summary
-- More visuals (Mermaid diagrams)
-- Focus on business impact
-- Minimize technical depth
 
 ## OUTPUT REQUIREMENTS
 
 - Use Markdown formatting
-- Include Mermaid diagram in architecture section
+- Include TWO Mermaid diagrams (timeline + architecture)
 - Present risks in table format with color coding
 - Explain all metrics clearly
 - Show exactly 2 related opportunities
-- Be specific with tool names, URLs, costs
-- NO ROI analysis in financial section
-- Make it professional and ready to present
-
-## REMEMBER
-
-- Users need to execute this themselves
-- Assume beginner-level knowledge
-- Be actionable, not just informational
-- Explain metrics in simple terms
-- Use visual aids (Mermaid, tables)
-- Keep related opportunities to 2 only
+- Recommended Stack: ONLY tool name (category)
+- Be specific with URLs and costs
+- NO ROI analysis
+- Professional and ready to present
 """
 
 # ============================================================================
@@ -567,10 +577,7 @@ client = get_anthropic_client()
 # ============================================================================
 
 def generate_report(user_query, clarifying_answers, tools_database):
-    """
-    Generate comprehensive advisory report using Claude API
-    Shows % completion during generation
-    """
+    """Generate comprehensive advisory report using Claude API"""
     # Build comprehensive prompt
     prompt = f"""# User Request
 {user_query}
@@ -650,7 +657,7 @@ def generate_report(user_query, clarifying_answers, tools_database):
         return None
 
 def generate_followup_answer(original_report, user_question):
-    """Generate answer to user's follow-up question"""
+    """Generate answer to user's follow-up question with progress indicator"""
     prompt = f"""Based on this AI stack advisory report:
 
 {original_report}
@@ -660,7 +667,18 @@ The user has asked: "{user_question}"
 Provide a detailed, helpful answer to their question. Match the report's tone and format.
 Be specific and actionable. If they ask for more related AI opportunities, provide 2-3 additional ones following the same format as in the original report."""
 
+    # Progress indicator for follow-up
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+    
     try:
+        status_text.text("◆ Understanding your question... (25%)")
+        progress_bar.progress(25)
+        time.sleep(0.2)
+        
+        status_text.text("◇ Generating detailed answer... (50%)")
+        progress_bar.progress(50)
+        
         response = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=3000,
@@ -670,9 +688,23 @@ Be specific and actionable. If they ask for more related AI opportunities, provi
             }]
         )
         
+        status_text.text("▲ Formatting response... (75%)")
+        progress_bar.progress(75)
+        time.sleep(0.2)
+        
+        status_text.text("✓ Answer ready! (100%)")
+        progress_bar.progress(100)
+        time.sleep(0.3)
+        
+        # Clean up
+        progress_bar.empty()
+        status_text.empty()
+        
         return response.content[0].text
         
     except Exception as e:
+        progress_bar.empty()
+        status_text.empty()
         st.error(f"Error generating follow-up answer: {str(e)}")
         return None
 
@@ -857,8 +889,7 @@ def render_step_3():
             st.error("Failed to generate report. Please try again.")
             return
     
-    # Display report with Mermaid support
-    st.markdown("## Strategic Advisory Report")
+    # Display report with Mermaid support (REMOVED "Strategic Advisory Report" title)
     
     # Check if report contains mermaid diagrams
     if "```mermaid" in st.session_state.generated_report:
@@ -876,7 +907,7 @@ def render_step_3():
                 mermaid_code = parts[i][:mermaid_end].strip()
                 remaining_text = parts[i][mermaid_end + 3:]
                 
-                # Display mermaid diagram
+                # Display mermaid diagram with increased height
                 try:
                     import streamlit.components.v1 as components
                     components.html(
@@ -887,7 +918,8 @@ def render_step_3():
                         {mermaid_code}
                         </div>
                         """,
-                        height=400
+                        height=600,
+                        scrolling=True
                     )
                 except:
                     # Fallback: show as code block
@@ -930,19 +962,18 @@ I can help with:
     )
     
     if st.button("Add to Report", type="primary", disabled=not user_followup):
-        with st.spinner("Generating response..."):
-            answer = generate_followup_answer(
-                st.session_state.generated_report,
-                user_followup
-            )
-            
-            if answer:
-                st.session_state.additional_sections.append({
-                    'question': user_followup,
-                    'answer': answer
-                })
-                st.success("✓ Added! See your answer below.")
-                st.rerun()
+        answer = generate_followup_answer(
+            st.session_state.generated_report,
+            user_followup
+        )
+        
+        if answer:
+            st.session_state.additional_sections.append({
+                'question': user_followup,
+                'answer': answer
+            })
+            st.success("✓ Added! See your answer below.")
+            st.rerun()
     
     # Display all follow-up Q&As
     if st.session_state.additional_sections:
