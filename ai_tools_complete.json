@@ -1,698 +1,284 @@
 {
-  "ai_tools": [
+  "tools": [
     {
-      "id": "chatgpt",
-      "name": "ChatGPT",
-      "provider": "OpenAI",
-      "category": "Conversational AI",
-      "website": "https://chat.openai.com",
-      "description": "Advanced conversational AI for text generation, coding, analysis, and creative tasks",
-      "capabilities": [
-        "Natural language conversation",
-        "Code generation and debugging",
-        "Writing and editing",
-        "Data analysis",
-        "Problem solving"
-      ],
-      "use_cases": [
-        "Content creation",
-        "Research assistance",
-        "Programming help",
-        "Learning and education",
-        "Brainstorming"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Plus", "price": "$20/month"},
-          {"name": "Team", "price": "$25/user/month"},
-          {"name": "Enterprise", "price": "Custom"}
-        ]
-      },
-      "integrations": ["API", "Plugins", "GPTs"],
-      "alternatives": ["claude", "gemini", "perplexity"],
-      "common_pairings": ["midjourney", "github_copilot", "notion"]
-    },
-    {
-      "id": "claude",
-      "name": "Claude",
-      "provider": "Anthropic",
-      "category": "Conversational AI",
+      "tool_name": "Claude Sonnet 4",
+      "category": "LLM",
+      "subcategory": "General Purpose AI",
+      "description": "Most intelligent model from Anthropic, excellent for complex reasoning and analysis",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
       "website": "https://claude.ai",
-      "description": "Advanced AI assistant with extended context, coding capabilities, and file analysis",
-      "capabilities": [
-        "200K token context window",
-        "Code generation and debugging",
-        "Document analysis",
-        "Creative writing",
-        "Data analysis"
-      ],
-      "use_cases": [
-        "Complex document analysis",
-        "Code reviews",
-        "Long-form content creation",
-        "Research synthesis",
-        "Strategic planning"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$20/month"},
-          {"name": "Team", "price": "$25/user/month"}
-        ]
-      },
-      "integrations": ["API", "Computer Use", "Skills"],
-      "alternatives": ["chatgpt", "gemini", "perplexity"],
-      "common_pairings": ["notion", "github", "cursor"]
+      "use_cases": ["Analysis", "Writing", "Coding", "Research", "Strategy"],
+      "best_for": "Complex reasoning tasks, long-form content",
+      "integration_options": ["API", "Web", "Mobile"],
+      "setup_time_minutes": 5
     },
     {
-      "id": "midjourney",
-      "name": "Midjourney",
-      "provider": "Midjourney",
-      "category": "Image Generation",
-      "website": "https://midjourney.com",
-      "description": "AI image generation with artistic style and high-quality outputs",
-      "capabilities": [
-        "Text-to-image generation",
-        "Style variations",
-        "Upscaling",
-        "Image editing",
-        "Consistent characters"
-      ],
-      "use_cases": [
-        "Marketing visuals",
-        "Concept art",
-        "Social media content",
-        "Product mockups",
-        "Illustrations"
-      ],
-      "pricing": {
-        "free_tier": false,
-        "paid_plans": [
-          {"name": "Basic", "price": "$10/month"},
-          {"name": "Standard", "price": "$30/month"},
-          {"name": "Pro", "price": "$60/month"}
-        ]
-      },
-      "integrations": ["Discord"],
-      "alternatives": ["dalle", "stable_diffusion", "leonardo_ai"],
-      "common_pairings": ["chatgpt", "canva", "photoshop"]
+      "tool_name": "GPT-4o",
+      "category": "LLM",
+      "subcategory": "General Purpose AI",
+      "description": "OpenAI's most capable multimodal model, fast and intelligent",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://chat.openai.com",
+      "use_cases": ["Analysis", "Writing", "Coding", "Image generation"],
+      "best_for": "Versatile AI tasks, multimodal work",
+      "integration_options": ["API", "Web", "Mobile"],
+      "setup_time_minutes": 5
     },
     {
-      "id": "notion_ai",
-      "name": "Notion AI",
-      "provider": "Notion",
-      "category": "Productivity",
-      "website": "https://notion.so",
-      "description": "AI-powered writing, editing, and organization within Notion workspace",
-      "capabilities": [
-        "Writing assistance",
-        "Content summarization",
-        "Translation",
-        "Brainstorming",
-        "Data extraction"
-      ],
-      "use_cases": [
-        "Meeting notes",
-        "Project documentation",
-        "Content planning",
-        "Knowledge management",
-        "Team collaboration"
-      ],
-      "pricing": {
-        "free_tier": false,
-        "paid_plans": [
-          {"name": "AI Add-on", "price": "$10/user/month"}
-        ]
-      },
-      "integrations": ["Notion workspace", "Slack", "Google Drive"],
-      "alternatives": ["chatgpt", "claude", "gemini"],
-      "common_pairings": ["chatgpt", "grammarly", "zapier"]
+      "tool_name": "Gemini Pro",
+      "category": "LLM",
+      "subcategory": "General Purpose AI",
+      "description": "Google's advanced AI model with deep integration into Google services",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://gemini.google.com",
+      "use_cases": ["Analysis", "Research", "Google Workspace integration"],
+      "best_for": "Google ecosystem users",
+      "integration_options": ["API", "Web", "Google Workspace"],
+      "setup_time_minutes": 5
     },
     {
-      "id": "github_copilot",
-      "name": "GitHub Copilot",
-      "provider": "GitHub/Microsoft",
-      "category": "Code Assistant",
-      "website": "https://github.com/features/copilot",
-      "description": "AI pair programmer for code completion and generation",
-      "capabilities": [
-        "Code completion",
-        "Function generation",
-        "Test writing",
-        "Code explanation",
-        "Bug detection"
-      ],
-      "use_cases": [
-        "Software development",
-        "Code reviews",
-        "Learning to code",
-        "API integration",
-        "Debugging"
-      ],
-      "pricing": {
-        "free_tier": false,
-        "paid_plans": [
-          {"name": "Individual", "price": "$10/month"},
-          {"name": "Business", "price": "$19/user/month"}
-        ]
-      },
-      "integrations": ["VS Code", "JetBrains IDEs", "Neovim"],
-      "alternatives": ["cursor", "tabnine", "codeium"],
-      "common_pairings": ["github", "vscode", "chatgpt"]
-    },
-    {
-      "id": "cursor",
-      "name": "Cursor",
-      "provider": "Cursor",
-      "category": "Code Editor",
-      "website": "https://cursor.sh",
-      "description": "AI-first code editor with GPT-4 integration",
-      "capabilities": [
-        "AI code generation",
-        "Chat with codebase",
-        "Code refactoring",
-        "Natural language commands",
-        "Multi-file editing"
-      ],
-      "use_cases": [
-        "Full-stack development",
-        "Code migration",
-        "Feature implementation",
-        "Bug fixing",
-        "Code documentation"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$20/month"}
-        ]
-      },
-      "integrations": ["Git", "VS Code extensions"],
-      "alternatives": ["vscode", "github_copilot", "replit"],
-      "common_pairings": ["github", "chatgpt", "claude"]
-    },
-    {
-      "id": "perplexity",
-      "name": "Perplexity AI",
-      "provider": "Perplexity",
-      "category": "Search & Research",
+      "tool_name": "Perplexity Pro",
+      "category": "Search",
+      "subcategory": "AI Search Engine",
+      "description": "AI-powered search with citations, perfect for research",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
       "website": "https://perplexity.ai",
-      "description": "AI-powered search engine with citations and real-time information",
-      "capabilities": [
-        "Real-time web search",
-        "Source citations",
-        "Follow-up questions",
-        "Multi-source synthesis",
-        "Academic research"
-      ],
-      "use_cases": [
-        "Research",
-        "Fact-checking",
-        "News updates",
-        "Academic papers",
-        "Market research"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$20/month"}
-        ]
-      },
-      "integrations": ["Browser extensions", "API"],
-      "alternatives": ["chatgpt", "claude", "gemini"],
-      "common_pairings": ["notion", "obsidian", "zotero"]
+      "use_cases": ["Research", "Fact-checking", "Competitive intelligence"],
+      "best_for": "Research-heavy workflows",
+      "integration_options": ["Web", "API", "Mobile"],
+      "setup_time_minutes": 5
     },
     {
-      "id": "canva",
-      "name": "Canva AI",
-      "provider": "Canva",
-      "category": "Design",
-      "website": "https://canva.com",
-      "description": "AI-powered design platform with templates and Magic Studio features",
-      "capabilities": [
-        "Text-to-image generation",
-        "Background removal",
-        "Magic Expand",
-        "Design suggestions",
-        "Brand kit management"
-      ],
-      "use_cases": [
-        "Social media graphics",
-        "Presentations",
-        "Marketing materials",
-        "Video editing",
-        "Brand design"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$15/month"},
-          {"name": "Teams", "price": "$30/user/month"}
-        ]
-      },
-      "integrations": ["Google Drive", "Dropbox", "Social media platforms"],
-      "alternatives": ["adobe_express", "figma", "designify"],
-      "common_pairings": ["midjourney", "chatgpt", "buffer"]
+      "tool_name": "GitHub Copilot",
+      "category": "Code Assistant",
+      "subcategory": "AI Code Completion",
+      "description": "AI pair programmer that suggests code as you type",
+      "pricing_monthly": 10,
+      "pricing_annual": 100,
+      "free_tier": false,
+      "website": "https://github.com/features/copilot",
+      "use_cases": ["Software development", "Code generation", "Learning"],
+      "best_for": "Professional developers",
+      "integration_options": ["VS Code", "JetBrains", "Neovim"],
+      "setup_time_minutes": 10
     },
     {
-      "id": "grammarly",
-      "name": "Grammarly",
-      "provider": "Grammarly",
-      "category": "Writing Assistant",
-      "website": "https://grammarly.com",
-      "description": "AI writing assistant for grammar, style, and tone suggestions",
-      "capabilities": [
-        "Grammar checking",
-        "Style suggestions",
-        "Tone detection",
-        "Plagiarism detection",
-        "Clarity improvements"
-      ],
-      "use_cases": [
-        "Professional emails",
-        "Content writing",
-        "Academic writing",
-        "Documentation",
-        "Social media posts"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Premium", "price": "$12/month"},
-          {"name": "Business", "price": "$15/user/month"}
-        ]
-      },
-      "integrations": ["Browser extensions", "Microsoft Office", "Google Docs"],
-      "alternatives": ["hemingway", "prowritingaid", "quillbot"],
-      "common_pairings": ["notion", "google_docs", "chatgpt"]
+      "tool_name": "Cursor",
+      "category": "Code Assistant",
+      "subcategory": "AI Code Editor",
+      "description": "AI-first code editor built for pair programming with AI",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://cursor.sh",
+      "use_cases": ["Software development", "Refactoring", "Code review"],
+      "best_for": "AI-native development",
+      "integration_options": ["Desktop app", "API"],
+      "setup_time_minutes": 15
     },
     {
-      "id": "jasper",
-      "name": "Jasper AI",
-      "provider": "Jasper",
-      "category": "Content Creation",
-      "website": "https://jasper.ai",
-      "description": "AI content platform for marketing copy and brand content",
-      "capabilities": [
-        "Long-form content",
-        "SEO optimization",
-        "Brand voice",
-        "Campaign creation",
-        "Content templates"
-      ],
-      "use_cases": [
-        "Blog posts",
-        "Marketing copy",
-        "Product descriptions",
-        "Email campaigns",
-        "Social media content"
-      ],
-      "pricing": {
-        "free_tier": false,
-        "paid_plans": [
-          {"name": "Creator", "price": "$49/month"},
-          {"name": "Teams", "price": "$125/month"}
-        ]
-      },
-      "integrations": ["Surfer SEO", "Grammarly", "Copyscape"],
-      "alternatives": ["copy_ai", "writesonic", "chatgpt"],
-      "common_pairings": ["surfer_seo", "canva", "hootsuite"]
-    },
-    {
-      "id": "runway_ml",
-      "name": "Runway ML",
-      "provider": "Runway",
-      "category": "Video Generation",
-      "website": "https://runwayml.com",
-      "description": "AI-powered video editing and generation platform",
-      "capabilities": [
-        "Text-to-video",
-        "Video editing",
-        "Green screen removal",
-        "Motion tracking",
-        "Style transfer"
-      ],
-      "use_cases": [
-        "Video content creation",
-        "Film production",
-        "Marketing videos",
-        "Social media clips",
-        "Animation"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Standard", "price": "$12/month"},
-          {"name": "Pro", "price": "$28/month"}
-        ]
-      },
-      "integrations": ["Adobe Premiere", "Final Cut Pro"],
-      "alternatives": ["descript", "pictory", "synthesia"],
-      "common_pairings": ["midjourney", "elevenlabs", "adobe_premiere"]
-    },
-    {
-      "id": "elevenlabs",
-      "name": "ElevenLabs",
-      "provider": "ElevenLabs",
-      "category": "Voice AI",
-      "website": "https://elevenlabs.io",
-      "description": "AI voice generation and cloning with realistic speech",
-      "capabilities": [
-        "Text-to-speech",
-        "Voice cloning",
-        "Multilingual support",
-        "Voice design",
-        "Dubbing"
-      ],
-      "use_cases": [
-        "Podcasts",
-        "Audiobooks",
-        "Video voiceovers",
-        "Virtual assistants",
-        "Content localization"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Starter", "price": "$5/month"},
-          {"name": "Creator", "price": "$22/month"}
-        ]
-      },
-      "integrations": ["API", "Adobe Premiere", "Descript"],
-      "alternatives": ["murf", "play_ht", "wellsaid"],
-      "common_pairings": ["descript", "runway_ml", "chatgpt"]
-    },
-    {
-      "id": "zapier",
-      "name": "Zapier AI",
-      "provider": "Zapier",
+      "tool_name": "Zapier Professional",
       "category": "Automation",
+      "subcategory": "Workflow Automation",
+      "description": "Connect and automate workflows between 5000+ apps",
+      "pricing_monthly": 20,
+      "pricing_annual": 240,
+      "free_tier": true,
       "website": "https://zapier.com",
-      "description": "Workflow automation with AI-powered features",
-      "capabilities": [
-        "App integration",
-        "Workflow automation",
-        "Data transformation",
-        "AI chatbots",
-        "Smart triggers"
-      ],
-      "use_cases": [
-        "Business automation",
-        "Data syncing",
-        "Lead management",
-        "Email automation",
-        "Reporting"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Starter", "price": "$20/month"},
-          {"name": "Professional", "price": "$49/month"}
-        ]
-      },
-      "integrations": ["5000+ apps"],
-      "alternatives": ["make", "n8n", "ifttt"],
-      "common_pairings": ["gmail", "slack", "airtable"]
+      "use_cases": ["Workflow automation", "Integration", "Data sync"],
+      "best_for": "No-code automation",
+      "integration_options": ["Web", "5000+ app integrations"],
+      "setup_time_minutes": 20
     },
     {
-      "id": "fireflies",
-      "name": "Fireflies.ai",
-      "provider": "Fireflies",
-      "category": "Meeting Assistant",
-      "website": "https://fireflies.ai",
-      "description": "AI meeting transcription and note-taking",
-      "capabilities": [
-        "Meeting transcription",
-        "Action item extraction",
-        "Meeting summaries",
-        "Search conversations",
-        "CRM integration"
-      ],
-      "use_cases": [
-        "Meeting notes",
-        "Sales calls",
-        "Team meetings",
-        "Client calls",
-        "Interviews"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$10/month"},
-          {"name": "Business", "price": "$19/month"}
-        ]
-      },
-      "integrations": ["Zoom", "Google Meet", "Teams", "Slack"],
-      "alternatives": ["otter_ai", "tactiq", "grain"],
-      "common_pairings": ["zoom", "slack", "notion"]
+      "tool_name": "Make",
+      "category": "Automation",
+      "subcategory": "Workflow Automation",
+      "description": "Visual automation platform (formerly Integromat)",
+      "pricing_monthly": 9,
+      "pricing_annual": 108,
+      "free_tier": true,
+      "website": "https://make.com",
+      "use_cases": ["Complex workflows", "Data transformation", "Integration"],
+      "best_for": "Advanced automation with visual interface",
+      "integration_options": ["Web", "1000+ app integrations"],
+      "setup_time_minutes": 30
     },
     {
-      "id": "beautiful_ai",
-      "name": "Beautiful.ai",
-      "provider": "Beautiful.ai",
-      "category": "Presentation",
-      "website": "https://beautiful.ai",
-      "description": "AI-powered presentation design with smart templates",
-      "capabilities": [
-        "Automatic formatting",
-        "Smart templates",
-        "Brand consistency",
-        "Collaboration",
-        "Real-time updates"
-      ],
-      "use_cases": [
-        "Business presentations",
-        "Pitch decks",
-        "Sales proposals",
-        "Marketing decks",
-        "Reports"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$12/month"},
-          {"name": "Team", "price": "$40/user/month"}
-        ]
-      },
-      "integrations": ["PowerPoint", "Google Slides"],
-      "alternatives": ["gamma", "tome", "pitch"],
-      "common_pairings": ["canva", "figma", "notion"]
+      "tool_name": "Notion AI",
+      "category": "Productivity",
+      "subcategory": "Note-taking & Documentation",
+      "description": "AI-powered workspace for notes, docs, and knowledge management",
+      "pricing_monthly": 10,
+      "pricing_annual": 96,
+      "free_tier": true,
+      "website": "https://notion.so",
+      "use_cases": ["Documentation", "Project management", "Knowledge base"],
+      "best_for": "Team collaboration and docs",
+      "integration_options": ["Web", "Desktop", "Mobile", "API"],
+      "setup_time_minutes": 10
     },
     {
-      "id": "descript",
-      "name": "Descript",
-      "provider": "Descript",
-      "category": "Video & Audio Editing",
+      "tool_name": "Midjourney",
+      "category": "Image Generation",
+      "subcategory": "AI Art",
+      "description": "Leading AI image generation tool for creative work",
+      "pricing_monthly": 10,
+      "pricing_annual": 96,
+      "free_tier": false,
+      "website": "https://midjourney.com",
+      "use_cases": ["Marketing assets", "Concept art", "Design inspiration"],
+      "best_for": "High-quality AI art generation",
+      "integration_options": ["Discord", "Web"],
+      "setup_time_minutes": 15
+    },
+    {
+      "tool_name": "DALL-E 3",
+      "category": "Image Generation",
+      "subcategory": "AI Art",
+      "description": "OpenAI's image generation model, integrated with ChatGPT",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": false,
+      "website": "https://openai.com/dall-e-3",
+      "use_cases": ["Marketing", "Content creation", "Prototyping"],
+      "best_for": "Quick image generation with text prompts",
+      "integration_options": ["ChatGPT", "API"],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "ElevenLabs",
+      "category": "Voice/Audio",
+      "subcategory": "Text-to-Speech",
+      "description": "Realistic AI voice generation and cloning",
+      "pricing_monthly": 22,
+      "pricing_annual": 264,
+      "free_tier": true,
+      "website": "https://elevenlabs.io",
+      "use_cases": ["Voiceovers", "Audiobooks", "Podcasts", "Accessibility"],
+      "best_for": "Professional voice generation",
+      "integration_options": ["Web", "API"],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Descript",
+      "category": "Voice/Audio",
+      "subcategory": "Audio/Video Editing",
+      "description": "AI-powered audio and video editing with transcription",
+      "pricing_monthly": 24,
+      "pricing_annual": 288,
+      "free_tier": true,
       "website": "https://descript.com",
-      "description": "Edit video and audio by editing text transcripts",
-      "capabilities": [
-        "Transcription",
-        "Text-based editing",
-        "Overdub voice cloning",
-        "Screen recording",
-        "Podcast editing"
-      ],
-      "use_cases": [
-        "Podcast production",
-        "Video editing",
-        "Content repurposing",
-        "Tutorials",
-        "Interviews"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Creator", "price": "$12/month"},
-          {"name": "Pro", "price": "$24/month"}
-        ]
-      },
-      "integrations": ["YouTube", "Adobe Premiere"],
-      "alternatives": ["runway_ml", "adobe_premiere", "final_cut"],
-      "common_pairings": ["elevenlabs", "zoom", "riverside"]
+      "use_cases": ["Podcast editing", "Video editing", "Transcription"],
+      "best_for": "Content creators",
+      "integration_options": ["Desktop app", "Web"],
+      "setup_time_minutes": 15
     },
     {
-      "id": "otter_ai",
-      "name": "Otter.ai",
-      "provider": "Otter.ai",
-      "category": "Transcription",
-      "website": "https://otter.ai",
-      "description": "Real-time transcription and meeting notes",
-      "capabilities": [
-        "Live transcription",
-        "Speaker identification",
-        "Meeting summaries",
-        "Keyword extraction",
-        "Collaboration"
-      ],
-      "use_cases": [
-        "Meeting notes",
-        "Lectures",
-        "Interviews",
-        "Conference calls",
-        "Research"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$10/month"},
-          {"name": "Business", "price": "$20/user/month"}
-        ]
-      },
-      "integrations": ["Zoom", "Google Meet", "Teams"],
-      "alternatives": ["fireflies", "tactiq", "tldv"],
-      "common_pairings": ["zoom", "notion", "slack"]
-    },
-    {
-      "id": "synthesia",
-      "name": "Synthesia",
-      "provider": "Synthesia",
-      "category": "Video Generation",
-      "website": "https://synthesia.io",
-      "description": "AI video generation with digital avatars",
-      "capabilities": [
-        "AI avatars",
-        "Text-to-video",
-        "Multilingual videos",
-        "Custom avatars",
-        "Template library"
-      ],
-      "use_cases": [
-        "Training videos",
-        "Product demos",
-        "Marketing videos",
-        "Internal communications",
-        "E-learning"
-      ],
-      "pricing": {
-        "free_tier": false,
-        "paid_plans": [
-          {"name": "Starter", "price": "$22/month"},
-          {"name": "Creator", "price": "$67/month"}
-        ]
-      },
-      "integrations": ["PowerPoint", "APIs"],
-      "alternatives": ["heygen", "d_id", "runway_ml"],
-      "common_pairings": ["chatgpt", "canva", "elevenlabs"]
-    },
-    {
-      "id": "copy_ai",
-      "name": "Copy.ai",
-      "provider": "Copy.ai",
+      "tool_name": "Jasper",
       "category": "Content Creation",
-      "website": "https://copy.ai",
+      "subcategory": "AI Writing",
+      "description": "Enterprise AI writing platform for marketing content",
+      "pricing_monthly": 49,
+      "pricing_annual": 588,
+      "free_tier": false,
+      "website": "https://jasper.ai",
+      "use_cases": ["Marketing copy", "Blog posts", "Social media"],
+      "best_for": "Marketing teams",
+      "integration_options": ["Web", "Browser extension", "API"],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Copy.ai",
+      "category": "Content Creation",
+      "subcategory": "AI Writing",
       "description": "AI copywriting tool for marketing and sales content",
-      "capabilities": [
-        "Marketing copy",
-        "Email templates",
-        "Product descriptions",
-        "Social media posts",
-        "Blog ideas"
-      ],
-      "use_cases": [
-        "Marketing campaigns",
-        "Ad copy",
-        "Email marketing",
-        "Social content",
-        "Sales copy"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Pro", "price": "$49/month"}
-        ]
-      },
-      "integrations": ["Chrome extension", "Zapier"],
-      "alternatives": ["jasper", "writesonic", "chatgpt"],
-      "common_pairings": ["canva", "hootsuite", "mailchimp"]
+      "pricing_monthly": 49,
+      "pricing_annual": 432,
+      "free_tier": true,
+      "website": "https://copy.ai",
+      "use_cases": ["Sales copy", "Email campaigns", "Product descriptions"],
+      "best_for": "Sales and marketing teams",
+      "integration_options": ["Web", "API"],
+      "setup_time_minutes": 5
     },
     {
-      "id": "loom",
-      "name": "Loom AI",
-      "provider": "Loom",
-      "category": "Screen Recording",
-      "website": "https://loom.com",
-      "description": "Screen recording with AI-powered transcription and editing",
-      "capabilities": [
-        "Screen recording",
-        "Video messaging",
-        "Auto-transcription",
-        "AI summaries",
-        "Video editing"
-      ],
-      "use_cases": [
-        "Team communication",
-        "Product demos",
-        "Bug reports",
-        "Tutorials",
-        "Sales pitches"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Business", "price": "$12.50/user/month"},
-          {"name": "Enterprise", "price": "Custom"}
-        ]
-      },
-      "integrations": ["Slack", "Gmail", "Notion"],
-      "alternatives": ["descript", "vidyard", "snagit"],
-      "common_pairings": ["slack", "notion", "jira"]
+      "tool_name": "Grammarly",
+      "category": "Content Creation",
+      "subcategory": "Writing Assistant",
+      "description": "AI-powered writing assistant for grammar and style",
+      "pricing_monthly": 12,
+      "pricing_annual": 144,
+      "free_tier": true,
+      "website": "https://grammarly.com",
+      "use_cases": ["Writing improvement", "Grammar checking", "Tone adjustment"],
+      "best_for": "Professional writing",
+      "integration_options": ["Web", "Desktop", "Browser extension"],
+      "setup_time_minutes": 5
     },
     {
-      "id": "framer",
-      "name": "Framer AI",
-      "provider": "Framer",
-      "category": "Web Design",
-      "website": "https://framer.com",
-      "description": "AI-powered website builder and design tool",
-      "capabilities": [
-        "AI website generation",
-        "No-code design",
-        "Responsive layouts",
-        "CMS integration",
-        "Custom code support"
-      ],
-      "use_cases": [
-        "Landing pages",
-        "Portfolio websites",
-        "Marketing sites",
-        "Product pages",
-        "Blogs"
-      ],
-      "pricing": {
-        "free_tier": true,
-        "paid_plans": [
-          {"name": "Mini", "price": "$5/month"},
-          {"name": "Basic", "price": "$15/month"}
-        ]
-      },
-      "integrations": ["Figma", "Analytics", "Forms"],
-      "alternatives": ["webflow", "wix", "squarespace"],
-      "common_pairings": ["figma", "notion", "chatgpt"]
+      "tool_name": "Tableau",
+      "category": "Data Analysis",
+      "subcategory": "Business Intelligence",
+      "description": "Powerful data visualization and analytics platform",
+      "pricing_monthly": 70,
+      "pricing_annual": 840,
+      "free_tier": true,
+      "website": "https://tableau.com",
+      "use_cases": ["Data visualization", "Business analytics", "Dashboards"],
+      "best_for": "Enterprise analytics",
+      "integration_options": ["Desktop", "Web", "Mobile", "API"],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Power BI",
+      "category": "Data Analysis",
+      "subcategory": "Business Intelligence",
+      "description": "Microsoft's business analytics platform",
+      "pricing_monthly": 10,
+      "pricing_annual": 120,
+      "free_tier": true,
+      "website": "https://powerbi.microsoft.com",
+      "use_cases": ["Data analysis", "Reporting", "Microsoft integration"],
+      "best_for": "Microsoft ecosystem users",
+      "integration_options": ["Desktop", "Web", "Mobile"],
+      "setup_time_minutes": 20
+    },
+    {
+      "tool_name": "Beautiful.ai",
+      "category": "Presentation",
+      "subcategory": "AI Presentation Design",
+      "description": "AI-powered presentation maker with smart templates",
+      "pricing_monthly": 12,
+      "pricing_annual": 144,
+      "free_tier": true,
+      "website": "https://beautiful.ai",
+      "use_cases": ["Presentations", "Pitch decks", "Reports"],
+      "best_for": "Professional presentations",
+      "integration_options": ["Web", "Desktop"],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Canva",
+      "category": "Design",
+      "subcategory": "Graphic Design",
+      "description": "AI-enhanced graphic design platform",
+      "pricing_monthly": 13,
+      "pricing_annual": 120,
+      "free_tier": true,
+      "website": "https://canva.com",
+      "use_cases": ["Social media graphics", "Presentations", "Marketing materials"],
+      "best_for": "Non-designers",
+      "integration_options": ["Web", "Desktop", "Mobile"],
+      "setup_time_minutes": 5
     }
-  ],
-  "metadata": {
-    "version": "1.0",
-    "last_updated": "2025-12-07",
-    "total_tools": 20,
-    "categories": [
-      "Conversational AI",
-      "Image Generation",
-      "Code Assistant",
-      "Productivity",
-      "Search & Research",
-      "Design",
-      "Writing Assistant",
-      "Content Creation",
-      "Video Generation",
-      "Voice AI",
-      "Automation",
-      "Meeting Assistant",
-      "Presentation",
-      "Video & Audio Editing",
-      "Transcription",
-      "Screen Recording",
-      "Web Design"
-    ]
-  }
+  ]
 }

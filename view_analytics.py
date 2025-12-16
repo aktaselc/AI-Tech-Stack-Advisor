@@ -140,8 +140,8 @@ def view_analytics():
             formatted_time = dt.strftime("%Y-%m-%d %H:%M")
             query_preview = query[:70] + "..." if len(query) > 70 else query
             user_type = f"Return user (visit #{visit_count})" if is_return else "New user"
-            print(f"\n{formatted_time} | {category:12} | {length:3} chars | {user_type}")
-            print(f"  "{query_preview}"")
+            print(f'\n{formatted_time} | {category:12} | {length:3} chars | {user_type}')
+            print(f'  "{query_preview}"')
         
         print("\n" + "="*60)
         
