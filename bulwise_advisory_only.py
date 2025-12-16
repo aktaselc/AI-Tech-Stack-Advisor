@@ -1,15 +1,18 @@
 """
 BulWise - AI Stack Advisory Platform
-Version 2.0 - Complete Implementation with 7 Major Improvements
+Version 2.1 - With User Feedback Updates
 
-Improvements included:
-1. Architecture Flow Diagram (specific tools, no emojis)
-2. Progress Indicators (minimalist geometric icons)
-3. Follow-up Questions (conversational, pre/post report)
-4. UI Cleanup (no white box, no quality badge)
-5. Explicit Implementation Roadmap (step-by-step beginner guide)
-6. Expanded Database (100+ tools ready)
-7. Adjacent AI Activities (related use case suggestions)
+Updates in this version:
+- Example use cases on main page
+- % completion during generation
+- Analytics tracking and download (owner view)
+- Recommended Stack section below executive summary
+- ROI analysis removed
+- Risk assessment in color-coded table
+- Clear success metrics descriptions
+- Only 2 related AI opportunities
+- Mermaid chart restored
+- AI architecture diagram restored
 """
 
 import streamlit as st
@@ -18,6 +21,7 @@ import json
 import os
 import time
 from datetime import datetime
+import pandas as pd
 
 # ============================================================================
 # CONFIGURATION
@@ -33,36 +37,108 @@ st.set_page_config(
 # Custom CSS for professional appearance
 st.markdown("""
 <style>
-    /* Clean, professional styling */
     .stApp {
         max-width: 1200px;
         margin: 0 auto;
     }
     
-    /* Remove extra padding */
     .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
     }
     
-    /* Professional button styling */
     .stButton > button {
         width: 100%;
         border-radius: 8px;
         font-weight: 500;
     }
     
-    /* Clean text areas */
     .stTextArea textarea {
         border-radius: 8px;
     }
     
-    /* Professional selectbox */
-    .stSelectbox {
+    .example-card {
+        background-color: #f0f2f6;
+        padding: 1rem;
         border-radius: 8px;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    
+    .example-card:hover {
+        border: 2px solid #4CAF50;
+        background-color: #e8f5e9;
+    }
+    
+    .risk-high {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    
+    .risk-medium {
+        background-color: #fff3e0;
+        color: #ef6c00;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    
+    .risk-low {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
     }
 </style>
 """, unsafe_allow_html=True)
+
+# ============================================================================
+# ANALYTICS TRACKING
+# ============================================================================
+
+def init_analytics():
+    """Initialize analytics storage"""
+    if 'analytics' not in st.session_state:
+        st.session_state.analytics = {
+            'sessions': [],
+            'queries': [],
+            'reports_generated': 0
+        }
+
+def track_session():
+    """Track new session"""
+    init_analytics()
+    session_id = f"session_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    st.session_state.analytics['sessions'].append({
+        'session_id': session_id,
+        'timestamp': datetime.now().isoformat(),
+        'user_agent': 'web'
+    })
+    return session_id
+
+def track_query(query, context):
+    """Track user query"""
+    init_analytics()
+    st.session_state.analytics['queries'].append({
+        'timestamp': datetime.now().isoformat(),
+        'query': query,
+        'context': context,
+        'report_purpose': context.get('report_purpose', 'Not specified'),
+        'primary_audience': context.get('primary_audience', 'Not specified'),
+        'budget': context.get('budget', 'Not specified')
+    })
+    st.session_state.analytics['reports_generated'] += 1
+
+def export_analytics():
+    """Export analytics as CSV"""
+    init_analytics()
+    df = pd.DataFrame(st.session_state.analytics['queries'])
+    return df.to_csv(index=False)
 
 # ============================================================================
 # INITIALIZE SESSION STATE
@@ -83,6 +159,12 @@ if 'generated_report' not in st.session_state:
 if 'additional_sections' not in st.session_state:
     st.session_state.additional_sections = []
 
+if 'session_id' not in st.session_state:
+    st.session_state.session_id = track_session()
+
+# Initialize analytics
+init_analytics()
+
 # ============================================================================
 # LOAD TOOL DATABASE
 # ============================================================================
@@ -99,7 +181,7 @@ def load_tool_database():
         return []
 
 # ============================================================================
-# SYSTEM PROMPT WITH ALL IMPROVEMENTS
+# SYSTEM PROMPT WITH UPDATED STRUCTURE
 # ============================================================================
 
 SYSTEM_PROMPT = """You are an expert AI strategy consultant helping users select and implement the right AI tools for their specific use cases.
@@ -110,249 +192,359 @@ Your role is to provide a comprehensive, actionable advisory report that is:
 - PROFESSIONAL (ready to present to stakeholders)
 - BEGINNER-FRIENDLY (assumes no technical expertise)
 
-## CRITICAL REQUIREMENTS
+## REPORT STRUCTURE - FOLLOW THIS EXACTLY
 
-### 1. AI ARCHITECTURE FLOW DIAGRAM
-[REQUIRED - Show complete data flow with SPECIFIC tool names]
+### 1. Executive Summary
+[2-3 paragraphs: problem, solution, expected impact]
 
-Create a clear visual flow showing how tools connect:
+### 2. Recommended Stack
+[REQUIRED - Simple bulleted list of recommended AI tools]
+
+Format as a clean list:
+```
+**Recommended AI Stack:**
+
+• **[Tool Name]** ([Category]) - $X/month
+  Brief one-line why this tool
+
+• **[Tool Name]** ([Category]) - $Y/month  
+  Brief one-line why this tool
+
+• **[Tool Name]** ([Category]) - $Z/month
+  Brief one-line why this tool
+
+**Total Monthly Cost:** $XXX
+**Total Annual Cost:** $X,XXX
+```
+
+Keep it simple - just tool name, category, price, and one line of justification.
+
+### 3. AI Architecture Flow (Mermaid Diagram)
+[REQUIRED - Create a Mermaid flowchart showing the complete workflow]
+
+Use Mermaid syntax to create a visual flowchart:
+```mermaid
+graph TD
+    A[User Input: Describe query] --> B[Tool 1: Perplexity Pro]
+    B --> C[Data Collection: JSON format]
+    C --> D[Tool 2: Claude Pro]
+    D --> E[Analysis: Structured output]
+    E --> F[Tool 3: Beautiful.ai]
+    F --> G[Final Output: Presentation]
+    
+    style A fill:#e1f5ff
+    style G fill:#c8e6c9
+```
+
+Requirements:
+- Use actual tool names (not generic "LLM")
+- Show data formats between steps
+- Use colors: start nodes (#e1f5ff), end nodes (#c8e6c9)
+- Keep it clear and readable
+- Show the complete flow from input to output
+
+### 4. Detailed Architecture Breakdown
+[REQUIRED - Text-based detailed breakdown]
 
 Format:
 ```
-USER INPUT
-What: [Describe the input]
-Example: [Concrete example]
-           ↓
+**Data Flow Architecture:**
+
+INPUT LAYER
+What enters: [Specific description]
+Format: [Text/JSON/CSV]
+Example: "Healthcare AI startup names and funding data"
+
+↓
+
 ORCHESTRATION LAYER
 Tool: [Specific tool name - e.g., Zapier Professional]
 Role: [What it orchestrates]
-Setup: [Specific setup steps]
-           ↓
-SEARCH & DATA INGESTION  
-Tool: [Specific tool name - e.g., Perplexity Pro]
-Role: [What data it collects]
-Output: [Format - JSON/CSV/Text]
-           ↓
-LLM ANALYSIS & CLASSIFICATION
-Tool: [Specific tool name - e.g., Claude Pro]
-Role: [What analysis it performs]
-Process: [Specific steps]
-Output: [What it produces]
-           ↓
-INSIGHT SYNTHESIS
-Tool: [Specific tool name]
-Role: [How insights are created]
-Output: [What format]
-           ↓
-OUTPUT GENERATION
-Tool: [Specific tool name - e.g., Beautiful.ai Pro]
-Role: [How output is created]
-Output: [Final format - .pptx/.pdf/etc]
+Setup: [1-2 sentences on configuration]
+
+↓
+
+PROCESSING LAYER 1: Data Collection
+Tool: [Specific tool - e.g., Perplexity Pro]
+Input: [What it receives]
+Process: [What it does]
+Output: [Format and content]
+
+↓
+
+PROCESSING LAYER 2: Analysis
+Tool: [Specific tool - e.g., Claude Pro]  
+Input: [What it receives from previous layer]
+Process: [What analysis it performs]
+Output: [Format and content]
+
+↓
+
+OUTPUT LAYER
+Tool: [Specific tool - e.g., Beautiful.ai]
+Input: [What it receives]
+Process: [How it creates final output]
+Output: [Final deliverable format]
 ```
 
-CRITICAL:
-- NO EMOJIS in the architecture diagram
-- Every layer must show SPECIFIC tool name (not "a vector database")
-- Show exact data formats between layers (JSON, CSV, PPTX)
-- Include concrete examples of data at each step
-
-### 2. EXPLICIT IMPLEMENTATION ROADMAP
-[REQUIRED - Step-by-step beginner-friendly instructions]
-
-Create a detailed week-by-week, day-by-day implementation plan:
-
-Format for each task:
-```
-WEEK X, DAY Y: [Specific Task Name]
-───────────────────────────────────────────────
-
-What you'll do:
-[One-sentence description]
-
-Step-by-step instructions:
-1. [Exact URL or location - e.g., "Go to perplexity.ai"]
-2. [Specific button to click - e.g., "Click the blue 'Sign Up' button"]
-3. [Exact field to fill - e.g., "Enter your email address"]
-4. [What to expect - e.g., "You'll see a verification code"]
-5. [How to verify success - e.g., "You should see 'Pro' badge"]
-
-Time required: [X minutes/hours]
-
-What you need:
-- [Prerequisites - e.g., "Credit card for payment"]
-- [Access requirements]
-
-Expected output:
-- Format: [e.g., "Text file", "JSON", "Spreadsheet"]
-- Contents: [e.g., "List of 10 competitors with funding data"]
-- Location: [e.g., "Save to Google Drive folder 'Data'"]
-
-CHECKPOINT:
-✓ [Specific success criteria]
-
-TROUBLESHOOTING:
-If you don't see [X], try [Y]
-
-Connect to next step:
-"You'll use this output in [Next Task] on [Week X, Day Y]"
-───────────────────────────────────────────────
-```
-
-CONNECTING TOOLS:
-When showing how to connect Tool A → Tool B:
-1. Where to find Tool A's output (exact button/location)
-2. What format it's in (text/CSV/JSON)
-3. How to export/copy it (exact steps)
-4. Where to paste in Tool B (exact field name)
-5. What to expect Tool B to return
-6. Example: "Copy text from Perplexity → Paste into Claude prompt box → Claude returns categorized list"
-
-BREAK INTO DAILY MILESTONES:
-- Day 1: Account setup for Tool A
-- Day 2: Test Tool A with sample data  
-- Day 3: Account setup for Tool B
-- Day 4: Connect Tool A → Tool B
-- Day 5: Test full workflow
-
-### 3. CONTEXT-AWARE CUSTOMIZATION
-
-Adapt report based on user's context:
-
-If report_purpose = "Investment decision":
-- Emphasize competitive analysis and market sizing
-- Include detailed financial ROI calculations
-- Add risk assessment with mitigation strategies
-- Use formal, analytical tone
-
-If report_purpose = "Executive presentation":
-- Lead with executive summary (1-page)
-- Use more visuals, focus on business impact
-- Include key takeaways in callout boxes
-- Minimize technical jargon
-
-If primary_audience = "Technical team":
-- Include API documentation links
-- Show technical architecture details
-- Use appropriate technical terminology
-- Provide integration code examples
-
-If primary_audience = "C-suite executives":
-- Minimize technical jargon
-- Focus on business outcomes and ROI
-- Emphasize competitive advantage
-- Include change management considerations
-
-If primary_audience = "Individual (just me)":
-- Conversational, friendly tone
-- Assume limited team/budget
-- Focus on quick wins and self-implementation
-- Include free/low-cost alternatives
-
-### 4. RELATED AI OPPORTUNITIES
-[REQUIRED - Suggest 3-5 adjacent use cases]
-
-At the end of report, analyze the user's use case and suggest related AI activities:
-
-Format:
-```
-## Related AI Opportunities
-
-Based on your [primary use case], you might also benefit from:
-
-### 1. [Related Use Case Name]
-**What it is:** [Brief description]
-
-**How it connects to what you're doing:**
-[2-3 sentences explaining the connection]
-
-**Recommended tools:**
-- [Tool 1] ([Category]): $X/month
-- [Tool 2] ([Category]): $Y/month
-- [Tool 3] ([Category]): $Z/month
-
-**Estimated setup time:** [X weeks/months]
-**Potential impact:** [Business value]
-
-**Would you like a detailed report for this use case?**
-[Explain they can ask for follow-up report]
-```
-
-ADJACENCY MAPPING:
-- Competitor intelligence → Market research, Sales intelligence, Content monitoring
-- Content creation → SEO optimization, Distribution automation, Analytics
-- Data analysis → Automated dashboards, Predictive analytics, Monitoring
-- Customer support → Chatbots, Email automation, Sentiment analysis
-- Software development → Code review, Testing automation, Documentation
-
-### 5. REPORT STRUCTURE
-
-## Strategic Advisory Report
-
-### Executive Summary
-[2-3 paragraphs: problem, solution, expected impact]
-
-### AI Architecture Flow
-[Detailed diagram as specified above]
-
-### Strategic Recommendations
-[3-5 key recommendations with rationale]
-
-### Detailed Tool Analysis
+### 5. Detailed Tool Analysis
 For each recommended tool:
 - Tool name and category
 - Why it's recommended (specific to use case)
-- Pricing breakdown
+- Key features relevant to this use case
+- Pricing breakdown (monthly/annual)
 - Integration requirements
-- Setup complexity
+- Setup complexity (beginner/intermediate/advanced)
+- Alternative options at different price points
 
-### Implementation Roadmap
-[Detailed day-by-day plan as specified above]
+### 6. Implementation Roadmap
+[Detailed day-by-day plan]
 
-### Financial Analysis
-- Monthly cost breakdown
-- Annual projections
-- ROI timeline
-- Cost optimization strategies
+Format for each task:
+```
+**WEEK X, DAY Y: [Specific Task Name]**
+───────────────────────────────────────
 
-### Risk Assessment & Mitigation
-[Potential issues and solutions]
+**What you'll accomplish:**
+[One-sentence goal]
 
-### Success Metrics
-[How to measure success]
+**Step-by-step instructions:**
+1. [Exact action - e.g., "Go to perplexity.ai"]
+2. [Specific button - e.g., "Click 'Sign Up' (blue button, top right)"]
+3. [Exact field - e.g., "Enter your email in 'Email Address' field"]
+4. [Expected result - e.g., "You'll receive verification code"]
+5. [Verification - e.g., "Check for 'Pro' badge next to your name"]
 
-### Related AI Opportunities
-[Adjacent use cases as specified above]
+**Time required:** [X minutes/hours]
 
-### Next Steps
-[Immediate actions to take]
+**Prerequisites:**
+- [What you need - e.g., "Credit card for $20/month payment"]
+- [Access requirements]
+
+**Expected output:**
+- Format: [JSON/CSV/Text/etc]
+- Contents: [What data you'll have]
+- Where to save: [Location/folder]
+
+**✓ CHECKPOINT:**
+You should now have [specific outcome]
+
+**Troubleshooting:**
+- If [problem], then [solution]
+- Common issue: [issue] → [fix]
+
+**Connecting to next step:**
+You'll use this [output] in [next task] on [Week X, Day Y]
+───────────────────────────────────────
+```
+
+Break into daily milestones:
+- Day 1: Account setup for Tool A
+- Day 2: Test Tool A with sample data
+- Day 3: Account setup for Tool B  
+- Day 4: Connect Tool A → Tool B
+- Day 5: Test complete workflow
+
+### 7. Risk Assessment & Mitigation
+
+[REQUIRED - Present as a structured table with color-coded risk levels]
+
+Create a clear table showing risks and mitigations:
+
+| Risk | Likelihood | Impact | Mitigation Strategy |
+|------|-----------|--------|---------------------|
+| [Specific risk] | 🔴 High / 🟡 Medium / 🟢 Low | 🔴 High / 🟡 Medium / 🟢 Low | [Specific mitigation steps] |
+
+Example:
+| Risk | Likelihood | Impact | Mitigation Strategy |
+|------|-----------|--------|---------------------|
+| API rate limits exceeded during peak usage | 🟡 Medium | 🔴 High | Implement request queuing; upgrade to enterprise tier if needed; monitor usage daily |
+| Team lacks technical skills for setup | 🔴 High | 🟡 Medium | Provide hands-on training sessions; create video tutorials; assign technical champion |
+| Data security concerns with cloud tools | 🟡 Medium | 🔴 High | Review vendor SOC2 compliance; implement data encryption; use on-premise options for sensitive data |
+
+Use color coding:
+- 🔴 High: Critical, needs immediate attention
+- 🟡 Medium: Important, monitor closely  
+- 🟢 Low: Minor, routine monitoring
+
+Include 4-6 most relevant risks for the use case.
+
+### 8. Success Metrics
+
+[REQUIRED - Provide clear, understandable metrics with explanations]
+
+Format:
+```
+**How to Measure Success:**
+
+**1. [Metric Name]**
+   - **What it is:** [Clear explanation in simple terms]
+   - **How to measure:** [Specific measurement method]
+   - **Target:** [Specific number/goal]
+   - **Why it matters:** [Business impact]
+   
+   Example: After 3 months, you should see [specific outcome]
+
+**2. [Metric Name]**
+   - **What it is:** [Clear explanation]
+   - **How to measure:** [Specific method]
+   - **Target:** [Specific goal]
+   - **Why it matters:** [Business impact]
+```
+
+Example metrics with clear explanations:
+- **Time Savings:** Measure hours saved per week compared to manual process
+- **Cost Reduction:** Calculate monthly cost savings vs previous solution
+- **Quality Improvement:** Track accuracy rate or error reduction percentage
+- **User Adoption:** Monitor how many team members actively use the tools
+- **Output Volume:** Count deliverables produced (reports, analyses, etc.)
+
+AVOID vague metrics like "relevance score average" without explanation.
+ALWAYS explain HOW to identify the target and WHY it matters.
+
+### 9. Financial Summary
+
+[Simple cost breakdown - NO ROI analysis]
+
+Format:
+```
+**Investment Summary:**
+
+**Setup Costs (One-time):**
+- Account setup & configuration: $X
+- Initial training: $X
+- Total setup: $XXX
+
+**Monthly Costs:**
+- [Tool 1]: $X/month
+- [Tool 2]: $Y/month
+- [Tool 3]: $Z/month
+- Total monthly: $XXX/month
+
+**Annual Costs:**
+- Tools & subscriptions: $X,XXX/year
+- Estimated total: $X,XXX/year
+
+**Cost Optimization Tips:**
+- [Specific tip to reduce costs]
+- [Another tip]
+```
+
+DO NOT include ROI calculations or payback period analysis.
+
+### 10. Related AI Opportunities
+
+[REQUIRED - Show exactly 2 adjacent use cases, not more]
+
+Format:
+```
+**Based on your [use case], you might also benefit from:**
+
+**1. [Related Use Case Name]**
+
+**What it is:** [2-3 sentence description]
+
+**How it connects:** [2 sentences explaining the connection to current use case]
+
+**Recommended tools:**
+• [Tool 1] ([Category]): $X/month - [Why relevant]
+• [Tool 2] ([Category]): $Y/month - [Why relevant]
+
+**Setup time:** [X weeks]
+**Potential impact:** [Specific business value]
+
+---
+
+**2. [Second Related Use Case Name]**
+
+**What it is:** [2-3 sentence description]
+
+**How it connects:** [2 sentences explaining connection]
+
+**Recommended tools:**
+• [Tool 1] ([Category]): $X/month - [Why relevant]
+• [Tool 2] ([Category]): $Y/month - [Why relevant]
+
+**Setup time:** [X weeks]
+**Potential impact:** [Specific business value]
+
+---
+
+*Want recommendations for additional use cases? Just ask in the follow-up section below!*
+```
+
+CRITICAL: Show EXACTLY 2 opportunities, not 3-5. Keep them highly relevant.
+
+### 11. Next Steps
+
+[Immediate actionable items]
+- [ ] [Specific first action]
+- [ ] [Specific second action]
+- [ ] [Specific third action]
+
+## CRITICAL REQUIREMENTS
+
+### Mermaid Diagrams
+- ALWAYS include a Mermaid flowchart in the AI Architecture Flow section
+- Use proper Mermaid syntax
+- Show complete workflow with actual tool names
+- Use colors for visual appeal
+- Keep it readable and not overly complex
+
+### Context-Aware Customization
+
+Adapt based on user context:
+
+**If primary_audience = "Individual (just me)":**
+- Conversational, friendly tone
+- Assume limited budget
+- Focus on self-implementation
+- Include free/low-cost alternatives
+- Emphasize ease of setup
+
+**If primary_audience = "C-suite executives":**
+- Minimize technical jargon
+- Focus on business outcomes
+- Emphasize ROI and competitive advantage
+- Include change management considerations
+
+**If primary_audience = "Technical team":**
+- Include technical details
+- Show API documentation links
+- Provide integration code examples
+- Use appropriate technical terminology
+
+**If report_purpose = "Investment decision":**
+- Emphasize competitive analysis
+- Include market sizing
+- Detailed financial analysis
+- Risk assessment prominent
+
+**If report_purpose = "Executive presentation":**
+- Lead with executive summary
+- More visuals (Mermaid diagrams)
+- Focus on business impact
+- Minimize technical depth
 
 ## OUTPUT REQUIREMENTS
 
 - Use Markdown formatting
-- Be specific (tool names, URLs, exact costs)
-- Be actionable (step-by-step instructions)
-- Be professional (ready to present)
-- Be comprehensive (10+ pages typical)
-- NO EMOJIS in main content (architecture, implementation sections)
-- Include visual timeline using Mermaid when appropriate
-
-## TOOL SELECTION CRITERIA
-
-When recommending tools:
-1. Match user's budget constraints
-2. Consider team size and technical expertise
-3. Prioritize tools with good integrations
-4. Balance cost vs. capability
-5. Provide alternatives at different price points
-6. Always include specific URLs and pricing
+- Include Mermaid diagram in architecture section
+- Present risks in table format with color coding
+- Explain all metrics clearly
+- Show exactly 2 related opportunities
+- Be specific with tool names, URLs, costs
+- NO ROI analysis in financial section
+- Make it professional and ready to present
 
 ## REMEMBER
 
-- This report will be presented to stakeholders
 - Users need to execute this themselves
-- Assume beginner-level technical knowledge
-- Provide troubleshooting guidance
-- Make it actionable, not just informational
+- Assume beginner-level knowledge
+- Be actionable, not just informational
+- Explain metrics in simple terms
+- Use visual aids (Mermaid, tables)
+- Keep related opportunities to 2 only
 """
 
 # ============================================================================
@@ -377,8 +569,7 @@ client = get_anthropic_client()
 def generate_report(user_query, clarifying_answers, tools_database):
     """
     Generate comprehensive advisory report using Claude API
-    
-    Improvement #2 (Progress Indicators): Shows generation progress with minimalist icons
+    Shows % completion during generation
     """
     # Build comprehensive prompt
     prompt = f"""# User Request
@@ -398,23 +589,23 @@ def generate_report(user_query, clarifying_answers, tools_database):
     prompt += f"\n## Available Tools:\n{len(tools_database)} AI tools available in database\n"
     prompt += "\nGenerate a comprehensive AI Stack Advisory Report following all requirements in the system prompt."
     
-    # Progress indicators (Improvement #2)
+    # Progress indicators with percentages
     progress_bar = st.progress(0)
     status_text = st.empty()
     
     try:
-        # Step 1
-        status_text.text("◆ Analyzing your requirements...")
+        # Step 1: 20%
+        status_text.text("◆ Analyzing your requirements... (20%)")
         progress_bar.progress(20)
         time.sleep(0.3)
         
-        # Step 2
-        status_text.text("◇ Searching tool database...")
+        # Step 2: 40%
+        status_text.text("◇ Searching tool database... (40%)")
         progress_bar.progress(40)
         time.sleep(0.3)
         
-        # Step 3 - Actual API call
-        status_text.text("▲ Generating recommendations...")
+        # Step 3: 60% - Actual API call
+        status_text.text("▲ Generating recommendations... (60%)")
         progress_bar.progress(60)
         
         response = client.messages.create(
@@ -427,13 +618,13 @@ def generate_report(user_query, clarifying_answers, tools_database):
             }]
         )
         
-        # Step 4
-        status_text.text("△ Creating visual elements...")
+        # Step 4: 80%
+        status_text.text("△ Creating diagrams and charts... (80%)")
         progress_bar.progress(80)
         time.sleep(0.2)
         
-        # Step 5
-        status_text.text("● Finalizing report...")
+        # Step 5: 100%
+        status_text.text("● Finalizing report... (100%)")
         progress_bar.progress(100)
         time.sleep(0.2)
         
@@ -444,6 +635,9 @@ def generate_report(user_query, clarifying_answers, tools_database):
         # Clean up
         progress_bar.empty()
         status_text.empty()
+        
+        # Track analytics
+        track_query(user_query, clarifying_answers)
         
         # Extract report text
         report_text = response.content[0].text
@@ -456,11 +650,7 @@ def generate_report(user_query, clarifying_answers, tools_database):
         return None
 
 def generate_followup_answer(original_report, user_question):
-    """
-    Generate answer to user's follow-up question
-    
-    Improvement #3 (Follow-up Questions): Conversational post-report Q&A
-    """
+    """Generate answer to user's follow-up question"""
     prompt = f"""Based on this AI stack advisory report:
 
 {original_report}
@@ -468,14 +658,7 @@ def generate_followup_answer(original_report, user_question):
 The user has asked: "{user_question}"
 
 Provide a detailed, helpful answer to their question. Match the report's tone and format.
-Be specific and actionable. If they ask about:
-- Setup: Give step-by-step instructions
-- Connections: Show exact data flow and integration steps
-- Costs: Provide detailed breakdown
-- Alternatives: Suggest specific tools with pros/cons
-- Related activities: Show 3-5 adjacent use cases with tools
-
-Keep your response focused on their specific question."""
+Be specific and actionable. If they ask for more related AI opportunities, provide 2-3 additional ones following the same format as in the original report."""
 
     try:
         response = client.messages.create(
@@ -504,15 +687,61 @@ def render_header():
     st.markdown("*Get specific tools, exact costs, and step-by-step implementation plans—not just suggestions.*")
     st.markdown("---")
 
+def render_example_prompts():
+    """Render example use cases for users to click"""
+    st.markdown("### 💡 Example Use Cases")
+    st.caption("Click any example to get started, or write your own below")
+    
+    examples = [
+        {
+            "title": "🔍 Competitor Intelligence",
+            "prompt": "I need to build a competitor intelligence system that tracks healthcare AI startups, monitors their funding rounds, analyzes their product launches, and generates weekly summary reports for our executive team."
+        },
+        {
+            "title": "✍️ Content Creation Workflow",
+            "prompt": "Help me create an AI-powered content workflow that generates blog posts, optimizes them for SEO, creates social media snippets, and schedules posts across multiple platforms."
+        },
+        {
+            "title": "📊 Data Analysis & Visualization",
+            "prompt": "I want to automate our sales data analysis by pulling data from our CRM, analyzing trends, generating insights, and creating interactive dashboards that update daily."
+        },
+        {
+            "title": "💬 Customer Support Automation",
+            "prompt": "Build an AI customer support system that handles common inquiries via chat, escalates complex issues to humans, and learns from past conversations to improve responses."
+        },
+        {
+            "title": "📈 Market Research Automation",
+            "prompt": "Create a system that monitors industry news, tracks market trends, identifies emerging competitors, and produces monthly market intelligence reports for strategic planning."
+        },
+        {
+            "title": "🎨 Marketing Asset Generation",
+            "prompt": "I need AI tools to help my marketing team generate product descriptions, create social media graphics, write email campaigns, and produce video scripts for different audience segments."
+        }
+    ]
+    
+    cols = st.columns(2)
+    for idx, example in enumerate(examples):
+        with cols[idx % 2]:
+            if st.button(
+                f"{example['title']}",
+                key=f"example_{idx}",
+                use_container_width=True
+            ):
+                st.session_state.user_query = example['prompt']
+                st.session_state.current_step = 2
+                st.rerun()
+
 def render_step_1():
-    """
-    Step 1: Initial user query
-    """
-    st.markdown("## Tell Us What You're Trying to Accomplish")
+    """Step 1: Initial user query with examples"""
+    render_example_prompts()
+    
+    st.markdown("---")
+    st.markdown("### Or Describe Your Own Use Case")
     
     user_query = st.text_area(
-        "Describe your AI use case:",
-        placeholder="Example: I need to build a competitor intelligence tool that searches for competitors, analyzes their strategy, and generates a slide deck",
+        "What AI workflow do you want to build?",
+        value=st.session_state.user_query,
+        placeholder="Example: I need to automate our weekly competitor analysis by searching for competitors, analyzing their strategies, and creating a presentation for stakeholders...",
         height=150,
         key="query_input"
     )
@@ -523,16 +752,11 @@ def render_step_1():
         st.rerun()
 
 def render_step_2():
-    """
-    Step 2: Clarifying questions
-    
-    Improvement #3 (Follow-up Questions - STAGE 1): Pre-report context
-    """
+    """Step 2: Clarifying questions"""
     st.markdown("## Help Us Tailor Your Report")
-    st.markdown(f"**Your query:** {st.session_state.user_query}")
+    st.markdown(f"**Your use case:** {st.session_state.user_query}")
     st.markdown("---")
     
-    # Context questions (Improvement #3)
     st.markdown("#### Report Context")
     st.caption("These help us customize the report to your needs")
     
@@ -616,35 +840,64 @@ def render_step_2():
             st.rerun()
 
 def render_step_3():
-    """
-    Step 3: Generate and display report
-    
-    Improvement #1: Architecture Flow Diagram
-    Improvement #2: Progress Indicators  
-    Improvement #4: UI Cleanup (no white box, no quality badge)
-    Improvement #5: Explicit Implementation Roadmap
-    Improvement #7: Adjacent AI Activities
-    """
+    """Step 3: Generate and display report"""
     tools_database = load_tool_database()
     
     # Generate report if not already done
     if not st.session_state.generated_report:
-        with st.spinner("Generating your report..."):
-            report = generate_report(
-                st.session_state.user_query,
-                st.session_state.clarifying_answers,
-                tools_database
-            )
-            
-            if report:
-                st.session_state.generated_report = report
-            else:
-                st.error("Failed to generate report. Please try again.")
-                return
+        report = generate_report(
+            st.session_state.user_query,
+            st.session_state.clarifying_answers,
+            tools_database
+        )
+        
+        if report:
+            st.session_state.generated_report = report
+        else:
+            st.error("Failed to generate report. Please try again.")
+            return
     
-    # Display report (Improvement #4: Clean display, no containers/badges)
+    # Display report with Mermaid support
     st.markdown("## Strategic Advisory Report")
-    st.markdown(st.session_state.generated_report, unsafe_allow_html=True)
+    
+    # Check if report contains mermaid diagrams
+    if "```mermaid" in st.session_state.generated_report:
+        # Split report by mermaid blocks
+        parts = st.session_state.generated_report.split("```mermaid")
+        
+        # Display first part (before first mermaid)
+        st.markdown(parts[0], unsafe_allow_html=True)
+        
+        # Display each mermaid diagram and subsequent text
+        for i in range(1, len(parts)):
+            # Extract mermaid code and remaining text
+            mermaid_end = parts[i].find("```")
+            if mermaid_end != -1:
+                mermaid_code = parts[i][:mermaid_end].strip()
+                remaining_text = parts[i][mermaid_end + 3:]
+                
+                # Display mermaid diagram
+                try:
+                    import streamlit.components.v1 as components
+                    components.html(
+                        f"""
+                        <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+                        <script>mermaid.initialize({{startOnLoad:true}});</script>
+                        <div class="mermaid">
+                        {mermaid_code}
+                        </div>
+                        """,
+                        height=400
+                    )
+                except:
+                    # Fallback: show as code block
+                    st.code(mermaid_code, language="mermaid")
+                
+                # Display remaining text
+                st.markdown(remaining_text, unsafe_allow_html=True)
+    else:
+        # No mermaid diagrams, display normally
+        st.markdown(st.session_state.generated_report, unsafe_allow_html=True)
     
     # Download button
     st.download_button(
@@ -656,22 +909,22 @@ def render_step_3():
     
     st.markdown("---")
     
-    # Conversational follow-up section (Improvement #3 - STAGE 2)
+    # Conversational follow-up section
     st.markdown("### 💬 Want More Detail?")
     st.markdown("""
 I can help with:
 - **Setup instructions** (step-by-step account creation)
 - **Tool connections** (how to connect Tool A → Tool B)
-- **Specific recommendations** (alternative tools, pricing questions)
+- **More related opportunities** (additional use cases beyond the 2 shown)
 - **Implementation guidance** (team training, change management)
-- **Related AI activities** (adjacent use cases you might benefit from)
+- **Specific questions** (pricing, alternatives, technical details)
 
-**Or just tell me what you'd like to know more about:**
+**Tell me what you'd like to know more about:**
 """)
     
     user_followup = st.text_area(
         label="Your question:",
-        placeholder="Example: 'I need detailed instructions on connecting Perplexity to Claude' or 'Show me related AI activities for content creation'",
+        placeholder="Example: 'Show me 3 more related AI opportunities' or 'I need detailed setup instructions for Perplexity'",
         height=100,
         key="followup_question"
     )
@@ -714,12 +967,62 @@ I can help with:
         st.rerun()
 
 # ============================================================================
+# OWNER ANALYTICS SIDEBAR
+# ============================================================================
+
+def render_analytics_sidebar():
+    """Render analytics for owner (password protected)"""
+    with st.sidebar:
+        st.markdown("## 📊 Analytics Dashboard")
+        st.caption("Owner access only")
+        
+        # Simple password protection
+        password = st.text_input("Enter owner password:", type="password", key="owner_pass")
+        
+        # Check password (you should change this!)
+        if password == "bulwise2024":
+            st.success("✓ Access granted")
+            
+            init_analytics()
+            
+            st.markdown("### Usage Statistics")
+            st.metric("Total Reports Generated", st.session_state.analytics['reports_generated'])
+            st.metric("Total Queries", len(st.session_state.analytics['queries']))
+            st.metric("Total Sessions", len(st.session_state.analytics['sessions']))
+            
+            # Show recent queries
+            if st.session_state.analytics['queries']:
+                st.markdown("### Recent Queries")
+                recent = st.session_state.analytics['queries'][-5:][::-1]  # Last 5, reversed
+                for q in recent:
+                    with st.expander(f"{q['timestamp'][:10]} - {q['primary_audience']}"):
+                        st.write(f"**Query:** {q['query'][:100]}...")
+                        st.write(f"**Purpose:** {q['report_purpose']}")
+                        st.write(f"**Budget:** {q['budget']}")
+            
+            # Export button
+            st.markdown("### Export Data")
+            if st.button("📥 Download All Analytics (CSV)"):
+                csv = export_analytics()
+                st.download_button(
+                    label="Download CSV",
+                    data=csv,
+                    file_name=f"bulwise_analytics_{datetime.now().strftime('%Y%m%d')}.csv",
+                    mime="text/csv"
+                )
+        elif password:
+            st.error("❌ Incorrect password")
+
+# ============================================================================
 # MAIN APPLICATION
 # ============================================================================
 
 def main():
     """Main application flow"""
     render_header()
+    
+    # Show analytics sidebar (password protected)
+    render_analytics_sidebar()
     
     if st.session_state.current_step == 1:
         render_step_1()
