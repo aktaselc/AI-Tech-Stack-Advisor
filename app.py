@@ -4,13 +4,15 @@ Simple Flask API that generates AI stack advisory reports
 """
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import anthropic
 import os
 import json
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from bulwise.io
+
+# Simple CORS - allow all origins for testing
+CORS(app, origins="*", methods=["GET", "POST", "OPTIONS"], allow_headers=["Content-Type"])
 
 # Initialize Anthropic client
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
