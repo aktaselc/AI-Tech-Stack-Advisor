@@ -4,7 +4,6 @@ Simple Flask API that generates AI stack advisory reports
 """
 
 from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS, cross_origin
 import anthropic
 import os
 import json
@@ -14,14 +13,12 @@ from weasyprint import HTML, CSS
 
 app = Flask(__name__)
 
-# Aggressive CORS configuration
-CORS(app)
-
+# Manual CORS handling - set headers once
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
     return response
 
 # Initialize Anthropic client
