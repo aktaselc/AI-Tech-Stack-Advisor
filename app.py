@@ -405,6 +405,11 @@ def followup():
 
 @app.route('/api/generate-pdf', methods=['POST', 'OPTIONS'])
 def generate_pdf():
+    """
+    Generate PDF from HTML content using WeasyPrint
+    This endpoint receives HTML and returns a properly formatted PDF
+    with correct page breaks
+    """
     # Handle preflight OPTIONS request
     if request.method == 'OPTIONS':
         response = jsonify({'status': 'ok'})
@@ -413,14 +418,6 @@ def generate_pdf():
         response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
         return response
     
-    # Rest of the function stays the same
-    try:
-        data = request.get_json()
-    """
-    Generate PDF from HTML content using WeasyPrint
-    This endpoint receives HTML and returns a properly formatted PDF
-    with correct page breaks
-    """
     try:
         data = request.get_json()
         html_content = data.get('html', '')
