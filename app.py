@@ -14,12 +14,15 @@ from weasyprint import HTML, CSS
 
 app = Flask(__name__)
 
-# Simple CORS - allow all origins for testing
-CORS(app, 
-     resources={r"/api/*": {"origins": "*"}},
-     allow_headers=["Content-Type", "Authorization"],
-     methods=["GET", "POST", "OPTIONS"],
-     supports_credentials=False)
+# Aggressive CORS configuration
+CORS(app)
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 # Initialize Anthropic client
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
@@ -400,8 +403,19 @@ def followup():
         }), 500
 
 
-@app.route('/api/generate-pdf', methods=['POST'])
+@app.route('/api/generate-pdf', methods=['POST', 'OPTIONS'])
 def generate_pdf():
+    # Handle preflight OPTIONS request
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response
+    
+    # Rest of the function stays the same
+    try:
+        data = request.get_json()
     """
     Generate PDF from HTML content using WeasyPrint
     This endpoint receives HTML and returns a properly formatted PDF
