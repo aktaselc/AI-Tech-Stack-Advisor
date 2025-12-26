@@ -1,12 +1,11 @@
 """
-BulWise Flask Backend with Cost Protection
-===========================================
+BulWise Flask Backend - WITH 166 TOOLS INTEGRATION
+==================================================
 
-This is your Flask API backend with rate limiting and budget protection.
-Replace your current Flask API code with this protected version.
+This version properly integrates your 166-tool database with Claude API.
+Claude will now use YOUR tools and provide alternatives for each recommendation.
 
-Requirements:
-pip install flask flask-cors flask-limiter anthropic python-dotenv --break-system-packages
+CRITICAL: Replace your current flask_backend_with_protection.py with this file.
 """
 
 from flask import Flask, request, jsonify
@@ -15,70 +14,126 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import anthropic
 import os
-from datetime import datetime
 import json
+from datetime import datetime
 from pathlib import Path
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend
+CORS(app)
 
-# ============================================================================
-# RATE LIMITING CONFIGURATION
-# ============================================================================
-
-# Initialize rate limiter with memory storage
+# Rate limiting
 limiter = Limiter(
     app=app,
-    key_func=get_remote_address,  # Track by IP address
-    default_limits=["100 per hour"],  # Fallback limit
-    storage_uri="memory://"  # Use in-memory storage (for production, use Redis)
+    key_func=get_remote_address,
+    default_limits=["100 per hour"],
+    storage_uri="memory://"
 )
 
-# ============================================================================
-# COST TRACKING CONFIGURATION
-# ============================================================================
-
-MONTHLY_BUDGET_CAP = 50.00  # $50 per month
-COST_PER_1K_INPUT_TOKENS = 0.003  # Claude Sonnet 4 pricing
-COST_PER_1K_OUTPUT_TOKENS = 0.015  # Claude Sonnet 4 pricing
+# Cost tracking
+MONTHLY_BUDGET_CAP = 50.00
+COST_PER_1K_INPUT_TOKENS = 0.003
+COST_PER_1K_OUTPUT_TOKENS = 0.015
 COST_TRACKING_FILE = "cost_tracking.json"
 
+# Input validation
+MAX_QUERY_LENGTH = 2000
+MAX_CONTEXT_LENGTH = 500
+
+# ==============================================================================
+# TOOLS DATABASE INTEGRATION
+# ==============================================================================
+
+def load_tools_database():
+    """
+    Load all 250 AI tools from JSON file.
+    
+    The tools are in complete_250_tools.json in the same directory.
+    """
+    try:
+        import os
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        tools_file = os.path.join(script_dir, 'complete_250_tools.json')
+        
+        with open(tools_file, 'r') as f:
+            data = json.load(f)
+            tools = data.get('tools', [])
+        
+        print(f"✅ Loaded {len(tools)} tools from database")
+        return tools
+        
+    except FileNotFoundError:
+        print("❌ complete_250_tools.json not found! Make sure it's in the same directory as this script.")
+        return []
+    except Exception as e:
+        print(f"❌ Error loading tools: {e}")
+        return []
+
+def format_tools_for_claude(tools):
+    """Format tools database for Claude's system prompt"""
+    if not tools:
+        return "NO TOOLS DATABASE AVAILABLE - Using general knowledge instead."
+    
+    formatted = []
+    for tool in tools:
+        # Handle both formats: tool_name/name
+        name = tool.get("tool_name") or tool.get("name")
+        
+        # Build strengths list from available data
+        strengths = tool.get("strengths", [])
+        if not strengths:
+            # Derive from use_cases or best_for
+            use_cases = tool.get("use_cases", [])
+            best_for = tool.get("best_for", "")
+            if use_cases:
+                strengths = [f"Supports {case}" for case in use_cases[:3]]
+            elif best_for:
+                strengths = [best_for]
+        
+        formatted.append({
+            "name": name,
+            "category": tool.get("category"),
+            "description": tool.get("description"),
+            "strengths": strengths if isinstance(strengths, list) else [strengths],
+            "best_for": tool.get("best_for", "General AI tasks"),
+            "integrations": tool.get("integration_options") or tool.get("integrations", ["Web"]),
+            "trade_offs": tool.get("trade_offs", "Standard limitations apply")
+        })
+    
+    return json.dumps(formatted, indent=2)
+
+# ==============================================================================
+# COST TRACKING (Same as before)
+# ==============================================================================
+
 def get_current_month():
-    """Returns current month in YYYY-MM format"""
     return datetime.now().strftime("%Y-%m")
 
 def load_cost_data():
-    """Load cost tracking data from file"""
     if not Path(COST_TRACKING_FILE).exists():
         return {"month": get_current_month(), "total_cost": 0.0, "requests": []}
     
     with open(COST_TRACKING_FILE, 'r') as f:
         data = json.load(f)
-        
-    # Reset if new month
+    
     if data.get("month") != get_current_month():
         return {"month": get_current_month(), "total_cost": 0.0, "requests": []}
     
     return data
 
 def save_cost_data(data):
-    """Save cost tracking data to file"""
     with open(COST_TRACKING_FILE, 'w') as f:
         json.dump(data, f, indent=2)
 
 def calculate_cost(input_tokens, output_tokens):
-    """Calculate cost based on token usage"""
     input_cost = (input_tokens / 1000) * COST_PER_1K_INPUT_TOKENS
     output_cost = (output_tokens / 1000) * COST_PER_1K_OUTPUT_TOKENS
     return input_cost + output_cost
 
 def check_budget():
-    """Check if monthly budget has been exceeded"""
     data = load_cost_data()
     return data["total_cost"] < MONTHLY_BUDGET_CAP
 
 def log_request(input_tokens, output_tokens, cost):
-    """Log request and update total cost"""
     data = load_cost_data()
     
     request_log = {
@@ -93,49 +148,40 @@ def log_request(input_tokens, output_tokens, cost):
     
     save_cost_data(data)
     
-    # Print cost summary
     print(f"💰 Cost: ${cost:.4f} | Month total: ${data['total_cost']:.2f}/{MONTHLY_BUDGET_CAP}")
     
     return data["total_cost"]
 
-# ============================================================================
-# INPUT VALIDATION
-# ============================================================================
-
-MAX_QUERY_LENGTH = 2000  # characters
-MAX_CONTEXT_LENGTH = 500  # characters per context field
+# ==============================================================================
+# INPUT VALIDATION (Same as before)
+# ==============================================================================
 
 def validate_input(data):
-    """Validate input lengths to prevent abuse"""
     query = data.get('query', '')
     context = data.get('context', {})
     
-    # Validate query length
     if len(query) > MAX_QUERY_LENGTH:
         return False, f"Query too long. Maximum {MAX_QUERY_LENGTH} characters allowed."
     
-    # Validate context fields
     for key, value in context.items():
         if isinstance(value, str) and len(value) > MAX_CONTEXT_LENGTH:
             return False, f"Context field '{key}' too long. Maximum {MAX_CONTEXT_LENGTH} characters allowed."
     
-    # Check for empty input
     if not query.strip():
         return False, "Query cannot be empty."
     
     return True, None
 
-# ============================================================================
-# API ENDPOINTS
-# ============================================================================
+# ==============================================================================
+# MAIN API ENDPOINT WITH TOOLS INTEGRATION
+# ==============================================================================
 
 @app.route('/api/generate', methods=['POST'])
-@limiter.limit("3 per day")  # CRITICAL: 3 requests per day per IP
+@limiter.limit("3 per day")
 def generate_report():
-    """Generate AI Stack Advisory Report"""
+    """Generate AI Stack Advisory Report WITH TOOLS DATABASE"""
     
     try:
-        # Get request data
         data = request.json
         
         # Validate input
@@ -152,6 +198,16 @@ def generate_report():
                          f"Please contact support at hello@bulwise.io"
             }), 503
         
+        # CRITICAL: Load your 166 tools
+        all_tools = load_tools_database()
+        tools_context = format_tools_for_claude(all_tools)
+        
+        # Log warning if no tools loaded
+        if not all_tools:
+            print("⚠️  WARNING: No tools loaded from database! Claude will use general knowledge.")
+        else:
+            print(f"✅ Loaded {len(all_tools)} tools from database")
+        
         # Initialize Anthropic client
         client = anthropic.Anthropic(
             api_key=os.environ.get("ANTHROPIC_API_KEY")
@@ -161,7 +217,97 @@ def generate_report():
         query = data.get('query')
         context = data.get('context', {})
         
-        system_prompt = """You are an AI Stack Advisory expert. Generate detailed, actionable AI implementation reports."""
+        # UPDATED SYSTEM PROMPT WITH TOOLS DATABASE
+        system_prompt = f"""You are BulWise, an AI Stack Advisory expert.
+
+CRITICAL: You have access to a curated database of {len(all_tools)} AI tools.
+You MUST ONLY recommend tools from this database.
+
+TOOLS DATABASE:
+{tools_context}
+
+TASK: Generate a comprehensive AI implementation report.
+
+IMPORTANT REQUIREMENTS:
+1. SELECT tools from the database above that match the user's specific needs
+2. PROVIDE exactly 2 alternatives for each recommended tool
+3. VARY recommendations based on:
+   - User's budget
+   - User's technical level
+   - Specific use case requirements
+4. DO NOT recommend the same tools for every use case
+5. EXPLAIN why you chose each tool over its alternatives
+
+FORMAT YOUR REPORT EXACTLY LIKE THIS:
+
+## Executive Summary
+[Brief overview of the solution]
+
+## Recommended Stack
+
+### [Category 1 Name] (e.g., Research & Data Gathering)
+
+**PRIMARY TOOL: [Tool Name]**
+
+Strengths:
+• [Strength 1]
+• [Strength 2]
+• [Strength 3]
+
+Best for: [Use cases]
+
+Integration: [How it connects to other tools]
+
+**ALTERNATIVE 1: [Tool Name]**
+
+Strengths:
+• [Strength 1]
+• [Strength 2]
+
+Best for: [Use cases]
+
+Integration: [Integration details]
+
+Trade-off: [What you give up vs primary tool]
+
+**ALTERNATIVE 2: [Tool Name]**
+
+Strengths:
+• [Strength 1]
+• [Strength 2]
+
+Best for: [Use cases]
+
+Integration: [Integration details]
+
+Trade-off: [What you give up vs primary tool]
+
+---
+
+[Repeat for each category in the stack]
+
+## Architecture Diagram
+[Mermaid diagram showing workflow]
+
+## Phased Implementation Roadmap
+[Week-by-week implementation plan]
+
+## Success Metrics
+[4-5 specific, measurable metrics]
+
+## Risk Assessment
+[5 risks with likelihood, impact, and mitigation]
+
+## Related Opportunities
+[3-5 additional AI use cases]
+
+Remember:
+- Use ONLY tools from the database
+- Provide exactly 2 alternatives per tool
+- Focus on strengths, best use cases, integrations
+- Explain trade-offs clearly
+- NO PRICING information
+"""
         
         user_prompt = f"""
 Problem/Goal: {query}
@@ -172,13 +318,7 @@ Context:
 - Budget: {context.get('budget', 'Not specified')}
 - Existing Tools: {context.get('existing_tools', 'None specified')}
 
-Generate a comprehensive AI Stack Advisory Report with:
-1. Executive Summary
-2. Recommended AI Tools (specific products with pricing)
-3. Implementation Timeline (week-by-week)
-4. Architecture Diagram (Mermaid format)
-5. Success Metrics
-6. Risk Assessment
+Generate a comprehensive AI Stack Advisory Report following the format specified in the system prompt.
 """
         
         # Call Claude API
@@ -208,7 +348,8 @@ Generate a comprehensive AI Stack Advisory Report with:
                 "input_tokens": input_tokens,
                 "output_tokens": output_tokens,
                 "cost": f"${cost:.4f}",
-                "month_total": f"${total_cost:.2f}/{MONTHLY_BUDGET_CAP}"
+                "month_total": f"${total_cost:.2f}/{MONTHLY_BUDGET_CAP}",
+                "tools_loaded": len(all_tools)
             }
         })
     
@@ -223,10 +364,14 @@ Generate a comprehensive AI Stack Advisory Report with:
         print(f"Unexpected error: {e}")
         return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
 
+# ==============================================================================
+# HEALTH CHECK & MONITORING
+# ==============================================================================
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
     cost_data = load_cost_data()
+    all_tools = load_tools_database()
     
     return jsonify({
         "status": "healthy",
@@ -234,46 +379,50 @@ def health_check():
         "total_cost": f"${cost_data['total_cost']:.2f}",
         "budget_cap": f"${MONTHLY_BUDGET_CAP}",
         "budget_remaining": f"${MONTHLY_BUDGET_CAP - cost_data['total_cost']:.2f}",
-        "requests_this_month": len(cost_data["requests"])
+        "requests_this_month": len(cost_data["requests"]),
+        "tools_in_database": len(all_tools)
     })
 
 @app.route('/api/costs', methods=['GET'])
 def get_costs():
-    """Get cost tracking data (admin endpoint - secure this in production!)"""
     cost_data = load_cost_data()
     return jsonify(cost_data)
 
-# ============================================================================
+# ==============================================================================
 # ERROR HANDLERS
-# ============================================================================
+# ==============================================================================
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
-    """Handle rate limit exceeded"""
     return jsonify({
         "error": "Rate limit exceeded. You can generate up to 3 reports per day. "
                  "Please try again tomorrow or contact hello@bulwise.io for more access."
     }), 429
 
-# ============================================================================
+# ==============================================================================
 # MAIN
-# ============================================================================
+# ==============================================================================
 
 if __name__ == '__main__':
-    # Check for API key
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("⚠️  WARNING: ANTHROPIC_API_KEY not set!")
-        print("Set it in your environment or .env file")
     
-    # Print configuration
     print("=" * 60)
-    print("BulWise Flask API - Protected Version")
+    print("BulWise Flask API - WITH TOOLS DATABASE INTEGRATION")
     print("=" * 60)
     print(f"✅ Rate Limiting: 3 requests per day per IP")
     print(f"✅ Monthly Budget Cap: ${MONTHLY_BUDGET_CAP}")
-    print(f"✅ Input Validation: Max {MAX_QUERY_LENGTH} chars (query), {MAX_CONTEXT_LENGTH} chars (context)")
+    print(f"✅ Input Validation: Max {MAX_QUERY_LENGTH} chars")
     print(f"✅ Cost Tracking: {COST_TRACKING_FILE}")
+    
+    # Check if tools database is accessible
+    tools = load_tools_database()
+    if tools:
+        print(f"✅ Tools Database: {len(tools)} tools loaded")
+    else:
+        print(f"⚠️  WARNING: Tools database is EMPTY!")
+        print(f"⚠️  You MUST implement load_tools_database() function!")
+    
     print("=" * 60)
     
-    # Run the app
     app.run(debug=True, host='0.0.0.0', port=5000)
