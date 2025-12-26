@@ -427,17 +427,8 @@ Generate a comprehensive AI Stack Advisory Report following the format specified
         cost = calculate_cost(input_tokens, output_tokens)
         total_cost = log_request(input_tokens, output_tokens, cost)
         
-        # Return response
-        return jsonify({
-            "report": report_content,
-            "metadata": {
-                "input_tokens": input_tokens,
-                "output_tokens": output_tokens,
-                "cost": f"${cost:.4f}",
-                "month_total": f"${total_cost:.2f}/{MONTHLY_BUDGET_CAP}",
-                "tools_loaded": len(all_tools)
-            }
-        })
+        # Return response - simple format for frontend compatibility
+        return jsonify({"report": report_content})
     
     except anthropic.RateLimitError:
         return jsonify({"error": "API rate limit exceeded. Please try again later."}), 429
