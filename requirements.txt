@@ -3,3 +3,4 @@ anthropic==0.25.0
 httpx==0.24.1
 gunicorn==21.2.0
 weasyprint==52.5
+flask-limiter

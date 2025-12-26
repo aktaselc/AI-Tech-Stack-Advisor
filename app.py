@@ -1,576 +1,279 @@
 """
-BulWise API Backend
-Simple Flask API that generates AI stack advisory reports
+BulWise Flask Backend with Cost Protection
+===========================================
+
+This is your Flask API backend with rate limiting and budget protection.
+Replace your current Flask API code with this protected version.
+
+Requirements:
+pip install flask flask-cors flask-limiter anthropic python-dotenv --break-system-packages
 """
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import anthropic
 import os
+from datetime import datetime
 import json
-import datetime
-import io
-from weasyprint import HTML, CSS
+from pathlib import Path
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for frontend
 
-# Manual CORS handling - set headers once
-@app.after_request
-def after_request(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-    return response
+# ============================================================================
+# RATE LIMITING CONFIGURATION
+# ============================================================================
 
-# Initialize Anthropic client
-client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+# Initialize rate limiter with memory storage
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,  # Track by IP address
+    default_limits=["100 per hour"],  # Fallback limit
+    storage_uri="memory://"  # Use in-memory storage (for production, use Redis)
+)
 
-# Analytics logging function
-def log_analytics(event_type, data):
-    """Log analytics data to a JSON file"""
-    try:
-        analytics_file = 'analytics_log.json'
-        
-        # Create log entry
-        log_entry = {
-            'timestamp': datetime.datetime.now().isoformat(),
-            'event_type': event_type,
-            'data': data
-        }
-        
-        # Read existing logs
-        if os.path.exists(analytics_file):
-            with open(analytics_file, 'r') as f:
-                logs = json.load(f)
-        else:
-            logs = []
-        
-        # Append new log
-        logs.append(log_entry)
-        
-        # Write back
-        with open(analytics_file, 'w') as f:
-            json.dump(logs, f, indent=2)
-            
-    except Exception as e:
-        print(f"Analytics logging error: {e}")
-        # Don't fail the request if logging fails
-        pass
+# ============================================================================
+# COST TRACKING CONFIGURATION
+# ============================================================================
 
-# AI Tools Database (same as your Streamlit app)
-TOOLS_DATABASE = [
-    {
-        "name": "Perplexity Pro",
-        "category": "Search & Research",
-        "description": "AI-powered search with real-time web access and citations",
-        "pricing_monthly": 20,
-        "pricing_annual": 200,
-        "url": "https://perplexity.ai"
-    },
-    {
-        "name": "Claude Pro",
-        "category": "LLM",
-        "description": "Advanced AI for analysis, writing, and reasoning",
-        "pricing_monthly": 20,
-        "pricing_annual": 200,
-        "url": "https://claude.ai"
-    },
-    {
-        "name": "ChatGPT Plus",
-        "category": "LLM",
-        "description": "OpenAI's conversational AI with GPT-4",
-        "pricing_monthly": 20,
-        "pricing_annual": 240,
-        "url": "https://chat.openai.com"
-    },
-    {
-        "name": "Zapier Professional",
-        "category": "Automation",
-        "description": "Connect and automate workflows between 5000+ apps",
-        "pricing_monthly": 20,
-        "pricing_annual": 240,
-        "url": "https://zapier.com"
-    },
-    {
-        "name": "Make (Integromat)",
-        "category": "Automation",
-        "description": "Visual automation for complex workflows",
-        "pricing_monthly": 9,
-        "pricing_annual": 108,
-        "url": "https://make.com"
-    },
-    {
-        "name": "Beautiful.ai",
-        "category": "Presentation",
-        "description": "AI-powered presentation builder",
-        "pricing_monthly": 12,
-        "pricing_annual": 144,
-        "url": "https://beautiful.ai"
-    },
-    {
-        "name": "Notion AI",
-        "category": "Productivity",
-        "description": "AI writing assistant in Notion",
-        "pricing_monthly": 10,
-        "pricing_annual": 120,
-        "url": "https://notion.so/product/ai"
-    },
-    {
-        "name": "Midjourney",
-        "category": "Image Generation",
-        "description": "AI art generator from text prompts",
-        "pricing_monthly": 10,
-        "pricing_annual": 120,
-        "url": "https://midjourney.com"
-    },
-    {
-        "name": "ElevenLabs",
-        "category": "Voice & Audio",
-        "description": "Realistic AI voice generation",
-        "pricing_monthly": 5,
-        "pricing_annual": 60,
-        "url": "https://elevenlabs.io"
-    },
-    {
-        "name": "Grammarly",
-        "category": "Writing",
-        "description": "AI writing assistant for grammar and clarity",
-        "pricing_monthly": 12,
-        "pricing_annual": 144,
-        "url": "https://grammarly.com"
+MONTHLY_BUDGET_CAP = 50.00  # $50 per month
+COST_PER_1K_INPUT_TOKENS = 0.003  # Claude Sonnet 4 pricing
+COST_PER_1K_OUTPUT_TOKENS = 0.015  # Claude Sonnet 4 pricing
+COST_TRACKING_FILE = "cost_tracking.json"
+
+def get_current_month():
+    """Returns current month in YYYY-MM format"""
+    return datetime.now().strftime("%Y-%m")
+
+def load_cost_data():
+    """Load cost tracking data from file"""
+    if not Path(COST_TRACKING_FILE).exists():
+        return {"month": get_current_month(), "total_cost": 0.0, "requests": []}
+    
+    with open(COST_TRACKING_FILE, 'r') as f:
+        data = json.load(f)
+        
+    # Reset if new month
+    if data.get("month") != get_current_month():
+        return {"month": get_current_month(), "total_cost": 0.0, "requests": []}
+    
+    return data
+
+def save_cost_data(data):
+    """Save cost tracking data to file"""
+    with open(COST_TRACKING_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def calculate_cost(input_tokens, output_tokens):
+    """Calculate cost based on token usage"""
+    input_cost = (input_tokens / 1000) * COST_PER_1K_INPUT_TOKENS
+    output_cost = (output_tokens / 1000) * COST_PER_1K_OUTPUT_TOKENS
+    return input_cost + output_cost
+
+def check_budget():
+    """Check if monthly budget has been exceeded"""
+    data = load_cost_data()
+    return data["total_cost"] < MONTHLY_BUDGET_CAP
+
+def log_request(input_tokens, output_tokens, cost):
+    """Log request and update total cost"""
+    data = load_cost_data()
+    
+    request_log = {
+        "timestamp": datetime.now().isoformat(),
+        "input_tokens": input_tokens,
+        "output_tokens": output_tokens,
+        "cost": cost
     }
-]
-
-
-def generate_report(user_query, context):
-    """
-    Generate AI stack advisory report using Claude
     
-    Args:
-        user_query: User's problem description
-        context: Dict with report_purpose, primary_audience, budget
+    data["requests"].append(request_log)
+    data["total_cost"] += cost
     
-    Returns:
-        Markdown formatted report
-    """
+    save_cost_data(data)
     
-    # Build tools database string
-    tools_info = "\n".join([
-        f"- {tool['name']} ({tool['category']}): {tool['description']} | ${tool['pricing_monthly']}/month"
-        for tool in TOOLS_DATABASE
-    ])
+    # Print cost summary
+    print(f"💰 Cost: ${cost:.4f} | Month total: ${data['total_cost']:.2f}/{MONTHLY_BUDGET_CAP}")
     
-    system_prompt = f"""You are BulWise, an AI Stack Advisory expert. Your job is to recommend specific AI tools and create detailed implementation plans.
+    return data["total_cost"]
 
-AVAILABLE TOOLS DATABASE:
-{tools_info}
+# ============================================================================
+# INPUT VALIDATION
+# ============================================================================
 
-CRITICAL INSTRUCTIONS:
-1. Recommend SPECIFIC tools by name from the database above
-2. Provide detailed analysis and step-by-step implementation guidance
-3. Include architecture diagram in Mermaid format
-4. Be specific, actionable, and detailed
+MAX_QUERY_LENGTH = 2000  # characters
+MAX_CONTEXT_LENGTH = 500  # characters per context field
 
-REPORT PURPOSE: {context.get('report_purpose', 'General guidance')}
-PRIMARY AUDIENCE: {context.get('primary_audience', 'General')}
-BUDGET: {context.get('budget', 'Not specified')}
-EXISTING TOOLS: {context.get('existing_tools', 'None specified')}
-
-TODAY'S DATE: December 18, 2025
-
-IMPORTANT: If user has existing tools, show how to integrate recommended AI tools with their current stack. Include connection details in "Detailed Architecture Breakdown" section.
-
-Format your response as a professional markdown report with these EXACT sections:
-
-## Executive Summary
-Brief overview of the recommended solution
-
-## Recommended Stack
-Format as markdown table WITHOUT cost columns. Make tool names clickable links:
-| Tool | Category | Purpose |
-|------|----------|---------|
-| [Tool Name](https://toolwebsite.com) | Category | What it does |
-
-IMPORTANT: Every tool name must be a markdown link to its website.
-
-## Architecture Diagram
-```mermaid
-graph TD
-    A[Start] --> B[Tool 1]
-    B --> C[Tool 2]
-```
-
-## Detailed Architecture Breakdown
-Explain step-by-step how the tools connect using bullet points:
-- **Tool A → Tool B**: Describe the connection and data flow
-- **Tool B → Tool C**: Describe the connection and integration method
-- **Tool C → Tool D**: Describe the connection
-(Continue for all tools in the stack)
-
-## Implementation Phases
-Break into 4 phases with milestones:
-**Phase 1: Setup (Weeks 1-2)**
-- Milestone 1
-- Milestone 2
-
-**Phase 2: Integration (Weeks 3-4)**
-- Milestone 1
-- Milestone 2
-
-(Continue for Phases 3 and 4)
-
-## Detailed Tool Analysis
-For each recommended tool:
-**Tool Name**
-- **Purpose**: What it does
-- **Key Features**: List 3-4 features
-- **Implementation Notes**: Specific setup considerations
-- **Best Practices**: 2-3 tips
-
-## Risk Assessment
-Format as markdown table with color indicators:
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Risk description | 🔴 High / 🟡 Medium / 🟢 Low | 🔴 High / 🟡 Medium / 🟢 Low | How to mitigate |
-
-Include 4-5 risks covering technical, organizational, and operational aspects.
-
-## Success Metrics
-For each metric (provide 3-4 metrics):
-
-**Metric Name**
-- **What it is**: Definition
-- **How to measure**: Specific measurement method
-- **Target**: Specific goal
-- **Why it matters**: Business impact
-- **Example**: Real-world scenario
-
-## Related AI Opportunities
-Show EXACTLY 3 opportunities:
-
-**Opportunity 1 Title**
-- **What it is**: Description
-- **How it connects**: Connection to main use case
-- **Recommended tools**: Specific tool names
-- **Setup time**: Estimated time
-- **Potential impact**: Expected benefit
-
-(Repeat for 2 more opportunities)
-
-CRITICAL FORMATTING RULES:
-- Use EXACTLY these section headers (## Section Name)
-- Include ALL sections listed above
-- Use proper markdown tables where specified
-- Use mermaid code blocks for diagrams
-- Use color emoji indicators: 🔴 High, 🟡 Medium, 🟢 Low
-- Be comprehensive - don't cut content short
-- Provide complete implementation phases (all 4 phases)
-- List ALL recommended tools in Detailed Tool Analysis
-
-DO NOT INCLUDE:
-- ROI calculations
-- Classification sections
-- Cost information in recommended stack table
-- Dates before December 2025"""
-
-    # Call Claude API
-    message = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=4000,
-        system=system_prompt,
-        messages=[
-            {
-                "role": "user",
-                "content": f"Create a comprehensive AI stack advisory report for this use case:\n\n{user_query}"
-            }
-        ]
-    )
+def validate_input(data):
+    """Validate input lengths to prevent abuse"""
+    query = data.get('query', '')
+    context = data.get('context', {})
     
-    return message.content[0].text
+    # Validate query length
+    if len(query) > MAX_QUERY_LENGTH:
+        return False, f"Query too long. Maximum {MAX_QUERY_LENGTH} characters allowed."
+    
+    # Validate context fields
+    for key, value in context.items():
+        if isinstance(value, str) and len(value) > MAX_CONTEXT_LENGTH:
+            return False, f"Context field '{key}' too long. Maximum {MAX_CONTEXT_LENGTH} characters allowed."
+    
+    # Check for empty input
+    if not query.strip():
+        return False, "Query cannot be empty."
+    
+    return True, None
 
-
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({"status": "healthy", "service": "BulWise API"})
-
+# ============================================================================
+# API ENDPOINTS
+# ============================================================================
 
 @app.route('/api/generate', methods=['POST'])
-def generate():
-    """
-    Generate AI stack advisory report
+@limiter.limit("3 per day")  # CRITICAL: 3 requests per day per IP
+def generate_report():
+    """Generate AI Stack Advisory Report"""
     
-    Expected JSON body:
-    {
-        "query": "User's problem description",
-        "context": {
-            "report_purpose": "Investment decision / Executive presentation / etc",
-            "primary_audience": "C-suite / Technical team / etc",
-            "budget": "Under $100 / $100-500 / etc"
-        }
-    }
-    """
     try:
-        data = request.get_json()
+        # Get request data
+        data = request.json
         
-        if not data or 'query' not in data:
-            return jsonify({"error": "Missing 'query' in request body"}), 400
+        # Validate input
+        is_valid, error_message = validate_input(data)
+        if not is_valid:
+            return jsonify({"error": error_message}), 400
         
-        user_query = data['query']
+        # Check monthly budget
+        if not check_budget():
+            cost_data = load_cost_data()
+            return jsonify({
+                "error": f"Monthly budget cap of ${MONTHLY_BUDGET_CAP} has been reached. "
+                         f"Current month total: ${cost_data['total_cost']:.2f}. "
+                         f"Please contact support at hello@bulwise.io"
+            }), 503
+        
+        # Initialize Anthropic client
+        client = anthropic.Anthropic(
+            api_key=os.environ.get("ANTHROPIC_API_KEY")
+        )
+        
+        # Prepare the prompt
+        query = data.get('query')
         context = data.get('context', {})
         
-        # Log analytics - user inputs
-        log_analytics('report_generated', {
-            'user_prompt': user_query,
-            'report_purpose': context.get('report_purpose'),
-            'primary_audience': context.get('primary_audience'),
-            'budget': context.get('budget'),
-            'existing_tools': context.get('existing_tools')
-        })
+        system_prompt = """You are an AI Stack Advisory expert. Generate detailed, actionable AI implementation reports."""
         
-        # Generate report
-        report = generate_report(user_query, context)
-        
-        # Log analytics - report output
-        log_analytics('report_output', {
-            'report_length': len(report),
-            'report_preview': report[:500] if len(report) > 500 else report
-        })
-        
-        return jsonify({
-            "success": True,
-            "report": report
-        })
-        
-    except Exception as e:
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
+        user_prompt = f"""
+Problem/Goal: {query}
 
+Context:
+- Report Purpose: {context.get('report_purpose', 'Not specified')}
+- Primary Audience: {context.get('primary_audience', 'Not specified')}
+- Budget: {context.get('budget', 'Not specified')}
+- Existing Tools: {context.get('existing_tools', 'None specified')}
 
-@app.route('/api/followup', methods=['POST'])
-def followup():
-    """
-    Answer follow-up questions about a report
-    
-    Expected JSON body:
-    {
-        "question": "User's follow-up question",
-        "original_report": "The original report (optional for context)"
-    }
-    """
-    try:
-        data = request.get_json()
-        
-        if not data or 'question' not in data:
-            return jsonify({"error": "Missing 'question' in request body"}), 400
-        
-        question = data['question']
-        original_report = data.get('original_report', '')
-        
-        # Build context-aware prompt
-        system_prompt = """You are BulWise, an AI Stack Advisory expert. Answer follow-up questions about AI tool recommendations with specific, actionable guidance."""
-        
-        user_message = f"Follow-up question: {question}"
-        if original_report:
-            user_message = f"Original report context:\n{original_report[:1000]}...\n\n{user_message}"
+Generate a comprehensive AI Stack Advisory Report with:
+1. Executive Summary
+2. Recommended AI Tools (specific products with pricing)
+3. Implementation Timeline (week-by-week)
+4. Architecture Diagram (Mermaid format)
+5. Success Metrics
+6. Risk Assessment
+"""
         
         # Call Claude API
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
-            max_tokens=2000,
+            max_tokens=4000,
+            temperature=0.7,
             system=system_prompt,
             messages=[
-                {
-                    "role": "user",
-                    "content": user_message
-                }
+                {"role": "user", "content": user_prompt}
             ]
         )
         
-        return jsonify({
-            "success": True,
-            "answer": message.content[0].text
-        })
+        # Extract response
+        report_content = message.content[0].text
         
-    except Exception as e:
+        # Calculate and log cost
+        input_tokens = message.usage.input_tokens
+        output_tokens = message.usage.output_tokens
+        cost = calculate_cost(input_tokens, output_tokens)
+        total_cost = log_request(input_tokens, output_tokens, cost)
+        
+        # Return response
         return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
-
-
-@app.route('/api/generate-pdf', methods=['POST', 'OPTIONS'])
-def generate_pdf():
-    """
-    Generate PDF from HTML content using WeasyPrint
-    This endpoint receives HTML and returns a properly formatted PDF
-    with correct page breaks
-    """
-    # Handle preflight OPTIONS request
-    if request.method == 'OPTIONS':
-        response = jsonify({'status': 'ok'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        return response
+            "report": report_content,
+            "metadata": {
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost": f"${cost:.4f}",
+                "month_total": f"${total_cost:.2f}/{MONTHLY_BUDGET_CAP}"
+            }
+        })
     
-    try:
-        data = request.get_json()
-        html_content = data.get('html', '')
-        
-        if not html_content:
-            return jsonify({
-                "success": False,
-                "error": "No HTML content provided"
-            }), 400
-        
-        # CSS for proper page breaks and styling
-        pdf_css = CSS(string='''
-            @page {
-                size: A4;
-                margin: 15mm;
-            }
-            
-            body {
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #2d3748;
-            }
-            
-            /* Prevent sections from breaking across pages */
-            .section-wrapper {
-                page-break-inside: avoid;
-                page-break-after: auto;
-            }
-            
-            /* Prevent diagrams from splitting */
-            .mermaid-diagram {
-                page-break-inside: avoid !important;
-                margin-top: 40px;
-                margin-bottom: 40px;
-            }
-            
-            /* Prevent tables from splitting */
-            table {
-                page-break-inside: avoid;
-                margin-top: 40px;
-                margin-bottom: 40px;
-                border-collapse: collapse;
-                width: 100%;
-            }
-            
-            table th,
-            table td {
-                padding: 12px;
-                text-align: left;
-                border: 1px solid #e2e8f0;
-            }
-            
-            table th {
-                background-color: #667eea;
-                color: white;
-                font-weight: bold;
-            }
-            
-            /* Prevent paragraphs from breaking */
-            p {
-                page-break-inside: avoid;
-                margin-bottom: 16px;
-            }
-            
-            /* Keep headings with content */
-            h1, h2, h3 {
-                page-break-after: avoid;
-                color: #667eea;
-                margin-top: 30px;
-                margin-bottom: 16px;
-            }
-            
-            h1 {
-                font-size: 32px;
-                border-bottom: 3px solid #667eea;
-                padding-bottom: 16px;
-            }
-            
-            h2 {
-                font-size: 24px;
-                margin-top: 40px;
-            }
-            
-            h3 {
-                font-size: 18px;
-            }
-            
-            /* Lists */
-            ul, ol {
-                page-break-inside: avoid;
-                margin-bottom: 20px;
-            }
-            
-            li {
-                margin-bottom: 8px;
-            }
-            
-            /* Links */
-            a {
-                color: #667eea;
-                text-decoration: none;
-            }
-            
-            a:hover {
-                text-decoration: underline;
-            }
-            
-            /* Report summary box */
-            .report-summary {
-                background: #f7fafc;
-                padding: 25px;
-                border-radius: 8px;
-                margin-bottom: 40px;
-                page-break-inside: avoid;
-                page-break-after: always;
-            }
-            
-            /* Code blocks */
-            pre, code {
-                background: #f7fafc;
-                padding: 12px;
-                border-radius: 4px;
-                font-family: monospace;
-                page-break-inside: avoid;
-            }
-        ''')
-        
-        # Generate PDF
-        pdf_bytes = HTML(string=html_content).write_pdf(stylesheets=[pdf_css])
-        
-        # Create file-like object
-        pdf_file = io.BytesIO(pdf_bytes)
-        pdf_file.seek(0)
-        
-        # Log analytics
-        log_analytics('pdf_generated', {
-            'html_length': len(html_content),
-            'pdf_size': len(pdf_bytes)
-        })
-        
-        # Return PDF file
-        return send_file(
-            pdf_file,
-            mimetype='application/pdf',
-            as_attachment=True,
-            download_name='BulWise-AI-Stack-Report.pdf'
-        )
-        
+    except anthropic.RateLimitError:
+        return jsonify({"error": "API rate limit exceeded. Please try again later."}), 429
+    
+    except anthropic.APIError as e:
+        print(f"Anthropic API Error: {e}")
+        return jsonify({"error": f"AI service error: {str(e)}"}), 500
+    
     except Exception as e:
-        print(f"PDF Generation Error: {e}")
-        return jsonify({
-            "success": False,
-            "error": f"Failed to generate PDF: {str(e)}"
-        }), 500
+        print(f"Unexpected error: {e}")
+        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
 
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    cost_data = load_cost_data()
+    
+    return jsonify({
+        "status": "healthy",
+        "month": cost_data["month"],
+        "total_cost": f"${cost_data['total_cost']:.2f}",
+        "budget_cap": f"${MONTHLY_BUDGET_CAP}",
+        "budget_remaining": f"${MONTHLY_BUDGET_CAP - cost_data['total_cost']:.2f}",
+        "requests_this_month": len(cost_data["requests"])
+    })
+
+@app.route('/api/costs', methods=['GET'])
+def get_costs():
+    """Get cost tracking data (admin endpoint - secure this in production!)"""
+    cost_data = load_cost_data()
+    return jsonify(cost_data)
+
+# ============================================================================
+# ERROR HANDLERS
+# ============================================================================
+
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    """Handle rate limit exceeded"""
+    return jsonify({
+        "error": "Rate limit exceeded. You can generate up to 3 reports per day. "
+                 "Please try again tomorrow or contact hello@bulwise.io for more access."
+    }), 429
+
+# ============================================================================
+# MAIN
+# ============================================================================
 
 if __name__ == '__main__':
-    # For local development
+    # Check for API key
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print("⚠️  WARNING: ANTHROPIC_API_KEY not set!")
+        print("Set it in your environment or .env file")
+    
+    # Print configuration
+    print("=" * 60)
+    print("BulWise Flask API - Protected Version")
+    print("=" * 60)
+    print(f"✅ Rate Limiting: 3 requests per day per IP")
+    print(f"✅ Monthly Budget Cap: ${MONTHLY_BUDGET_CAP}")
+    print(f"✅ Input Validation: Max {MAX_QUERY_LENGTH} chars (query), {MAX_CONTEXT_LENGTH} chars (context)")
+    print(f"✅ Cost Tracking: {COST_TRACKING_FILE}")
+    print("=" * 60)
+    
+    # Run the app
     app.run(debug=True, host='0.0.0.0', port=5000)
