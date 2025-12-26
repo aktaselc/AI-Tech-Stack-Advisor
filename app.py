@@ -238,68 +238,153 @@ IMPORTANT REQUIREMENTS:
 4. DO NOT recommend the same tools for every use case
 5. EXPLAIN why you chose each tool over its alternatives
 
+⚠️  CRITICAL FORMAT REQUIREMENT ⚠️
+You MUST follow this EXACT format for the Recommended Stack section.
+DO NOT use tables, lists, or any other format.
+This format is MANDATORY for the frontend to work correctly.
+
 FORMAT YOUR REPORT EXACTLY LIKE THIS:
 
 ## Executive Summary
-[Brief overview of the solution]
+[Brief overview of the solution - 2-3 sentences]
 
 ## Recommended Stack
 
-### [Category 1 Name] (e.g., Research & Data Gathering)
+### Research & Data Gathering
 
-**PRIMARY TOOL: [Tool Name]**
-
-Strengths:
-• [Strength 1]
-• [Strength 2]
-• [Strength 3]
-
-Best for: [Use cases]
-
-Integration: [How it connects to other tools]
-
-**ALTERNATIVE 1: [Tool Name]**
+**PRIMARY TOOL: Perplexity Pro**
 
 Strengths:
-• [Strength 1]
-• [Strength 2]
+• Real-time web search with citations
+• Best-in-class accuracy for research
+• API available for automation
 
-Best for: [Use cases]
+Best for: Competitive intelligence, market research, fact-checking
 
-Integration: [Integration details]
+Integration: Web interface, API, Zapier, mobile app
 
-Trade-off: [What you give up vs primary tool]
-
-**ALTERNATIVE 2: [Tool Name]**
+**ALTERNATIVE 1: ChatGPT Plus**
 
 Strengths:
-• [Strength 1]
-• [Strength 2]
+• Excellent for creative ideation
+• Large plugin ecosystem
+• DALL-E image generation
 
-Best for: [Use cases]
+Best for: Brainstorming, content creation
 
-Integration: [Integration details]
+Integration: Web, API, plugins, mobile
 
-Trade-off: [What you give up vs primary tool]
+Trade-off: No source citations, less accurate for real-time research
+
+**ALTERNATIVE 2: Gemini Advanced**
+
+Strengths:
+• Deep Google Workspace integration
+• Strong multimodal capabilities
+• Real-time Google Search access
+
+Best for: Google ecosystem users
+
+Integration: Google Workspace, Gmail, Google Docs
+
+Trade-off: Weaker third-party integrations
 
 ---
 
-[Repeat for each category in the stack]
+### Content Creation
+
+**PRIMARY TOOL: Jasper**
+
+Strengths:
+• Marketing-focused templates
+• Brand voice customization
+• SEO integration
+
+Best for: Marketing teams, blog posts, ad copy
+
+Integration: Surfer SEO, Chrome extension, API
+
+**ALTERNATIVE 1: Copy.ai**
+
+Strengths:
+• Lower cost than Jasper
+• Sales copy focus
+• Email campaigns
+
+Best for: Sales teams, email marketing
+
+Integration: Web, API, Chrome extension
+
+Trade-off: Less sophisticated than Jasper
+
+**ALTERNATIVE 2: Claude Pro**
+
+Strengths:
+• Superior analytical writing
+• Long-form content
+• Code generation
+
+Best for: Technical content, analysis
+
+Integration: Web, API, Projects
+
+Trade-off: Not marketing-optimized
+
+---
+
+[Continue this EXACT format for 3-5 categories total]
+
+CRITICAL FORMATTING RULES:
+1. Category header: ### [Category Name] (use triple ###)
+2. Primary tool: **PRIMARY TOOL: [Exact Tool Name]**
+3. Alternatives: **ALTERNATIVE 1:** and **ALTERNATIVE 2:**
+4. Separator between categories: --- (three dashes on their own line)
+5. Each tool section must include: Strengths (bullets), Best for, Integration
+6. Alternatives must include: Trade-off line
+7. DO NOT use tables, bullet lists for tools, or any other format
 
 ## Architecture Diagram
-[Mermaid diagram showing workflow]
+
+```mermaid
+graph TD
+    A[User Input] --> B[Tool 1]
+    B --> C[Tool 2]
+    C --> D[Final Output]
+```
 
 ## Phased Implementation Roadmap
-[Week-by-week implementation plan]
+
+**Phase 1: Foundation (Week 1-2)**
+[Setup steps]
+
+**Phase 2: Integration (Week 3-4)**
+[Integration steps]
+
+**Phase 3: Optimization (Month 2+)**
+[Optimization steps]
 
 ## Success Metrics
-[4-5 specific, measurable metrics]
+
+1. [Metric 1]
+2. [Metric 2]
+3. [Metric 3]
+4. [Metric 4]
 
 ## Risk Assessment
-[5 risks with likelihood, impact, and mitigation]
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| [Risk 1] | Medium | High | [Strategy] |
+| [Risk 2] | Low | Medium | [Strategy] |
 
 ## Related Opportunities
-[3-5 additional AI use cases]
+
+1. [Opportunity 1]
+2. [Opportunity 2]
+3. [Opportunity 3]
+
+⚠️  REMINDER: The Recommended Stack section MUST use the exact format shown above.
+Frontend parsing depends on this specific structure. DO NOT deviate from it.
 
 Remember:
 - Use ONLY tools from the database
@@ -307,6 +392,7 @@ Remember:
 - Focus on strengths, best use cases, integrations
 - Explain trade-offs clearly
 - NO PRICING information
+- FOLLOW THE FORMAT EXACTLY
 """
         
         user_prompt = f"""

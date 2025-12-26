@@ -1,0 +1,4897 @@
+{
+  "tools": [
+    {
+      "tool_name": "Claude Sonnet 4",
+      "category": "LLM",
+      "subcategory": "General Purpose AI",
+      "description": "Most intelligent model from Anthropic, excellent for complex reasoning and analysis",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://claude.ai",
+      "use_cases": [
+        "Analysis",
+        "Writing",
+        "Coding",
+        "Research",
+        "Strategy"
+      ],
+      "best_for": "Complex reasoning tasks, long-form content",
+      "integration_options": [
+        "API",
+        "Web",
+        "Mobile"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "GPT-4o",
+      "category": "LLM",
+      "subcategory": "General Purpose AI",
+      "description": "OpenAI's most capable multimodal model, fast and intelligent",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://chat.openai.com",
+      "use_cases": [
+        "Analysis",
+        "Writing",
+        "Coding",
+        "Image generation"
+      ],
+      "best_for": "Versatile AI tasks, multimodal work",
+      "integration_options": [
+        "API",
+        "Web",
+        "Mobile"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "Gemini Pro",
+      "category": "LLM",
+      "subcategory": "General Purpose AI",
+      "description": "Google's advanced AI model with deep integration into Google services",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://gemini.google.com",
+      "use_cases": [
+        "Analysis",
+        "Research",
+        "Google Workspace integration"
+      ],
+      "best_for": "Google ecosystem users",
+      "integration_options": [
+        "API",
+        "Web",
+        "Google Workspace"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "Perplexity Pro",
+      "category": "Search",
+      "subcategory": "AI Search Engine",
+      "description": "AI-powered search with citations, perfect for research",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://perplexity.ai",
+      "use_cases": [
+        "Research",
+        "Fact-checking",
+        "Competitive intelligence"
+      ],
+      "best_for": "Research-heavy workflows",
+      "integration_options": [
+        "Web",
+        "API",
+        "Mobile"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "GitHub Copilot",
+      "category": "Code Assistant",
+      "subcategory": "AI Code Completion",
+      "description": "AI pair programmer that suggests code as you type",
+      "pricing_monthly": 10,
+      "pricing_annual": 100,
+      "free_tier": false,
+      "website": "https://github.com/features/copilot",
+      "use_cases": [
+        "Software development",
+        "Code generation",
+        "Learning"
+      ],
+      "best_for": "Professional developers",
+      "integration_options": [
+        "VS Code",
+        "JetBrains",
+        "Neovim"
+      ],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Cursor",
+      "category": "Code Assistant",
+      "subcategory": "AI Code Editor",
+      "description": "AI-first code editor built for pair programming with AI",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": true,
+      "website": "https://cursor.sh",
+      "use_cases": [
+        "Software development",
+        "Refactoring",
+        "Code review"
+      ],
+      "best_for": "AI-native development",
+      "integration_options": [
+        "Desktop app",
+        "API"
+      ],
+      "setup_time_minutes": 15
+    },
+    {
+      "tool_name": "Zapier Professional",
+      "category": "Automation",
+      "subcategory": "Workflow Automation",
+      "description": "Connect and automate workflows between 5000+ apps",
+      "pricing_monthly": 20,
+      "pricing_annual": 240,
+      "free_tier": true,
+      "website": "https://zapier.com",
+      "use_cases": [
+        "Workflow automation",
+        "Integration",
+        "Data sync"
+      ],
+      "best_for": "No-code automation",
+      "integration_options": [
+        "Web",
+        "5000+ app integrations"
+      ],
+      "setup_time_minutes": 20
+    },
+    {
+      "tool_name": "Make",
+      "category": "Automation",
+      "subcategory": "Workflow Automation",
+      "description": "Visual automation platform (formerly Integromat)",
+      "pricing_monthly": 9,
+      "pricing_annual": 108,
+      "free_tier": true,
+      "website": "https://make.com",
+      "use_cases": [
+        "Complex workflows",
+        "Data transformation",
+        "Integration"
+      ],
+      "best_for": "Advanced automation with visual interface",
+      "integration_options": [
+        "Web",
+        "1000+ app integrations"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Notion AI",
+      "category": "Productivity",
+      "subcategory": "Note-taking & Documentation",
+      "description": "AI-powered workspace for notes, docs, and knowledge management",
+      "pricing_monthly": 10,
+      "pricing_annual": 96,
+      "free_tier": true,
+      "website": "https://notion.so",
+      "use_cases": [
+        "Documentation",
+        "Project management",
+        "Knowledge base"
+      ],
+      "best_for": "Team collaboration and docs",
+      "integration_options": [
+        "Web",
+        "Desktop",
+        "Mobile",
+        "API"
+      ],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Midjourney",
+      "category": "Image Generation",
+      "subcategory": "AI Art",
+      "description": "Leading AI image generation tool for creative work",
+      "pricing_monthly": 10,
+      "pricing_annual": 96,
+      "free_tier": false,
+      "website": "https://midjourney.com",
+      "use_cases": [
+        "Marketing assets",
+        "Concept art",
+        "Design inspiration"
+      ],
+      "best_for": "High-quality AI art generation",
+      "integration_options": [
+        "Discord",
+        "Web"
+      ],
+      "setup_time_minutes": 15
+    },
+    {
+      "tool_name": "DALL-E 3",
+      "category": "Image Generation",
+      "subcategory": "AI Art",
+      "description": "OpenAI's image generation model, integrated with ChatGPT",
+      "pricing_monthly": 20,
+      "pricing_annual": 200,
+      "free_tier": false,
+      "website": "https://openai.com/dall-e-3",
+      "use_cases": [
+        "Marketing",
+        "Content creation",
+        "Prototyping"
+      ],
+      "best_for": "Quick image generation with text prompts",
+      "integration_options": [
+        "ChatGPT",
+        "API"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "ElevenLabs",
+      "category": "Voice/Audio",
+      "subcategory": "Text-to-Speech",
+      "description": "Realistic AI voice generation and cloning",
+      "pricing_monthly": 22,
+      "pricing_annual": 264,
+      "free_tier": true,
+      "website": "https://elevenlabs.io",
+      "use_cases": [
+        "Voiceovers",
+        "Audiobooks",
+        "Podcasts",
+        "Accessibility"
+      ],
+      "best_for": "Professional voice generation",
+      "integration_options": [
+        "Web",
+        "API"
+      ],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Descript",
+      "category": "Voice/Audio",
+      "subcategory": "Audio/Video Editing",
+      "description": "AI-powered audio and video editing with transcription",
+      "pricing_monthly": 24,
+      "pricing_annual": 288,
+      "free_tier": true,
+      "website": "https://descript.com",
+      "use_cases": [
+        "Podcast editing",
+        "Video editing",
+        "Transcription"
+      ],
+      "best_for": "Content creators",
+      "integration_options": [
+        "Desktop app",
+        "Web"
+      ],
+      "setup_time_minutes": 15
+    },
+    {
+      "tool_name": "Jasper",
+      "category": "Content Creation",
+      "subcategory": "AI Writing",
+      "description": "Enterprise AI writing platform for marketing content",
+      "pricing_monthly": 49,
+      "pricing_annual": 588,
+      "free_tier": false,
+      "website": "https://jasper.ai",
+      "use_cases": [
+        "Marketing copy",
+        "Blog posts",
+        "Social media"
+      ],
+      "best_for": "Marketing teams",
+      "integration_options": [
+        "Web",
+        "Browser extension",
+        "API"
+      ],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Copy.ai",
+      "category": "Content Creation",
+      "subcategory": "AI Writing",
+      "description": "AI copywriting tool for marketing and sales content",
+      "pricing_monthly": 49,
+      "pricing_annual": 432,
+      "free_tier": true,
+      "website": "https://copy.ai",
+      "use_cases": [
+        "Sales copy",
+        "Email campaigns",
+        "Product descriptions"
+      ],
+      "best_for": "Sales and marketing teams",
+      "integration_options": [
+        "Web",
+        "API"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "Grammarly",
+      "category": "Content Creation",
+      "subcategory": "Writing Assistant",
+      "description": "AI-powered writing assistant for grammar and style",
+      "pricing_monthly": 12,
+      "pricing_annual": 144,
+      "free_tier": true,
+      "website": "https://grammarly.com",
+      "use_cases": [
+        "Writing improvement",
+        "Grammar checking",
+        "Tone adjustment"
+      ],
+      "best_for": "Professional writing",
+      "integration_options": [
+        "Web",
+        "Desktop",
+        "Browser extension"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "tool_name": "Tableau",
+      "category": "Data Analysis",
+      "subcategory": "Business Intelligence",
+      "description": "Powerful data visualization and analytics platform",
+      "pricing_monthly": 70,
+      "pricing_annual": 840,
+      "free_tier": true,
+      "website": "https://tableau.com",
+      "use_cases": [
+        "Data visualization",
+        "Business analytics",
+        "Dashboards"
+      ],
+      "best_for": "Enterprise analytics",
+      "integration_options": [
+        "Desktop",
+        "Web",
+        "Mobile",
+        "API"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Power BI",
+      "category": "Data Analysis",
+      "subcategory": "Business Intelligence",
+      "description": "Microsoft's business analytics platform",
+      "pricing_monthly": 10,
+      "pricing_annual": 120,
+      "free_tier": true,
+      "website": "https://powerbi.microsoft.com",
+      "use_cases": [
+        "Data analysis",
+        "Reporting",
+        "Microsoft integration"
+      ],
+      "best_for": "Microsoft ecosystem users",
+      "integration_options": [
+        "Desktop",
+        "Web",
+        "Mobile"
+      ],
+      "setup_time_minutes": 20
+    },
+    {
+      "tool_name": "Beautiful.ai",
+      "category": "Presentation",
+      "subcategory": "AI Presentation Design",
+      "description": "AI-powered presentation maker with smart templates",
+      "pricing_monthly": 12,
+      "pricing_annual": 144,
+      "free_tier": true,
+      "website": "https://beautiful.ai",
+      "use_cases": [
+        "Presentations",
+        "Pitch decks",
+        "Reports"
+      ],
+      "best_for": "Professional presentations",
+      "integration_options": [
+        "Web",
+        "Desktop"
+      ],
+      "setup_time_minutes": 10
+    },
+    {
+      "tool_name": "Canva",
+      "category": "Design",
+      "subcategory": "Graphic Design",
+      "description": "AI-enhanced graphic design platform",
+      "pricing_monthly": 13,
+      "pricing_annual": 120,
+      "free_tier": true,
+      "website": "https://canva.com",
+      "use_cases": [
+        "Social media graphics",
+        "Presentations",
+        "Marketing materials"
+      ],
+      "best_for": "Non-designers",
+      "integration_options": [
+        "Web",
+        "Desktop",
+        "Mobile"
+      ],
+      "setup_time_minutes": 5
+    },
+    {
+      "name": "Gemini Advanced",
+      "category": "LLM",
+      "description": "Google's advanced AI model with multimodal capabilities",
+      "url": "https://gemini.google.com",
+      "pricing": "$20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Llama 3",
+      "category": "LLM",
+      "description": "Meta's open-source large language model",
+      "url": "https://llama.meta.com",
+      "pricing": "Free (self-hosted)",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Mistral AI",
+      "category": "LLM",
+      "description": "Efficient European LLM alternative",
+      "url": "https://mistral.ai",
+      "pricing": "$7/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Cohere",
+      "category": "LLM",
+      "description": "Enterprise-focused language AI platform",
+      "url": "https://cohere.com",
+      "pricing": "Usage-based",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Anthropic Claude API",
+      "category": "LLM",
+      "description": "API access to Claude models for developers",
+      "url": "https://console.anthropic.com",
+      "pricing": "Usage-based",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "OpenAI API",
+      "category": "LLM",
+      "description": "API access to GPT-4 and other OpenAI models",
+      "url": "https://platform.openai.com",
+      "pricing": "Usage-based",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Perplexity API",
+      "category": "LLM",
+      "description": "Search-augmented AI with citations via API",
+      "url": "https://docs.perplexity.ai",
+      "pricing": "Usage-based",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "LLM tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Leonardo.ai",
+      "category": "Image Generation",
+      "description": "Game asset focused AI image generation",
+      "url": "https://leonardo.ai",
+      "pricing": "$12/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Ideogram",
+      "category": "Image Generation",
+      "description": "AI image generator with text rendering",
+      "url": "https://ideogram.ai",
+      "pricing": "$8/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Adobe Firefly",
+      "category": "Image Generation",
+      "description": "Adobe's commercial-safe AI image generator",
+      "url": "https://firefly.adobe.com",
+      "pricing": "Included in Creative Cloud",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Canva AI",
+      "category": "Image Generation",
+      "description": "AI-powered design tools in Canva",
+      "url": "https://canva.com",
+      "pricing": "$13/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Artbreeder",
+      "category": "Image Generation",
+      "description": "Collaborative AI art creation platform",
+      "url": "https://artbreeder.com",
+      "pricing": "$9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "NightCafe",
+      "category": "Image Generation",
+      "description": "Multi-algorithm AI art generator",
+      "url": "https://nightcafe.studio",
+      "pricing": "$6/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Craiyon",
+      "category": "Image Generation",
+      "description": "Free DALL-E mini alternative",
+      "url": "https://craiyon.com",
+      "pricing": "Free",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "DreamStudio",
+      "category": "Image Generation",
+      "description": "Official Stable Diffusion interface",
+      "url": "https://dreamstudio.ai",
+      "pricing": "Credit-based",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Fotor AI",
+      "category": "Image Generation",
+      "description": "AI photo editing and generation",
+      "url": "https://fotor.com",
+      "pricing": "$9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Photoleap",
+      "category": "Image Generation",
+      "description": "Mobile-first AI image editor",
+      "url": "https://photoleapapp.com",
+      "pricing": "$8/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Image Generation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Pictory",
+      "category": "Video",
+      "description": "Text to video AI for marketing",
+      "url": "https://pictory.ai",
+      "pricing": "$19/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "InVideo AI",
+      "category": "Video",
+      "description": "AI video creation from prompts",
+      "url": "https://invideo.io",
+      "pricing": "$20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Fliki",
+      "category": "Video",
+      "description": "Text to video with AI voices",
+      "url": "https://fliki.ai",
+      "pricing": "$21/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "HeyGen",
+      "category": "Video",
+      "description": "AI avatar video generation",
+      "url": "https://heygen.com",
+      "pricing": "$30/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Lumen5",
+      "category": "Video",
+      "description": "Blog to video AI converter",
+      "url": "https://lumen5.com",
+      "pricing": "$19/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Kapwing",
+      "category": "Video",
+      "description": "Online video editor with AI features",
+      "url": "https://kapwing.com",
+      "pricing": "$16/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Colossyan",
+      "category": "Video",
+      "description": "AI video creator for workplace learning",
+      "url": "https://colossyan.com",
+      "pricing": "$28/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Vidyo.ai",
+      "category": "Video",
+      "description": "Long video to short clips AI",
+      "url": "https://vidyo.ai",
+      "pricing": "$15/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Video tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Murf.ai",
+      "category": "Voice & Audio",
+      "description": "Professional AI voiceover generator",
+      "url": "https://murf.ai",
+      "pricing": "$19/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Resemble.ai",
+      "category": "Voice & Audio",
+      "description": "Custom AI voice cloning",
+      "url": "https://resemble.ai",
+      "pricing": "$29/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Speechify",
+      "category": "Voice & Audio",
+      "description": "Text to speech AI reader",
+      "url": "https://speechify.com",
+      "pricing": "$12/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Podcastle",
+      "category": "Voice & Audio",
+      "description": "AI podcast creation platform",
+      "url": "https://podcastle.ai",
+      "pricing": "$12/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Descript Overdub",
+      "category": "Voice & Audio",
+      "description": "AI voice cloning for editing",
+      "url": "https://descript.com",
+      "pricing": "$12/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Suno AI",
+      "category": "Voice & Audio",
+      "description": "AI music generation",
+      "url": "https://suno.ai",
+      "pricing": "$10/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Soundraw",
+      "category": "Voice & Audio",
+      "description": "AI royalty-free music creator",
+      "url": "https://soundraw.io",
+      "pricing": "$17/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "AIVA",
+      "category": "Voice & Audio",
+      "description": "AI music composition",
+      "url": "https://aiva.ai",
+      "pricing": "$11/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Voice & Audio tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Writesonic",
+      "category": "Content Creation",
+      "description": "AI writing for blogs and ads",
+      "url": "https://writesonic.com",
+      "pricing": "$16/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Content Creation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Rytr",
+      "category": "Content Creation",
+      "description": "Budget-friendly AI writing",
+      "url": "https://rytr.me",
+      "pricing": "$9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Content Creation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Wordtune",
+      "category": "Writing",
+      "description": "AI writing companion and rewriter",
+      "url": "https://wordtune.com",
+      "pricing": "$10/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Writing tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "QuillBot",
+      "category": "Writing",
+      "description": "Paraphrasing and grammar tool",
+      "url": "https://quillbot.com",
+      "pricing": "$9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Writing tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Surfer SEO",
+      "category": "Content Creation",
+      "description": "AI-powered SEO content optimization",
+      "url": "https://surferseo.com",
+      "pricing": "$89/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Content Creation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Frase",
+      "category": "Content Creation",
+      "description": "SEO content research and writing",
+      "url": "https://frase.io",
+      "pricing": "$15/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Content Creation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Anyword",
+      "category": "Content Creation",
+      "description": "Performance-focused AI copywriting",
+      "url": "https://anyword.com",
+      "pricing": "$39/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Content Creation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Hemingway Editor",
+      "category": "Writing",
+      "description": "AI readability and clarity checker",
+      "url": "https://hemingwayapp.com",
+      "pricing": "Free / $20 one-time",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Writing tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Tabnine",
+      "category": "Code",
+      "description": "AI code completion for multiple IDEs",
+      "url": "https://tabnine.com",
+      "pricing": "$12/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Codeium",
+      "category": "Code",
+      "description": "Free AI code autocomplete",
+      "url": "https://codeium.com",
+      "pricing": "Free",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Replit Ghostwriter",
+      "category": "Code",
+      "description": "AI pair programming in browser",
+      "url": "https://replit.com",
+      "pricing": "$7/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Amazon CodeWhisperer",
+      "category": "Code",
+      "description": "AWS AI code generator",
+      "url": "https://aws.amazon.com/codewhisperer",
+      "pricing": "Free for individuals",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Sourcegraph Cody",
+      "category": "Code",
+      "description": "AI coding assistant with codebase context",
+      "url": "https://sourcegraph.com/cody",
+      "pricing": "Free / $9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Mintlify",
+      "category": "Code",
+      "description": "AI documentation generator",
+      "url": "https://mintlify.com",
+      "pricing": "$120/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Phind",
+      "category": "Code",
+      "description": "AI search engine for developers",
+      "url": "https://phind.com",
+      "pricing": "Free / $15/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "v0 by Vercel",
+      "category": "Code",
+      "description": "AI UI component generator",
+      "url": "https://v0.dev",
+      "pricing": "Free / $20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Code tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "n8n",
+      "category": "Automation",
+      "description": "Open-source workflow automation",
+      "url": "https://n8n.io",
+      "pricing": "Free / $20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Automation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Tray.io",
+      "category": "Automation",
+      "description": "Enterprise automation platform",
+      "url": "https://tray.io",
+      "pricing": "Custom pricing",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Automation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Workato",
+      "category": "Automation",
+      "description": "Enterprise iPaaS and automation",
+      "url": "https://workato.com",
+      "pricing": "Custom pricing",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Automation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Integrately",
+      "category": "Automation",
+      "description": "One-click automation alternative",
+      "url": "https://integrately.com",
+      "pricing": "$20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Automation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Bardeen",
+      "category": "Automation",
+      "description": "Browser automation with AI",
+      "url": "https://bardeen.ai",
+      "pricing": "$10/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Automation tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Tableau",
+      "category": "Analytics",
+      "description": "Visual analytics platform",
+      "url": "https://tableau.com",
+      "pricing": "$70/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Looker",
+      "category": "Analytics",
+      "description": "Business intelligence platform",
+      "url": "https://looker.com",
+      "pricing": "Custom pricing",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Julius AI",
+      "category": "Analytics",
+      "description": "AI data analyst chatbot",
+      "url": "https://julius.ai",
+      "pricing": "$20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Rows.com",
+      "category": "Analytics",
+      "description": "Spreadsheet with AI and integrations",
+      "url": "https://rows.com",
+      "pricing": "$Free / $59/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Hex",
+      "category": "Analytics",
+      "description": "Collaborative data workspace",
+      "url": "https://hex.tech",
+      "pricing": "Free / $80/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Mode Analytics",
+      "category": "Analytics",
+      "description": "SQL-based analytics platform",
+      "url": "https://mode.com",
+      "pricing": "$42/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Polymer",
+      "category": "Analytics",
+      "description": "AI-powered data visualization",
+      "url": "https://polymersearch.com",
+      "pricing": "$20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Patterns",
+      "category": "Analytics",
+      "description": "AI data pipeline builder",
+      "url": "https://patterns.app",
+      "pricing": "Custom pricing",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Seek.ai",
+      "category": "Analytics",
+      "description": "Natural language to SQL",
+      "url": "https://seek.ai",
+      "pricing": "Custom pricing",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "DataRobot",
+      "category": "Analytics",
+      "description": "Enterprise AI platform",
+      "url": "https://datarobot.com",
+      "pricing": "Custom pricing",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Analytics tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "You.com",
+      "category": "Search & Research",
+      "description": "AI-powered search engine",
+      "url": "https://you.com",
+      "pricing": "Free / $15/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Search & Research tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Brave Search",
+      "category": "Search & Research",
+      "description": "Privacy-focused search with AI",
+      "url": "https://search.brave.com",
+      "pricing": "Free",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Search & Research tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Consensus",
+      "category": "Search & Research",
+      "description": "AI search for research papers",
+      "url": "https://consensus.app",
+      "pricing": "Free / $9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Search & Research tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Elicit",
+      "category": "Search & Research",
+      "description": "AI research assistant for papers",
+      "url": "https://elicit.org",
+      "pricing": "Free / $10/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Search & Research tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Scite.ai",
+      "category": "Search & Research",
+      "description": "Citation analysis with AI",
+      "url": "https://scite.ai",
+      "pricing": "$20/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Search & Research tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "ClickUp AI",
+      "category": "Productivity",
+      "description": "Project management with AI features",
+      "url": "https://clickup.com",
+      "pricing": "$7/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Productivity tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Todoist AI",
+      "category": "Productivity",
+      "description": "Task management with AI suggestions",
+      "url": "https://todoist.com",
+      "pricing": "$4/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Productivity tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Mem.ai",
+      "category": "Productivity",
+      "description": "AI-powered note-taking workspace",
+      "url": "https://mem.ai",
+      "pricing": "$15/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Productivity tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Reflect",
+      "category": "Productivity",
+      "description": "Networked notes with AI",
+      "url": "https://reflect.app",
+      "pricing": "$10/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Productivity tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Reclaim.ai",
+      "category": "Productivity",
+      "description": "AI calendar and time blocking",
+      "url": "https://reclaim.ai",
+      "pricing": "$8/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Productivity tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Motion",
+      "category": "Productivity",
+      "description": "AI task and calendar manager",
+      "url": "https://usemotion.com",
+      "pricing": "$34/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Productivity tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Uizard",
+      "category": "Design",
+      "description": "AI UI/UX design tool",
+      "url": "https://uizard.io",
+      "pricing": "$12/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Design tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Framer AI",
+      "category": "Design",
+      "description": "AI website builder",
+      "url": "https://framer.com",
+      "pricing": "$5/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Design tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Relume",
+      "category": "Design",
+      "description": "AI sitemap and wireframe generator",
+      "url": "https://relume.io",
+      "pricing": "$32/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Design tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Khroma",
+      "category": "Design",
+      "description": "AI color palette generator",
+      "url": "https://khroma.co",
+      "pricing": "Free",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Design tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "name": "Remove.bg",
+      "category": "Design",
+      "description": "AI background removal",
+      "url": "https://remove.bg",
+      "pricing": "$9/month",
+      "strengths": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "best_for": "Design tasks",
+      "integrations": [
+        "Web",
+        "API"
+      ],
+      "trade_offs": "Standard limitations apply"
+    },
+    {
+      "tool_name": "Viz.ai",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI stroke detection and care coordination",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://viz.ai",
+      "use_cases": [
+        "Stroke detection",
+        "Care coordination"
+      ],
+      "best_for": "Hospital emergency departments",
+      "integration_options": [
+        "PACS",
+        "EHR"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "PathAI",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI pathology diagnosis assistance",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://pathai.com",
+      "use_cases": [
+        "Pathology",
+        "Diagnosis"
+      ],
+      "best_for": "Pathology labs",
+      "integration_options": [
+        "Lab systems",
+        "Digital pathology"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Tempus",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI precision medicine for cancer",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://tempus.com",
+      "use_cases": [
+        "Genomic analysis",
+        "Treatment planning"
+      ],
+      "best_for": "Oncology practices",
+      "integration_options": [
+        "EHR",
+        "Genomic platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Olive AI",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI healthcare operations automation",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://oliveai.com",
+      "use_cases": [
+        "Revenue cycle",
+        "Claims processing"
+      ],
+      "best_for": "Hospital administration",
+      "integration_options": [
+        "EHR",
+        "RCM systems"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Suki AI",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI voice assistant for medical documentation",
+      "pricing_monthly": 399,
+      "pricing_annual": 3990,
+      "free_tier": false,
+      "website": "https://suki.ai",
+      "use_cases": [
+        "Voice documentation",
+        "Clinical notes"
+      ],
+      "best_for": "Physicians",
+      "integration_options": [
+        "EHR",
+        "Mobile"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Nuance DAX",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI ambient clinical documentation",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://nuance.com/dax",
+      "use_cases": [
+        "Automatic notes",
+        "Ambient listening"
+      ],
+      "best_for": "Healthcare systems",
+      "integration_options": [
+        "Epic",
+        "Cerner"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Butterfly iQ",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI handheld ultrasound device",
+      "pricing_monthly": 420,
+      "pricing_annual": 4200,
+      "free_tier": false,
+      "website": "https://butterflynetwork.com",
+      "use_cases": [
+        "Portable ultrasound",
+        "Point-of-care"
+      ],
+      "best_for": "Remote healthcare",
+      "integration_options": [
+        "Mobile app",
+        "Cloud"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Paige AI",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "FDA-approved AI for cancer diagnosis",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://paige.ai",
+      "use_cases": [
+        "Cancer detection",
+        "Digital pathology"
+      ],
+      "best_for": "Pathology departments",
+      "integration_options": [
+        "Digital pathology systems"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Regard AI",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI clinical assistant for diagnosis",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://regard.ai",
+      "use_cases": [
+        "Diagnosis support",
+        "Documentation"
+      ],
+      "best_for": "Primary care physicians",
+      "integration_options": [
+        "EHR systems"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Babylon Health",
+      "category": "Healthcare AI",
+      "subcategory": "Healthcare AI",
+      "description": "AI virtual care and triage",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://babylonhealth.com",
+      "use_cases": [
+        "Symptom checker",
+        "Virtual consultations"
+      ],
+      "best_for": "Patient engagement",
+      "integration_options": [
+        "Mobile app",
+        "Telemedicine"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Trullion",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI lease accounting and ASC 842 compliance",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://trullion.com",
+      "use_cases": [
+        "Lease accounting",
+        "Compliance"
+      ],
+      "best_for": "Finance teams",
+      "integration_options": [
+        "NetSuite",
+        "QuickBooks"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "AppZen",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI expense report auditing and fraud detection",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://appzen.com",
+      "use_cases": [
+        "Expense auditing",
+        "Fraud detection"
+      ],
+      "best_for": "Corporate expense management",
+      "integration_options": [
+        "Concur",
+        "Expensify"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Vic.ai",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI autonomous invoice processing",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://vic.ai",
+      "use_cases": [
+        "Invoice processing",
+        "AP automation"
+      ],
+      "best_for": "Accounts payable",
+      "integration_options": [
+        "NetSuite",
+        "QuickBooks"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Booke.AI",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI bookkeeping automation",
+      "pricing_monthly": 49,
+      "pricing_annual": 490,
+      "free_tier": false,
+      "website": "https://booke.ai",
+      "use_cases": [
+        "Transaction categorization",
+        "Reconciliation"
+      ],
+      "best_for": "Accounting firms",
+      "integration_options": [
+        "QuickBooks",
+        "Xero"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Docyt",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI accounting platform for small business",
+      "pricing_monthly": 199,
+      "pricing_annual": 1990,
+      "free_tier": false,
+      "website": "https://docyt.com",
+      "use_cases": [
+        "Automated bookkeeping",
+        "Real-time financials"
+      ],
+      "best_for": "Small businesses",
+      "integration_options": [
+        "Banks",
+        "POS systems"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Stampli",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI AP automation with collaboration",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://stampli.com",
+      "use_cases": [
+        "Invoice management",
+        "Approval workflows"
+      ],
+      "best_for": "AP departments",
+      "integration_options": [
+        "NetSuite",
+        "SAP"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Zeni",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI bookkeeping with finance team",
+      "pricing_monthly": 549,
+      "pricing_annual": 5490,
+      "free_tier": false,
+      "website": "https://zeni.ai",
+      "use_cases": [
+        "Full-service bookkeeping",
+        "CFO services"
+      ],
+      "best_for": "Startups",
+      "integration_options": [
+        "Banks",
+        "Payroll"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "MindBridge",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI financial risk detection and audit",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://mindbridge.ai",
+      "use_cases": [
+        "Anomaly detection",
+        "Audit analytics"
+      ],
+      "best_for": "Internal audit teams",
+      "integration_options": [
+        "Accounting systems",
+        "ERP"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Datarails",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI FP&A platform for budgeting",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://datarails.com",
+      "use_cases": [
+        "Budgeting",
+        "Financial planning"
+      ],
+      "best_for": "FP&A teams",
+      "integration_options": [
+        "Excel",
+        "ERPs"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "BlackLine",
+      "category": "Finance & Accounting AI",
+      "subcategory": "Finance & Accounting AI",
+      "description": "AI account reconciliation and close",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://blackline.com",
+      "use_cases": [
+        "Account reconciliation",
+        "Financial close"
+      ],
+      "best_for": "Finance teams",
+      "integration_options": [
+        "SAP",
+        "Oracle"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Darktrace",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI autonomous cyber defense",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://darktrace.com",
+      "use_cases": [
+        "Threat detection",
+        "Autonomous response"
+      ],
+      "best_for": "Enterprise security",
+      "integration_options": [
+        "Network",
+        "Cloud",
+        "SIEM"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "CrowdStrike Falcon",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI endpoint protection and threat intelligence",
+      "pricing_monthly": 8.99,
+      "pricing_annual": 89.9,
+      "free_tier": false,
+      "website": "https://crowdstrike.com",
+      "use_cases": [
+        "Endpoint detection",
+        "Threat intelligence"
+      ],
+      "best_for": "Endpoint security",
+      "integration_options": [
+        "Cloud",
+        "SIEM"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "SentinelOne",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI endpoint security with autonomous response",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://sentinelone.com",
+      "use_cases": [
+        "Behavioral AI",
+        "Autonomous remediation"
+      ],
+      "best_for": "Endpoint protection",
+      "integration_options": [
+        "Cloud",
+        "SIEM"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Vectra AI",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI network detection and response",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://vectra.ai",
+      "use_cases": [
+        "Network traffic analysis",
+        "Threat prioritization"
+      ],
+      "best_for": "Network security",
+      "integration_options": [
+        "Network",
+        "Cloud"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Abnormal Security",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI email security for advanced threats",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://abnormalsecurity.com",
+      "use_cases": [
+        "BEC prevention",
+        "Phishing"
+      ],
+      "best_for": "Email security",
+      "integration_options": [
+        "Microsoft 365",
+        "Google Workspace"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Cybereason",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI EDR and threat hunting",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://cybereason.com",
+      "use_cases": [
+        "Malware prevention",
+        "Threat hunting"
+      ],
+      "best_for": "SOC teams",
+      "integration_options": [
+        "SIEM",
+        "Threat feeds"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Recorded Future",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI threat intelligence platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://recordedfuture.com",
+      "use_cases": [
+        "Threat intelligence",
+        "Dark web monitoring"
+      ],
+      "best_for": "Risk assessment",
+      "integration_options": [
+        "SIEM",
+        "SOAR"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Tessian",
+      "category": "Cybersecurity AI",
+      "subcategory": "Cybersecurity AI",
+      "description": "AI email security for human risks",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://tessian.com",
+      "use_cases": [
+        "Data loss prevention",
+        "Phishing"
+      ],
+      "best_for": "Email security",
+      "integration_options": [
+        "Microsoft 365",
+        "Google Workspace"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Uptake",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://uptake.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Augury",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://augury.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Fero Labs",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://ferolabs.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "ClearMetal",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://clearmetal.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Called",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://called.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Instrumental",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://instrumental.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Kinaxis",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://kinaxis.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Covariant",
+      "category": "Manufacturing & Supply Chain AI",
+      "subcategory": "Manufacturing & Supply Chain AI",
+      "description": "AI-powered manufacturing & supply chain ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://covariant.com",
+      "use_cases": [
+        "Manufacturing",
+        "Automation"
+      ],
+      "best_for": "Manufacturing & Supply Chain AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Cherre",
+      "category": "Real Estate AI",
+      "subcategory": "Real Estate AI",
+      "description": "AI-powered real estate ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://cherre.com",
+      "use_cases": [
+        "Real",
+        "Automation"
+      ],
+      "best_for": "Real Estate AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Reonomy",
+      "category": "Real Estate AI",
+      "subcategory": "Real Estate AI",
+      "description": "AI-powered real estate ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://reonomy.com",
+      "use_cases": [
+        "Real",
+        "Automation"
+      ],
+      "best_for": "Real Estate AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Entera",
+      "category": "Real Estate AI",
+      "subcategory": "Real Estate AI",
+      "description": "AI-powered real estate ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://entera.com",
+      "use_cases": [
+        "Real",
+        "Automation"
+      ],
+      "best_for": "Real Estate AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Altus Group",
+      "category": "Real Estate AI",
+      "subcategory": "Real Estate AI",
+      "description": "AI-powered real estate ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://altusgroup.com",
+      "use_cases": [
+        "Real",
+        "Automation"
+      ],
+      "best_for": "Real Estate AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "SmartRent",
+      "category": "Real Estate AI",
+      "subcategory": "Real Estate AI",
+      "description": "AI-powered real estate ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://smartrent.com",
+      "use_cases": [
+        "Real",
+        "Automation"
+      ],
+      "best_for": "Real Estate AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Latch",
+      "category": "Real Estate AI",
+      "subcategory": "Real Estate AI",
+      "description": "AI-powered real estate ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://latch.com",
+      "use_cases": [
+        "Real",
+        "Automation"
+      ],
+      "best_for": "Real Estate AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Duolingo Max",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://duolingomax.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Synthesis",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://synthesis.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Gradescope",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://gradescope.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Century Tech",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://centurytech.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Cognii",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://cognii.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Squirrel AI",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://squirrelai.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Knewton Alta",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://knewtonalta.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Turnitin",
+      "category": "Education & E-learning AI",
+      "subcategory": "Education & E-learning AI",
+      "description": "AI-powered education & e-learning ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://turnitin.com",
+      "use_cases": [
+        "Education",
+        "Automation"
+      ],
+      "best_for": "Education & E-learning AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Climate FieldView",
+      "category": "Agriculture AI",
+      "subcategory": "Agriculture AI",
+      "description": "AI-powered agriculture ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://climatefieldview.com",
+      "use_cases": [
+        "Agriculture",
+        "Automation"
+      ],
+      "best_for": "Agriculture AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Blue River Technology",
+      "category": "Agriculture AI",
+      "subcategory": "Agriculture AI",
+      "description": "AI-powered agriculture ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://bluerivertechnology.com",
+      "use_cases": [
+        "Agriculture",
+        "Automation"
+      ],
+      "best_for": "Agriculture AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Taranis",
+      "category": "Agriculture AI",
+      "subcategory": "Agriculture AI",
+      "description": "AI-powered agriculture ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://taranis.com",
+      "use_cases": [
+        "Agriculture",
+        "Automation"
+      ],
+      "best_for": "Agriculture AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Prospera",
+      "category": "Agriculture AI",
+      "subcategory": "Agriculture AI",
+      "description": "AI-powered agriculture ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://prospera.com",
+      "use_cases": [
+        "Agriculture",
+        "Automation"
+      ],
+      "best_for": "Agriculture AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "aWhere",
+      "category": "Agriculture AI",
+      "subcategory": "Agriculture AI",
+      "description": "AI-powered agriculture ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://awhere.com",
+      "use_cases": [
+        "Agriculture",
+        "Automation"
+      ],
+      "best_for": "Agriculture AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Gamaya",
+      "category": "Agriculture AI",
+      "subcategory": "Agriculture AI",
+      "description": "AI-powered agriculture ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://gamaya.com",
+      "use_cases": [
+        "Agriculture",
+        "Automation"
+      ],
+      "best_for": "Agriculture AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Dynamic Yield",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://dynamicyield.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Nosto",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://nosto.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Optimizely",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://optimizely.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Algonomy",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://algonomy.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Monetate",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://monetate.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Recombee",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://recombee.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Blueshift",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://blueshift.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Vue.ai",
+      "category": "Personalization & Recommendation AI",
+      "subcategory": "Personalization & Recommendation AI",
+      "description": "AI-powered personalization & recommendation ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://vueai.com",
+      "use_cases": [
+        "Personalization",
+        "Automation"
+      ],
+      "best_for": "Personalization & Recommendation AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Testim",
+      "category": "Quality Assurance & Testing AI",
+      "subcategory": "Quality Assurance & Testing AI",
+      "description": "AI-powered quality assurance & testing ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://testim.com",
+      "use_cases": [
+        "Quality",
+        "Automation"
+      ],
+      "best_for": "Quality Assurance & Testing AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Mabl",
+      "category": "Quality Assurance & Testing AI",
+      "subcategory": "Quality Assurance & Testing AI",
+      "description": "AI-powered quality assurance & testing ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://mabl.com",
+      "use_cases": [
+        "Quality",
+        "Automation"
+      ],
+      "best_for": "Quality Assurance & Testing AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Functionize",
+      "category": "Quality Assurance & Testing AI",
+      "subcategory": "Quality Assurance & Testing AI",
+      "description": "AI-powered quality assurance & testing ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://functionize.com",
+      "use_cases": [
+        "Quality",
+        "Automation"
+      ],
+      "best_for": "Quality Assurance & Testing AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Applitools",
+      "category": "Quality Assurance & Testing AI",
+      "subcategory": "Quality Assurance & Testing AI",
+      "description": "AI-powered quality assurance & testing ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://applitools.com",
+      "use_cases": [
+        "Quality",
+        "Automation"
+      ],
+      "best_for": "Quality Assurance & Testing AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Test.ai",
+      "category": "Quality Assurance & Testing AI",
+      "subcategory": "Quality Assurance & Testing AI",
+      "description": "AI-powered quality assurance & testing ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://testai.com",
+      "use_cases": [
+        "Quality",
+        "Automation"
+      ],
+      "best_for": "Quality Assurance & Testing AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Eggplant",
+      "category": "Quality Assurance & Testing AI",
+      "subcategory": "Quality Assurance & Testing AI",
+      "description": "AI-powered quality assurance & testing ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://eggplant.com",
+      "use_cases": [
+        "Quality",
+        "Automation"
+      ],
+      "best_for": "Quality Assurance & Testing AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Harness",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://harness.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Dynatrace",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://dynatrace.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Datadog",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://datadog.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "New Relic",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://newrelic.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Moogsoft",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://moogsoft.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "BigPanda",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://bigpanda.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "PagerDuty",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://pagerduty.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Snyk",
+      "category": "DevOps & Infrastructure AI",
+      "subcategory": "DevOps & Infrastructure AI",
+      "description": "AI-powered devops & infrastructure ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://snyk.com",
+      "use_cases": [
+        "DevOps",
+        "Automation"
+      ],
+      "best_for": "DevOps & Infrastructure AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Chainalysis",
+      "category": "Blockchain & Web3 AI",
+      "subcategory": "Blockchain & Web3 AI",
+      "description": "AI-powered blockchain & web3 ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://chainalysis.com",
+      "use_cases": [
+        "Blockchain",
+        "Automation"
+      ],
+      "best_for": "Blockchain & Web3 AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Elliptic",
+      "category": "Blockchain & Web3 AI",
+      "subcategory": "Blockchain & Web3 AI",
+      "description": "AI-powered blockchain & web3 ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://elliptic.com",
+      "use_cases": [
+        "Blockchain",
+        "Automation"
+      ],
+      "best_for": "Blockchain & Web3 AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Nansen",
+      "category": "Blockchain & Web3 AI",
+      "subcategory": "Blockchain & Web3 AI",
+      "description": "AI-powered blockchain & web3 ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://nansen.com",
+      "use_cases": [
+        "Blockchain",
+        "Automation"
+      ],
+      "best_for": "Blockchain & Web3 AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Dune Analytics",
+      "category": "Blockchain & Web3 AI",
+      "subcategory": "Blockchain & Web3 AI",
+      "description": "AI-powered blockchain & web3 ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://duneanalytics.com",
+      "use_cases": [
+        "Blockchain",
+        "Automation"
+      ],
+      "best_for": "Blockchain & Web3 AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "TRM Labs",
+      "category": "Blockchain & Web3 AI",
+      "subcategory": "Blockchain & Web3 AI",
+      "description": "AI-powered blockchain & web3 ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://trmlabs.com",
+      "use_cases": [
+        "Blockchain",
+        "Automation"
+      ],
+      "best_for": "Blockchain & Web3 AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Glassnode",
+      "category": "Blockchain & Web3 AI",
+      "subcategory": "Blockchain & Web3 AI",
+      "description": "AI-powered blockchain & web3 ai solution",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://glassnode.com",
+      "use_cases": [
+        "Blockchain",
+        "Automation"
+      ],
+      "best_for": "Blockchain & Web3 AI teams",
+      "integration_options": [
+        "API",
+        "Web platform"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Intercom",
+      "category": "Customer Support",
+      "subcategory": "Customer Support",
+      "description": "AI-powered customer messaging platform",
+      "pricing_monthly": 74,
+      "pricing_annual": 740,
+      "free_tier": false,
+      "website": "https://intercom.com",
+      "use_cases": [
+        "Customer messaging",
+        "Chatbots"
+      ],
+      "best_for": "Customer support teams",
+      "integration_options": [
+        "CRM",
+        "Email",
+        "Slack"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Zendesk AI",
+      "category": "Customer Support",
+      "subcategory": "Customer Support",
+      "description": "AI support ticketing and automation",
+      "pricing_monthly": 55,
+      "pricing_annual": 550,
+      "free_tier": false,
+      "website": "https://zendesk.com",
+      "use_cases": [
+        "Ticketing",
+        "AI automation"
+      ],
+      "best_for": "Support departments",
+      "integration_options": [
+        "Email",
+        "Chat",
+        "Phone"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Ada",
+      "category": "Customer Support",
+      "subcategory": "Customer Support",
+      "description": "AI-powered automated customer service",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://ada.cx",
+      "use_cases": [
+        "Automated support",
+        "Chatbots"
+      ],
+      "best_for": "Customer service teams",
+      "integration_options": [
+        "Web",
+        "Mobile",
+        "API"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Drift",
+      "category": "Customer Support",
+      "subcategory": "Customer Support",
+      "description": "Conversational AI for sales and support",
+      "pricing_monthly": 2500,
+      "pricing_annual": 25000,
+      "free_tier": false,
+      "website": "https://drift.com",
+      "use_cases": [
+        "Conversational AI",
+        "Lead qualification"
+      ],
+      "best_for": "Sales teams",
+      "integration_options": [
+        "CRM",
+        "Email",
+        "Calendar"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Tidio",
+      "category": "Customer Support",
+      "subcategory": "Customer Support",
+      "description": "Live chat with AI chatbots",
+      "pricing_monthly": 29,
+      "pricing_annual": 290,
+      "free_tier": false,
+      "website": "https://tidio.com",
+      "use_cases": [
+        "Live chat",
+        "Chatbots"
+      ],
+      "best_for": "Small businesses",
+      "integration_options": [
+        "Website",
+        "Email",
+        "Messenger"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Freshdesk AI",
+      "category": "Customer Support",
+      "subcategory": "Customer Support",
+      "description": "AI-powered helpdesk platform",
+      "pricing_monthly": 15,
+      "pricing_annual": 150,
+      "free_tier": false,
+      "website": "https://freshdesk.com",
+      "use_cases": [
+        "Helpdesk",
+        "AI automation"
+      ],
+      "best_for": "Support teams",
+      "integration_options": [
+        "Email",
+        "Phone",
+        "Chat"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Fireflies.ai",
+      "category": "Meeting Assistant",
+      "subcategory": "Meeting Assistant",
+      "description": "AI meeting recorder and transcription",
+      "pricing_monthly": 10,
+      "pricing_annual": 100,
+      "free_tier": false,
+      "website": "https://fireflies.ai",
+      "use_cases": [
+        "Meeting recording",
+        "Transcription"
+      ],
+      "best_for": "Remote teams",
+      "integration_options": [
+        "Zoom",
+        "Teams",
+        "Meet"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Grain",
+      "category": "Meeting Assistant",
+      "subcategory": "Meeting Assistant",
+      "description": "AI meeting recording and insights",
+      "pricing_monthly": 15,
+      "pricing_annual": 150,
+      "free_tier": false,
+      "website": "https://grain.co",
+      "use_cases": [
+        "Meeting recording",
+        "Highlights"
+      ],
+      "best_for": "Sales and product teams",
+      "integration_options": [
+        "Zoom",
+        "Teams",
+        "Meet"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Fathom",
+      "category": "Meeting Assistant",
+      "subcategory": "Meeting Assistant",
+      "description": "Free AI meeting notes",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://fathom.video",
+      "use_cases": [
+        "Meeting notes",
+        "Summaries"
+      ],
+      "best_for": "All teams",
+      "integration_options": [
+        "Zoom",
+        "Teams",
+        "Meet"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Tactiq",
+      "category": "Meeting Assistant",
+      "subcategory": "Meeting Assistant",
+      "description": "Real-time meeting transcription",
+      "pricing_monthly": 8,
+      "pricing_annual": 80,
+      "free_tier": false,
+      "website": "https://tactiq.io",
+      "use_cases": [
+        "Real-time transcription",
+        "Summaries"
+      ],
+      "best_for": "Remote workers",
+      "integration_options": [
+        "Zoom",
+        "Teams",
+        "Meet"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Sembly AI",
+      "category": "Meeting Assistant",
+      "subcategory": "Meeting Assistant",
+      "description": "AI team assistant for meetings",
+      "pricing_monthly": 10,
+      "pricing_annual": 100,
+      "free_tier": false,
+      "website": "https://sembly.ai",
+      "use_cases": [
+        "Meeting intelligence",
+        "Action items"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Zoom",
+        "Teams",
+        "Meet"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Read AI",
+      "category": "Meeting Assistant",
+      "subcategory": "Meeting Assistant",
+      "description": "AI meeting summaries and analytics",
+      "pricing_monthly": 19.75,
+      "pricing_annual": 197.5,
+      "free_tier": false,
+      "website": "https://read.ai",
+      "use_cases": [
+        "Meeting analytics",
+        "Insights"
+      ],
+      "best_for": "Leadership teams",
+      "integration_options": [
+        "Zoom",
+        "Teams",
+        "Meet"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Apify",
+      "category": "Web Scraping",
+      "subcategory": "Web Scraping",
+      "description": "Web scraping and automation platform",
+      "pricing_monthly": 49,
+      "pricing_annual": 490,
+      "free_tier": false,
+      "website": "https://apify.com",
+      "use_cases": [
+        "Web scraping",
+        "Automation"
+      ],
+      "best_for": "Data teams",
+      "integration_options": [
+        "API",
+        "Cloud"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Octoparse",
+      "category": "Web Scraping",
+      "subcategory": "Web Scraping",
+      "description": "No-code web scraping tool",
+      "pricing_monthly": 75,
+      "pricing_annual": 750,
+      "free_tier": false,
+      "website": "https://octoparse.com",
+      "use_cases": [
+        "No-code scraping",
+        "Data extraction"
+      ],
+      "best_for": "Business analysts",
+      "integration_options": [
+        "Desktop",
+        "Cloud"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "ParseHub",
+      "category": "Web Scraping",
+      "subcategory": "Web Scraping",
+      "description": "Visual web scraping for complex sites",
+      "pricing_monthly": 149,
+      "pricing_annual": 1490,
+      "free_tier": false,
+      "website": "https://parsehub.com",
+      "use_cases": [
+        "Visual scraping",
+        "Complex sites"
+      ],
+      "best_for": "Data analysts",
+      "integration_options": [
+        "Desktop",
+        "Web"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Bright Data",
+      "category": "Web Scraping",
+      "subcategory": "Web Scraping",
+      "description": "Enterprise web data platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://brightdata.com",
+      "use_cases": [
+        "Web data",
+        "Proxies"
+      ],
+      "best_for": "Enterprises",
+      "integration_options": [
+        "API",
+        "Dashboard"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "ScrapingBee",
+      "category": "Web Scraping",
+      "subcategory": "Web Scraping",
+      "description": "Web scraping API with headless browsers",
+      "pricing_monthly": 49,
+      "pricing_annual": 490,
+      "free_tier": false,
+      "website": "https://scrapingbee.com",
+      "use_cases": [
+        "API scraping",
+        "Headless browsers"
+      ],
+      "best_for": "Developers",
+      "integration_options": [
+        "API",
+        "SDK"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Gong",
+      "category": "Sales",
+      "subcategory": "Sales",
+      "description": "Revenue intelligence platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://gong.io",
+      "use_cases": [
+        "Revenue intelligence",
+        "Call analysis"
+      ],
+      "best_for": "Sales teams",
+      "integration_options": [
+        "CRM",
+        "Video conferencing"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Salesforce Einstein",
+      "category": "Sales",
+      "subcategory": "Sales",
+      "description": "AI-powered CRM insights",
+      "pricing_monthly": 75,
+      "pricing_annual": 750,
+      "free_tier": false,
+      "website": "https://salesforce.com/einstein",
+      "use_cases": [
+        "CRM insights",
+        "Predictions"
+      ],
+      "best_for": "Sales organizations",
+      "integration_options": [
+        "Salesforce",
+        "Email"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "HubSpot AI",
+      "category": "Sales",
+      "subcategory": "Sales",
+      "description": "AI marketing and sales CRM",
+      "pricing_monthly": 50,
+      "pricing_annual": 500,
+      "free_tier": false,
+      "website": "https://hubspot.com",
+      "use_cases": [
+        "CRM",
+        "Marketing automation"
+      ],
+      "best_for": "Growing businesses",
+      "integration_options": [
+        "Email",
+        "Web",
+        "Social"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Chorus.ai",
+      "category": "Sales",
+      "subcategory": "Sales",
+      "description": "Conversation intelligence platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://chorus.ai",
+      "use_cases": [
+        "Conversation intelligence",
+        "Deal insights"
+      ],
+      "best_for": "Sales teams",
+      "integration_options": [
+        "CRM",
+        "Video"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "People.ai",
+      "category": "Sales",
+      "subcategory": "Sales",
+      "description": "Revenue operations platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://people.ai",
+      "use_cases": [
+        "Revenue operations",
+        "Activity capture"
+      ],
+      "best_for": "RevOps teams",
+      "integration_options": [
+        "CRM",
+        "Email",
+        "Calendar"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Superhuman",
+      "category": "Email",
+      "subcategory": "Email",
+      "description": "AI-powered email client",
+      "pricing_monthly": 30,
+      "pricing_annual": 300,
+      "free_tier": false,
+      "website": "https://superhuman.com",
+      "use_cases": [
+        "Fast email",
+        "AI features"
+      ],
+      "best_for": "Busy professionals",
+      "integration_options": [
+        "Gmail",
+        "Outlook"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "SaneBox",
+      "category": "Email",
+      "subcategory": "Email",
+      "description": "AI email organization",
+      "pricing_monthly": 7,
+      "pricing_annual": 70,
+      "free_tier": false,
+      "website": "https://sanebox.com",
+      "use_cases": [
+        "Email filtering",
+        "Organization"
+      ],
+      "best_for": "Email users",
+      "integration_options": [
+        "Gmail",
+        "Outlook",
+        "iCloud"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Shortwave",
+      "category": "Email",
+      "subcategory": "Email",
+      "description": "AI email assistant",
+      "pricing_monthly": 9,
+      "pricing_annual": 90,
+      "free_tier": false,
+      "website": "https://shortwave.com",
+      "use_cases": [
+        "Email management",
+        "AI summaries"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Gmail"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Lavender",
+      "category": "Email",
+      "subcategory": "Email",
+      "description": "AI email coach for sales",
+      "pricing_monthly": 29,
+      "pricing_annual": 290,
+      "free_tier": false,
+      "website": "https://lavender.ai",
+      "use_cases": [
+        "Email coaching",
+        "Sales emails"
+      ],
+      "best_for": "Sales reps",
+      "integration_options": [
+        "Gmail",
+        "Outlook"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Smartwriter",
+      "category": "Email",
+      "subcategory": "Email",
+      "description": "AI cold email personalization",
+      "pricing_monthly": 59,
+      "pricing_annual": 590,
+      "free_tier": false,
+      "website": "https://smartwriter.ai",
+      "use_cases": [
+        "Email personalization",
+        "Outreach"
+      ],
+      "best_for": "Sales teams",
+      "integration_options": [
+        "Email",
+        "LinkedIn"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Hootsuite AI",
+      "category": "Marketing",
+      "subcategory": "Marketing",
+      "description": "AI social media management",
+      "pricing_monthly": 99,
+      "pricing_annual": 990,
+      "free_tier": false,
+      "website": "https://hootsuite.com",
+      "use_cases": [
+        "Social media",
+        "Scheduling"
+      ],
+      "best_for": "Marketing teams",
+      "integration_options": [
+        "Social platforms",
+        "Analytics"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Buffer",
+      "category": "Marketing",
+      "subcategory": "Marketing",
+      "description": "AI-powered social media scheduler",
+      "pricing_monthly": 6,
+      "pricing_annual": 60,
+      "free_tier": false,
+      "website": "https://buffer.com",
+      "use_cases": [
+        "Social scheduling",
+        "Analytics"
+      ],
+      "best_for": "Small businesses",
+      "integration_options": [
+        "Social platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Lately AI",
+      "category": "Marketing",
+      "subcategory": "Marketing",
+      "description": "AI social media content generator",
+      "pricing_monthly": 49,
+      "pricing_annual": 490,
+      "free_tier": false,
+      "website": "https://lately.ai",
+      "use_cases": [
+        "Content generation",
+        "Social media"
+      ],
+      "best_for": "Marketing teams",
+      "integration_options": [
+        "Social platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Predis.ai",
+      "category": "Marketing",
+      "subcategory": "Marketing",
+      "description": "AI social media content creation",
+      "pricing_monthly": 29,
+      "pricing_annual": 290,
+      "free_tier": false,
+      "website": "https://predis.ai",
+      "use_cases": [
+        "Content creation",
+        "Design"
+      ],
+      "best_for": "Social media managers",
+      "integration_options": [
+        "Social platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Flick",
+      "category": "Marketing",
+      "subcategory": "Marketing",
+      "description": "AI social media marketing",
+      "pricing_monthly": 14,
+      "pricing_annual": 140,
+      "free_tier": false,
+      "website": "https://flick.tech",
+      "use_cases": [
+        "Social marketing",
+        "Hashtags"
+      ],
+      "best_for": "Creators",
+      "integration_options": [
+        "Instagram",
+        "Facebook"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "DeepL",
+      "category": "Translation",
+      "subcategory": "Translation",
+      "description": "AI-powered translation",
+      "pricing_monthly": 8.74,
+      "pricing_annual": 87.4,
+      "free_tier": false,
+      "website": "https://deepl.com",
+      "use_cases": [
+        "Translation",
+        "Writing improvement"
+      ],
+      "best_for": "Global teams",
+      "integration_options": [
+        "Web",
+        "API",
+        "Desktop"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Smartling",
+      "category": "Translation",
+      "subcategory": "Translation",
+      "description": "AI translation management",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://smartling.com",
+      "use_cases": [
+        "Translation management",
+        "Localization"
+      ],
+      "best_for": "Enterprises",
+      "integration_options": [
+        "CMS",
+        "Marketing platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Lokalise",
+      "category": "Translation",
+      "subcategory": "Translation",
+      "description": "Translation and localization platform",
+      "pricing_monthly": 120,
+      "pricing_annual": 1200,
+      "free_tier": false,
+      "website": "https://lokalise.com",
+      "use_cases": [
+        "Localization",
+        "Translation"
+      ],
+      "best_for": "Software teams",
+      "integration_options": [
+        "GitHub",
+        "Figma",
+        "Jira"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Clearscope",
+      "category": "SEO",
+      "subcategory": "SEO",
+      "description": "AI content optimization for SEO",
+      "pricing_monthly": 170,
+      "pricing_annual": 1700,
+      "free_tier": false,
+      "website": "https://clearscope.io",
+      "use_cases": [
+        "Content optimization",
+        "SEO"
+      ],
+      "best_for": "Content teams",
+      "integration_options": [
+        "Google Docs",
+        "WordPress"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "MarketMuse",
+      "category": "SEO",
+      "subcategory": "SEO",
+      "description": "AI content planning and optimization",
+      "pricing_monthly": 149,
+      "pricing_annual": 1490,
+      "free_tier": false,
+      "website": "https://marketmuse.com",
+      "use_cases": [
+        "Content planning",
+        "SEO strategy"
+      ],
+      "best_for": "Content strategists",
+      "integration_options": [
+        "CMS platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "SEMrush AI",
+      "category": "SEO",
+      "subcategory": "SEO",
+      "description": "AI-powered SEO toolkit",
+      "pricing_monthly": 129.95,
+      "pricing_annual": 1299.5,
+      "free_tier": false,
+      "website": "https://semrush.com",
+      "use_cases": [
+        "SEO",
+        "Competitive research"
+      ],
+      "best_for": "SEO professionals",
+      "integration_options": [
+        "Analytics",
+        "CMS"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Ahrefs",
+      "category": "SEO",
+      "subcategory": "SEO",
+      "description": "SEO toolset with AI insights",
+      "pricing_monthly": 99,
+      "pricing_annual": 990,
+      "free_tier": false,
+      "website": "https://ahrefs.com",
+      "use_cases": [
+        "SEO",
+        "Backlink analysis"
+      ],
+      "best_for": "SEO teams",
+      "integration_options": [
+        "Web",
+        "API"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Glean",
+      "category": "Knowledge Management",
+      "subcategory": "Knowledge Management",
+      "description": "AI-powered workplace search",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://glean.com",
+      "use_cases": [
+        "Workplace search",
+        "Knowledge discovery"
+      ],
+      "best_for": "Large organizations",
+      "integration_options": [
+        "All workplace apps"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Guru",
+      "category": "Knowledge Management",
+      "subcategory": "Knowledge Management",
+      "description": "AI knowledge management platform",
+      "pricing_monthly": 10,
+      "pricing_annual": 100,
+      "free_tier": false,
+      "website": "https://getguru.com",
+      "use_cases": [
+        "Knowledge management",
+        "Search"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Slack",
+        "Browser",
+        "API"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Tettra",
+      "category": "Knowledge Management",
+      "subcategory": "Knowledge Management",
+      "description": "AI internal knowledge base",
+      "pricing_monthly": 8.33,
+      "pricing_annual": 83.3,
+      "free_tier": false,
+      "website": "https://tettra.com",
+      "use_cases": [
+        "Knowledge base",
+        "Documentation"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Slack",
+        "Teams",
+        "Google Drive"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Document360",
+      "category": "Knowledge Management",
+      "subcategory": "Knowledge Management",
+      "description": "AI knowledge base software",
+      "pricing_monthly": 149,
+      "pricing_annual": 1490,
+      "free_tier": false,
+      "website": "https://document360.com",
+      "use_cases": [
+        "Knowledge base",
+        "Documentation"
+      ],
+      "best_for": "Support teams",
+      "integration_options": [
+        "Web",
+        "API"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Docparser",
+      "category": "Document Processing",
+      "subcategory": "Document Processing",
+      "description": "AI document data extraction",
+      "pricing_monthly": 39,
+      "pricing_annual": 390,
+      "free_tier": false,
+      "website": "https://docparser.com",
+      "use_cases": [
+        "Data extraction",
+        "Document parsing"
+      ],
+      "best_for": "Operations teams",
+      "integration_options": [
+        "Email",
+        "Cloud storage",
+        "API"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Rossum",
+      "category": "Document Processing",
+      "subcategory": "Document Processing",
+      "description": "AI document processing platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://rossum.ai",
+      "use_cases": [
+        "Document processing",
+        "Data capture"
+      ],
+      "best_for": "Finance teams",
+      "integration_options": [
+        "Email",
+        "API",
+        "ERP"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Nanonets",
+      "category": "Document Processing",
+      "subcategory": "Document Processing",
+      "description": "AI OCR and data extraction",
+      "pricing_monthly": 49,
+      "pricing_annual": 490,
+      "free_tier": false,
+      "website": "https://nanonets.com",
+      "use_cases": [
+        "OCR",
+        "Data extraction"
+      ],
+      "best_for": "Businesses",
+      "integration_options": [
+        "API",
+        "Web"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "ABBYY FineReader",
+      "category": "Document Processing",
+      "subcategory": "Document Processing",
+      "description": "AI-powered OCR software",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://abbyy.com",
+      "use_cases": [
+        "OCR",
+        "PDF conversion"
+      ],
+      "best_for": "Document management",
+      "integration_options": [
+        "Desktop",
+        "Cloud"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "HireVue",
+      "category": "HR & Recruitment",
+      "subcategory": "HR & Recruitment",
+      "description": "AI video interviewing platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://hirevue.com",
+      "use_cases": [
+        "Video interviews",
+        "AI assessment"
+      ],
+      "best_for": "HR teams",
+      "integration_options": [
+        "ATS",
+        "HRIS"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Paradox",
+      "category": "HR & Recruitment",
+      "subcategory": "HR & Recruitment",
+      "description": "AI recruiting assistant",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://paradox.ai",
+      "use_cases": [
+        "Recruiting automation",
+        "Chatbots"
+      ],
+      "best_for": "HR teams",
+      "integration_options": [
+        "ATS",
+        "HRIS"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Eightfold.ai",
+      "category": "HR & Recruitment",
+      "subcategory": "HR & Recruitment",
+      "description": "AI talent intelligence platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://eightfold.ai",
+      "use_cases": [
+        "Talent intelligence",
+        "Skills matching"
+      ],
+      "best_for": "Large organizations",
+      "integration_options": [
+        "HRIS",
+        "ATS"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Beamery",
+      "category": "HR & Recruitment",
+      "subcategory": "HR & Recruitment",
+      "description": "AI talent management platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://beamery.com",
+      "use_cases": [
+        "Talent management",
+        "Recruiting"
+      ],
+      "best_for": "Enterprises",
+      "integration_options": [
+        "ATS",
+        "HRIS",
+        "CRM"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Harvey AI",
+      "category": "Legal",
+      "subcategory": "Legal",
+      "description": "AI legal assistant for law firms",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://harvey.ai",
+      "use_cases": [
+        "Legal research",
+        "Document drafting"
+      ],
+      "best_for": "Law firms",
+      "integration_options": [
+        "Document systems"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Spellbook",
+      "category": "Legal",
+      "subcategory": "Legal",
+      "description": "AI contract drafting and review",
+      "pricing_monthly": 40,
+      "pricing_annual": 400,
+      "free_tier": false,
+      "website": "https://spellbook.legal",
+      "use_cases": [
+        "Contract drafting",
+        "Review"
+      ],
+      "best_for": "Lawyers",
+      "integration_options": [
+        "Microsoft Word"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Casetext",
+      "category": "Legal",
+      "subcategory": "Legal",
+      "description": "AI legal research platform",
+      "pricing_monthly": 89,
+      "pricing_annual": 890,
+      "free_tier": false,
+      "website": "https://casetext.com",
+      "use_cases": [
+        "Legal research",
+        "Brief writing"
+      ],
+      "best_for": "Legal professionals",
+      "integration_options": [
+        "Web",
+        "Mobile"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Typeform",
+      "category": "Forms & Surveys",
+      "subcategory": "Forms & Surveys",
+      "description": "AI-powered forms and surveys",
+      "pricing_monthly": 25,
+      "pricing_annual": 250,
+      "free_tier": false,
+      "website": "https://typeform.com",
+      "use_cases": [
+        "Forms",
+        "Surveys"
+      ],
+      "best_for": "Marketing and research teams",
+      "integration_options": [
+        "Web",
+        "API",
+        "Integrations"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Fillout",
+      "category": "Forms & Surveys",
+      "subcategory": "Forms & Surveys",
+      "description": "AI form builder",
+      "pricing_monthly": 15,
+      "pricing_annual": 150,
+      "free_tier": false,
+      "website": "https://fillout.com",
+      "use_cases": [
+        "Form building",
+        "Data collection"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Web",
+        "Integrations"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Tally",
+      "category": "Forms & Surveys",
+      "subcategory": "Forms & Surveys",
+      "description": "Free AI form builder",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://tally.so",
+      "use_cases": [
+        "Forms",
+        "Surveys"
+      ],
+      "best_for": "Creators and startups",
+      "integration_options": [
+        "Web",
+        "Notion"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Asana Intelligence",
+      "category": "Project Management",
+      "subcategory": "Project Management",
+      "description": "AI-powered project management",
+      "pricing_monthly": 13.49,
+      "pricing_annual": 134.9,
+      "free_tier": false,
+      "website": "https://asana.com",
+      "use_cases": [
+        "Project management",
+        "Workflow automation"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Calendar",
+        "Slack",
+        "Email"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Monday.com AI",
+      "category": "Project Management",
+      "subcategory": "Project Management",
+      "description": "AI work management platform",
+      "pricing_monthly": 12,
+      "pricing_annual": 120,
+      "free_tier": false,
+      "website": "https://monday.com",
+      "use_cases": [
+        "Work management",
+        "Automation"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Calendar",
+        "Email",
+        "Apps"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Wrike AI",
+      "category": "Project Management",
+      "subcategory": "Project Management",
+      "description": "AI project management",
+      "pricing_monthly": 9.8,
+      "pricing_annual": 98.0,
+      "free_tier": false,
+      "website": "https://wrike.com",
+      "use_cases": [
+        "Project management",
+        "Collaboration"
+      ],
+      "best_for": "Teams",
+      "integration_options": [
+        "Email",
+        "Calendar",
+        "Apps"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "AdCreative.ai",
+      "category": "Ad Creation",
+      "subcategory": "Ad Creation",
+      "description": "AI ad creative generation",
+      "pricing_monthly": 29,
+      "pricing_annual": 290,
+      "free_tier": false,
+      "website": "https://adcreative.ai",
+      "use_cases": [
+        "Ad generation",
+        "Creative testing"
+      ],
+      "best_for": "Marketers",
+      "integration_options": [
+        "Social platforms",
+        "Google Ads"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Pencil",
+      "category": "Ad Creation",
+      "subcategory": "Ad Creation",
+      "description": "AI ad generator for ecommerce",
+      "pricing_monthly": 119,
+      "pricing_annual": 1190,
+      "free_tier": false,
+      "website": "https://trypencil.com",
+      "use_cases": [
+        "Ad generation",
+        "Testing"
+      ],
+      "best_for": "Ecommerce brands",
+      "integration_options": [
+        "Social platforms"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Omneky",
+      "category": "Ad Creation",
+      "subcategory": "Ad Creation",
+      "description": "AI-powered ad creation",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://omneky.com",
+      "use_cases": [
+        "Ad creation",
+        "Personalization"
+      ],
+      "best_for": "Brands",
+      "integration_options": [
+        "Social platforms",
+        "Display"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Crayon",
+      "category": "Competitive Intelligence",
+      "subcategory": "Competitive Intelligence",
+      "description": "AI competitive intelligence",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://crayon.co",
+      "use_cases": [
+        "Competitive intel",
+        "Market analysis"
+      ],
+      "best_for": "Product and marketing teams",
+      "integration_options": [
+        "CRM",
+        "Slack"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Klue",
+      "category": "Competitive Intelligence",
+      "subcategory": "Competitive Intelligence",
+      "description": "Competitive enablement platform",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://klue.com",
+      "use_cases": [
+        "Competitive enablement",
+        "Intelligence"
+      ],
+      "best_for": "Sales and product teams",
+      "integration_options": [
+        "CRM",
+        "Slack"
+      ],
+      "setup_time_minutes": 30
+    },
+    {
+      "tool_name": "Kompyte",
+      "category": "Competitive Intelligence",
+      "subcategory": "Competitive Intelligence",
+      "description": "Automated competitor tracking",
+      "pricing_monthly": 0,
+      "pricing_annual": 0,
+      "free_tier": true,
+      "website": "https://kompyte.com",
+      "use_cases": [
+        "Competitor tracking",
+        "Alerts"
+      ],
+      "best_for": "Marketing teams",
+      "integration_options": [
+        "CRM",
+        "Marketing platforms"
+      ],
+      "setup_time_minutes": 30
+    }
+  ]
+}
