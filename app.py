@@ -428,8 +428,9 @@ Generate a comprehensive AI Stack Advisory Report following the format specified
         cost = calculate_cost(input_tokens, output_tokens)
         total_cost = log_request(input_tokens, output_tokens, cost)
         
-        # Return response
+        # Return response - with success flag for frontend compatibility
         return jsonify({
+            "success": True,
             "report": report_content,
             "metadata": {
                 "input_tokens": input_tokens,
