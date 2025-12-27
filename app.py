@@ -406,44 +406,10 @@ graph TD
 
 ## Success Metrics
 
-⚠️ CRITICAL FORMATTING REQUIREMENT ⚠️
-In Success Metrics and Related Opportunities sections:
-- EACH bullet point (• **What it is**, • **How to measure**, etc.) MUST be on a SEPARATE LINE
-- Put a line break after EACH bullet
-- Do NOT combine multiple bullets into one paragraph
-- Follow the exact format in the examples below
-
-### Research Automation Efficiency
-
-• **What it is**: Time reduction in competitive intelligence gathering and analysis
-• **How to measure**: Compare manual research time vs automated process completion
-• **Target**: 80% reduction in research time within 3 months
-• **Why it matters**: Frees analysts for strategic work rather than data collection
-• **Example**: Reduce 8-hour weekly competitor research to 1.5 hours of review
-
-### Competitor Coverage Completeness
-
-• **What it is**: Percentage of relevant competitor activities captured automatically
-• **How to measure**: Manual audit of missed vs captured competitor news/updates
-• **Target**: 90% capture rate of significant competitor activities
-• **Why it matters**: Ensures comprehensive market intelligence for strategic decisions
-• **Example**: Capture 27 of 30 major competitor announcements in a quarter
-
-### Insight Quality
-
-• **What it is**: Actionability and accuracy of competitive insights generated
-• **How to measure**: Percentage of insights validated and acted upon by leadership
-• **Target**: 85% of insights lead to strategic discussions or decisions
-• **Why it matters**: Ensures analysis drives real business value
-• **Example**: Competitor pricing insights inform product positioning strategy
-
-### Report Delivery Frequency
-
-• **What it is**: Cadence of competitive intelligence reporting to stakeholders
-• **How to measure**: Number of automated reports delivered vs manual reports
-• **Target**: Weekly automated reports vs previous monthly manual reports
-• **Why it matters**: Faster insights enable quicker strategic responses
-• **Example**: Leadership receives competitive updates every Monday morning
+1. **Time Reduction**: 80% reduction in manual competitive research time
+2. **Coverage Increase**: 3x more competitors monitored regularly
+3. **Report Frequency**: Weekly automated reports vs. monthly manual reports
+4. **Insight Quality**: 90% of strategic insights validated by business stakeholders
 
 ## Risk Assessment
 
@@ -454,59 +420,10 @@ In Success Metrics and Related Opportunities sections:
 
 ## Related Opportunities
 
-⚠️ CRITICAL FORMATTING REQUIREMENT ⚠️
-- EACH bullet point (• **What it is**, • **How it connects**, etc.) MUST be on a SEPARATE LINE
-- Put a line break after EACH bullet
-- Do NOT combine multiple bullets into one paragraph
-- Follow the exact format in the examples below
-
-### Patient Sentiment Analysis
-
-• **What it is**: Extend competitor monitoring to include patient reviews and social media sentiment across healthcare platforms
-• **How it connects**: Complements competitive intelligence with patient perspective data
-• **Recommended tools**: Brand24 for social listening, MonkeyLearn for sentiment analysis
-• **Setup time**: 2-3 weeks integration with existing workflow
-• **Potential impact**: Early identification of service gaps before competitors address them
-
-### Clinical Trial Intelligence
-
-• **What it is**: Monitor competitor clinical trial activities, regulatory filings, and FDA approvals for strategic advantage
-• **How it connects**: Extends analysis engine to track R&D pipeline developments
-• **Recommended tools**: Clinicaltrials.gov API, FDA database integrations
-• **Setup time**: 4-5 weeks for regulatory data integration
-• **Potential impact**: Anticipate competitor product launches 12-18 months ahead
-
-### Partnership Mapping
-
-• **What it is**: Track competitor partnerships, acquisitions, and strategic alliances in the healthcare ecosystem
-• **How it connects**: Uses same competitor database to monitor strategic moves
-• **Recommended tools**: Crunchbase API, PitchBook integration, news aggregation
-• **Setup time**: 3-4 weeks building partnership tracking workflows
-• **Potential impact**: Identify emerging market consolidation and partnership opportunities
-
-### Technology Stack Analysis
-
-• **What it is**: Monitor competitor technology adoptions, digital health initiatives, and AI implementation strategies
-• **How it connects**: Expands competitive tracking to include technology transformation trends
-• **Recommended tools**: BuiltWith for tech stack detection, G2 for software adoption signals
-• **Setup time**: 2-3 weeks for technology monitoring integration
-• **Potential impact**: Stay ahead of digital transformation trends in healthcare
-
-### Regulatory Compliance Monitoring
-
-• **What it is**: Track competitor responses to healthcare regulations and policy changes
-• **How it connects**: Integrates regulatory intelligence with competitive analysis
-• **Recommended tools**: RegScan for healthcare compliance, PolicyTracker
-• **Setup time**: 3-4 weeks for compliance data integration
-• **Potential impact**: Anticipate strategic shifts driven by regulatory requirements
-
-### Provider Network Analysis
-
-• **What it is**: Analyze competitor provider relationships, network expansions, and market penetration strategies
-• **How it connects**: Extends market intelligence to provider relationship dynamics
-• **Recommended tools**: Healthcare provider databases, CMS data integration
-• **Setup time**: 4-5 weeks for provider data analysis
-• **Potential impact**: Identify geographic expansion opportunities and competitive threats
+1. **Patient Sentiment Analysis**: Extend competitor monitoring to include patient reviews and social media sentiment
+2. **Clinical Trial Intelligence**: Monitor competitor clinical trial activities and regulatory filings
+3. **Partnership Mapping**: Track competitor partnerships, acquisitions, and strategic alliances
+4. **Technology Stack Analysis**: Monitor competitor technology adoptions and digital transformation initiatives
 
 ⚠️  REMINDER: The Recommended Stack section MUST use the exact format shown above.
 Frontend parsing depends on this specific structure. DO NOT deviate from it.
