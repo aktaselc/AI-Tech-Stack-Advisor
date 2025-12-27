@@ -8,7 +8,7 @@ Claude will now use YOUR tools and provide alternatives for each recommendation.
 CRITICAL: Replace your current flask_backend_with_protection.py with this file.
 """
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -343,6 +343,47 @@ CRITICAL FORMATTING RULES:
 6. Alternatives must include: Trade-off line
 7. DO NOT use tables, bullet lists for tools, or any other format
 
+⚠️ CRITICAL: NEWLINES AND FORMATTING ⚠️
+YOU MUST follow these formatting rules EXACTLY:
+
+1. **Phased Implementation Roadmap**: Each phase MUST be on separate lines with blank lines between them
+   - Put **Phase 1: Foundation (Week 1-2)** on its own line
+   - Add a blank line
+   - Then list the steps (with bullet points, each on new line)
+   - Add a blank line
+   - Then **Phase 2: Integration (Week 3-4)** on its own line
+   - And so on
+
+2. **Success Metrics**: Each subsection MUST have bullets on SEPARATE LINES
+   - Put ### heading on its own line
+   - Then EACH bullet (• **What it is**:, • **How to measure**:, etc.) on ITS OWN LINE
+   - Add blank line between subsections
+   
+3. **Related Opportunities**: Same as Success Metrics - each bullet on its OWN LINE
+
+DO NOT COMBINE multiple bullets into one paragraph!
+DO NOT COMBINE multiple phases into one paragraph!
+ALWAYS use proper line breaks and blank lines!
+
+Example of CORRECT formatting:
+```
+**Phase 1: Foundation (Week 1-2)**
+• Set up Perplexity Pro account
+• Configure Claude Sonnet 4 API
+• Establish data storage
+
+**Phase 2: Integration (Week 3-4)**
+• Build automated workflows
+• Set up templates
+```
+
+Example of WRONG formatting:
+```
+**Phase 1: Foundation (Week 1-2)** • Set up Perplexity Pro • Configure Claude **Phase 2: Integration** • Build workflows
+```
+
+⚠️ REMEMBER: Each bullet MUST be on its own line! Each phase MUST be separated!
+
 ## Architecture Diagram
 
 ```mermaid
@@ -549,10 +590,10 @@ def get_costs():
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
     """
-    Generate PDF from HTML content using WeasyPrint
+    Generate PDF from HTML content using WeasyPrint with proper page breaks
     """
     try:
-        from weasyprint import HTML
+        from weasyprint import HTML, CSS
         from io import BytesIO
         
         data = request.get_json()
@@ -561,26 +602,75 @@ def generate_pdf():
         if not html_content:
             return jsonify({"error": "No HTML content provided"}), 400
         
-        # Generate PDF using WeasyPrint
+        # Add CSS for proper page breaks to prevent sections from splitting
+        page_break_css = """
+            @page {
+                size: A4;
+                margin: 1cm;
+            }
+            
+            /* Prevent sections from breaking in the middle */
+            .section-wrapper {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+            
+            h2 {
+                page-break-after: avoid;
+                page-break-inside: avoid;
+                margin-top: 20px;
+            }
+            
+            h3 {
+                page-break-after: avoid;
+                page-break-inside: avoid;
+                margin-top: 15px;
+            }
+            
+            /* Keep heading with at least 2 lines of content */
+            h2, h3 {
+                orphans: 3;
+                widows: 3;
+            }
+            
+            /* Prevent breaks right after headings */
+            h2 + *, h3 + * {
+                page-break-before: avoid;
+            }
+            
+            /* Keep lists together when possible */
+            ul, ol {
+                page-break-inside: avoid;
+            }
+            
+            /* Tables shouldn't break */
+            table {
+                page-break-inside: avoid;
+            }
+        """
+        
+        # Generate PDF
         pdf_buffer = BytesIO()
-        HTML(string=html_content).write_pdf(pdf_buffer)
+        html_doc = HTML(string=html_content)
+        css_doc = CSS(string=page_break_css)
+        html_doc.write_pdf(pdf_buffer, stylesheets=[css_doc])
         pdf_buffer.seek(0)
         
-        # Return PDF - compatible with both Flask 2.x and 3.x
-        from flask import make_response
+        # Create response with PDF
         response = make_response(pdf_buffer.read())
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=BulWise-AI-Stack-Report.pdf'
+        
         return response
         
     except ImportError as e:
-        print(f"Import Error: {str(e)}")
-        return jsonify({"error": "WeasyPrint not installed"}), 500
+        print(f"❌ WeasyPrint Import Error: {str(e)}")
+        return jsonify({"error": "WeasyPrint not installed. Please install: pip install weasyprint"}), 500
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        print(f"PDF Error: {str(e)}")
-        print(f"Traceback: {error_trace}")
+        print(f"❌ PDF Generation Error: {str(e)}")
+        print(f"Full traceback:\n{error_trace}")
         return jsonify({"error": f"PDF generation failed: {str(e)}"}), 500
 
 # ==============================================================================
