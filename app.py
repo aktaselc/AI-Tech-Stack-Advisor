@@ -1,5 +1,5 @@
 """
-BulWise Flask Backend - WITH 166 TOOLS INTEGRATION
+BulWise Flask Backend - WITH 166 TOOLS INTEGRATION 
 ==================================================
 
 This version properly integrates your 166-tool database with Claude API.
