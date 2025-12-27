@@ -603,10 +603,10 @@ def get_costs():
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
     """
-    Generate PDF from HTML content using WeasyPrint with proper page breaks
+    Generate PDF from HTML content using WeasyPrint
     """
     try:
-        from weasyprint import HTML, CSS
+        from weasyprint import HTML
         from io import BytesIO
         
         data = request.get_json()
@@ -615,61 +615,12 @@ def generate_pdf():
         if not html_content:
             return jsonify({"error": "No HTML content provided"}), 400
         
-        # Add CSS for proper page breaks to prevent sections from splitting
-        page_break_css = """
-            @page {
-                size: A4;
-                margin: 1cm;
-            }
-            
-            /* Prevent sections from breaking in the middle */
-            .section-wrapper {
-                page-break-inside: avoid;
-                margin-bottom: 20px;
-            }
-            
-            h2 {
-                page-break-after: avoid;
-                page-break-inside: avoid;
-                margin-top: 20px;
-            }
-            
-            h3 {
-                page-break-after: avoid;
-                page-break-inside: avoid;
-                margin-top: 15px;
-            }
-            
-            /* Keep heading with at least 2 lines of content */
-            h2, h3 {
-                orphans: 3;
-                widows: 3;
-            }
-            
-            /* Prevent breaks right after headings */
-            h2 + *, h3 + * {
-                page-break-before: avoid;
-            }
-            
-            /* Keep lists together when possible */
-            ul, ol {
-                page-break-inside: avoid;
-            }
-            
-            /* Tables shouldn't break */
-            table {
-                page-break-inside: avoid;
-            }
-        """
-        
-        # Generate PDF
+        # Generate PDF - HTML already contains all necessary CSS for page breaks
         pdf_buffer = BytesIO()
-        html_doc = HTML(string=html_content)
-        css_doc = CSS(string=page_break_css)
-        html_doc.write_pdf(pdf_buffer, stylesheets=[css_doc])
+        HTML(string=html_content).write_pdf(pdf_buffer)
         pdf_buffer.seek(0)
         
-        # Create response with PDF
+        # Create response
         response = make_response(pdf_buffer.read())
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=BulWise-AI-Stack-Report.pdf'
@@ -678,7 +629,7 @@ def generate_pdf():
         
     except ImportError as e:
         print(f"❌ WeasyPrint Import Error: {str(e)}")
-        return jsonify({"error": "WeasyPrint not installed. Please install: pip install weasyprint"}), 500
+        return jsonify({"error": "WeasyPrint not installed"}), 500
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
