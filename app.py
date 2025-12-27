@@ -365,10 +365,37 @@ graph TD
 
 ## Success Metrics
 
-1. [Metric 1]
-2. [Metric 2]
-3. [Metric 3]
-4. [Metric 4]
+### [Metric Name 1] (e.g., Research Automation Efficiency)
+
+• **What it is**: [Description of the metric]
+• **How to measure**: [Measurement methodology]
+• **Target**: [Specific target with timeframe]
+• **Why it matters**: [Business impact explanation]
+• **Example**: [Concrete example]
+
+### [Metric Name 2] (e.g., Data Quality Improvement)
+
+• **What it is**: [Description of the metric]
+• **How to measure**: [Measurement methodology]
+• **Target**: [Specific target with timeframe]
+• **Why it matters**: [Business impact explanation]
+• **Example**: [Concrete example]
+
+### [Metric Name 3]
+
+• **What it is**: [Description of the metric]
+• **How to measure**: [Measurement methodology]
+• **Target**: [Specific target with timeframe]
+• **Why it matters**: [Business impact explanation]
+• **Example**: [Concrete example]
+
+### [Metric Name 4]
+
+• **What it is**: [Description of the metric]
+• **How to measure**: [Measurement methodology]
+• **Target**: [Specific target with timeframe]
+• **Why it matters**: [Business impact explanation]
+• **Example**: [Concrete example]
 
 ## Risk Assessment
 
@@ -379,9 +406,29 @@ graph TD
 
 ## Related Opportunities
 
-1. [Opportunity 1]
-2. [Opportunity 2]
-3. [Opportunity 3]
+### [Opportunity Name 1] (e.g., Market Trend Prediction Engine)
+
+• **What it is**: [Description of the AI opportunity]
+• **How it connects**: [Connection to current implementation]
+• **Recommended tools**: [Specific tools to use]
+• **Setup time**: [Implementation timeframe]
+• **Potential impact**: [Business value proposition]
+
+### [Opportunity Name 2]
+
+• **What it is**: [Description of the AI opportunity]
+• **How it connects**: [Connection to current implementation]
+• **Recommended tools**: [Specific tools to use]
+• **Setup time**: [Implementation timeframe]
+• **Potential impact**: [Business value proposition]
+
+### [Opportunity Name 3]
+
+• **What it is**: [Description of the AI opportunity]
+• **How it connects**: [Connection to current implementation]
+• **Recommended tools**: [Specific tools to use]
+• **Setup time**: [Implementation timeframe]
+• **Potential impact**: [Business value proposition]
 
 ⚠️  REMINDER: The Recommended Stack section MUST use the exact format shown above.
 Frontend parsing depends on this specific structure. DO NOT deviate from it.
