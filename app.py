@@ -8,7 +8,7 @@ Claude will now use YOUR tools and provide alternatives for each recommendation.
 CRITICAL: Replace your current flask_backend_with_protection.py with this file.
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -343,6 +343,24 @@ CRITICAL FORMATTING RULES:
 6. Alternatives must include: Trade-off line
 7. DO NOT use tables, bullet lists for tools, or any other format
 
+⚠️  CRITICAL: SUCCESS METRICS & RELATED OPPORTUNITIES FORMATTING ⚠️
+For Success Metrics and Related Opportunities sections:
+- Each bullet point MUST be on its OWN LINE with a line break after it
+- Use this format EXACTLY (note the line breaks):
+
+### Metric Name
+
+• **What it is**: Description here
+• **How to measure**: Measurement methodology here
+• **Target**: Specific target here
+• **Why it matters**: Impact explanation here
+• **Example**: Concrete example here
+
+DO NOT write all bullets in one paragraph like this:
+"• **What it is**: Description • **How to measure**: Methodology • **Target**: Goal"
+
+ALWAYS put each bullet on a separate line!
+
 ## Architecture Diagram
 
 ```mermaid
@@ -514,6 +532,41 @@ def health_check():
 def get_costs():
     cost_data = load_cost_data()
     return jsonify(cost_data)
+
+@app.route('/api/generate-pdf', methods=['POST'])
+def generate_pdf():
+    """
+    Generate PDF from HTML content using WeasyPrint
+    """
+    try:
+        from weasyprint import HTML
+        from io import BytesIO
+        
+        data = request.get_json()
+        html_content = data.get('html', '')
+        
+        if not html_content:
+            return jsonify({"error": "No HTML content provided"}), 400
+        
+        # Generate PDF using WeasyPrint
+        pdf_file = BytesIO()
+        HTML(string=html_content).write_pdf(pdf_file)
+        pdf_file.seek(0)
+        
+        # Return PDF as response
+        return send_file(
+            pdf_file,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name='BulWise-AI-Stack-Report.pdf'
+        )
+        
+    except ImportError:
+        return jsonify({
+            "error": "WeasyPrint not installed. Please install with: pip install weasyprint"
+        }), 500
+    except Exception as e:
+        return jsonify({"error": f"PDF generation failed: {str(e)}"}), 500
 
 # ==============================================================================
 # ERROR HANDLERS
