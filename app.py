@@ -406,6 +406,13 @@ graph TD
 
 ## Success Metrics
 
+⚠️ CRITICAL FORMATTING REQUIREMENT ⚠️
+In Success Metrics and Related Opportunities sections:
+- EACH bullet point (• **What it is**, • **How to measure**, etc.) MUST be on a SEPARATE LINE
+- Put a line break after EACH bullet
+- Do NOT combine multiple bullets into one paragraph
+- Follow the exact format in the examples below
+
 ### Research Automation Efficiency
 
 • **What it is**: Time reduction in competitive intelligence gathering and analysis
@@ -446,6 +453,12 @@ graph TD
 | [Risk 2] | Low | Medium | [Strategy] |
 
 ## Related Opportunities
+
+⚠️ CRITICAL FORMATTING REQUIREMENT ⚠️
+- EACH bullet point (• **What it is**, • **How it connects**, etc.) MUST be on a SEPARATE LINE
+- Put a line break after EACH bullet
+- Do NOT combine multiple bullets into one paragraph
+- Follow the exact format in the examples below
 
 ### Patient Sentiment Analysis
 
