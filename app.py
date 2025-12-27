@@ -343,24 +343,6 @@ CRITICAL FORMATTING RULES:
 6. Alternatives must include: Trade-off line
 7. DO NOT use tables, bullet lists for tools, or any other format
 
-⚠️  CRITICAL: SUCCESS METRICS & RELATED OPPORTUNITIES FORMATTING ⚠️
-For Success Metrics and Related Opportunities sections:
-- Each bullet point MUST be on its OWN LINE with a line break after it
-- Use this format EXACTLY (note the line breaks):
-
-### Metric Name
-
-• **What it is**: Description here
-• **How to measure**: Measurement methodology here
-• **Target**: Specific target here
-• **Why it matters**: Impact explanation here
-• **Example**: Concrete example here
-
-DO NOT write all bullets in one paragraph like this:
-"• **What it is**: Description • **How to measure**: Methodology • **Target**: Goal"
-
-ALWAYS put each bullet on a separate line!
-
 ## Architecture Diagram
 
 ```mermaid
@@ -383,37 +365,10 @@ graph TD
 
 ## Success Metrics
 
-### Research Automation Efficiency
-
-• **What it is**: Percentage reduction in manual research time for competitive analysis
-• **How to measure**: Compare time spent on manual research before vs. automated research after implementation
-• **Target**: 75% reduction in manual research time within 3 months
-• **Why it matters**: Frees up analyst time for strategic interpretation and decision-making
-• **Example**: Manual process taking 8 hours per week reduced to 2 hours of review and refinement
-
-### Data Quality Improvement
-
-• **What it is**: Accuracy and completeness of automated competitor intelligence
-• **How to measure**: Audit sample reports for data accuracy and completeness
-• **Target**: 95% accuracy rate within 6 months
-• **Why it matters**: Ensures reliable data for strategic decisions
-• **Example**: Competitor updates captured within 24 hours vs previous 2-week lag
-
-### Market Coverage Expansion
-
-• **What it is**: Number of competitors monitored systematically
-• **How to measure**: Count of active competitor profiles being tracked
-• **Target**: Increase from 15 to 50+ competitors within 4 months
-• **Why it matters**: Broader market visibility identifies emerging threats and opportunities
-• **Example**: Automated tracking catches new market entrants within 48 hours
-
-### Strategic Insight Generation
-
-• **What it is**: Quality and actionability of insights produced
-• **How to measure**: Percentage of insights that lead to strategic actions
-• **Target**: 80% of insights validated by business stakeholders
-• **Why it matters**: Ensures analysis drives real business value
-• **Example**: Identify competitor pricing changes that inform product strategy
+1. **Time Reduction**: 80% reduction in manual competitive research time
+2. **Coverage Increase**: 3x more competitors monitored regularly  
+3. **Report Frequency**: Weekly automated reports vs. monthly manual reports
+4. **Insight Quality**: 90% of strategic insights validated by business stakeholders
 
 ## Risk Assessment
 
@@ -424,29 +379,10 @@ graph TD
 
 ## Related Opportunities
 
-### Market Trend Prediction Engine
-
-• **What it is**: AI system that analyzes competitor patterns to predict healthcare market trends
-• **How it connects**: Extends current competitor database with predictive analytics
-• **Recommended tools**: Claude Pro for pattern analysis, Perplexity Pro for market validation
-• **Setup time**: 3-4 weeks building on existing infrastructure
-• **Potential impact**: Early identification of market shifts provides 6-12 month competitive advantage
-
-### Patient Sentiment Analysis
-
-• **What it is**: Automated tracking of patient reviews and social media sentiment about competitors
-• **How it connects**: Complements competitor monitoring with patient perspective data
-• **Recommended tools**: Brand24 for social listening, MonkeyLearn for sentiment analysis
-• **Setup time**: 2-3 weeks integration with existing workflow
-• **Potential impact**: Identify service gaps before competitors address them
-
-### Clinical Trial Intelligence
-
-• **What it is**: Monitor competitor clinical trial activities and regulatory filings
-• **How it connects**: Uses same analysis engine to track R&D pipeline developments
-• **Recommended tools**: Clinicaltrials.gov API, FDA database integrations
-• **Setup time**: 4-5 weeks for regulatory data integration
-• **Potential impact**: Anticipate competitor product launches 12-18 months ahead
+1. **Patient Sentiment Analysis**: Extend competitor monitoring to include patient reviews and social media sentiment
+2. **Clinical Trial Intelligence**: Monitor competitor clinical trial activities and regulatory filings
+3. **Partnership Mapping**: Track competitor partnerships, acquisitions, and strategic alliances
+4. **Technology Stack Analysis**: Monitor competitor technology adoptions and digital transformation initiatives
 
 ⚠️  REMINDER: The Recommended Stack section MUST use the exact format shown above.
 Frontend parsing depends on this specific structure. DO NOT deviate from it.
@@ -492,10 +428,16 @@ Generate a comprehensive AI Stack Advisory Report following the format specified
         cost = calculate_cost(input_tokens, output_tokens)
         total_cost = log_request(input_tokens, output_tokens, cost)
         
-        # Return response - with success flag for frontend compatibility
+        # Return response
         return jsonify({
-            "success": True,
-            "report": report_content
+            "report": report_content,
+            "metadata": {
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost": f"${cost:.4f}",
+                "month_total": f"${total_cost:.2f}/{MONTHLY_BUDGET_CAP}",
+                "tools_loaded": len(all_tools)
+            }
         })
     
     except anthropic.RateLimitError:
@@ -541,7 +483,6 @@ def generate_pdf():
     try:
         from weasyprint import HTML
         from io import BytesIO
-        import traceback
         
         data = request.get_json()
         html_content = data.get('html', '')
@@ -551,32 +492,21 @@ def generate_pdf():
         
         # Generate PDF using WeasyPrint
         pdf_bytes = BytesIO()
-        
-        # Create HTML object and write to PDF
-        html_obj = HTML(string=html_content)
-        html_obj.write_pdf(pdf_bytes)
-        
-        # Rewind the buffer
+        HTML(string=html_content).write_pdf(pdf_bytes)
         pdf_bytes.seek(0)
         
-        # Return PDF as response (use attachment_filename for Flask 2.x compatibility)
+        # Return PDF - use download_name for Flask 3.x
         return send_file(
             pdf_bytes,
             mimetype='application/pdf',
             as_attachment=True,
-            attachment_filename='BulWise-AI-Stack-Report.pdf'
+            download_name='BulWise-AI-Stack-Report.pdf'
         )
         
-    except ImportError as e:
-        print(f"❌ WeasyPrint import error: {str(e)}")
-        return jsonify({
-            "error": "WeasyPrint not installed. Please install with: pip install weasyprint"
-        }), 500
+    except ImportError:
+        return jsonify({"error": "WeasyPrint not installed"}), 500
     except Exception as e:
-        import traceback
-        error_trace = traceback.format_exc()
-        print(f"❌ PDF generation error: {str(e)}")
-        print(f"Traceback: {error_trace}")
+        print(f"PDF Error: {str(e)}")
         return jsonify({"error": f"PDF generation failed: {str(e)}"}), 500
 
 # ==============================================================================
