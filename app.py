@@ -167,52 +167,13 @@ Strong multimodal capabilities
 
 ---
 
-For "Detailed Architecture Breakdown", format each connection on its own line like this:
+For "Detailed Architecture Breakdown", format each connection clearly on its own line with bold tool names (e.g., **Tool A → Tool B:**).
 
-**Zapier → Perplexity Pro:** Weekly scheduled trigger initiates automated searches for each competitor using predefined search queries and monitoring parameters
+For "Phased Implementation Roadmap", format each phase clearly separated with bold phase titles (e.g., **Phase 1: Foundation (Week 1-2)**).
 
-**Perplexity Pro → Claude Pro:** Raw search results, news articles, and competitor data are processed and sent to Claude for strategic analysis via Zapier webhook integration
+For "Success Metrics", format clearly with proper spacing and make field labels bold (**What it is:**, **How to measure:**, **Target:**, **Why it matters:**, **Example:**).
 
-**Claude Pro → Notion AI:** Analyzed competitor insights, market categorizations, and strategic summaries are automatically stored in structured Notion database with AI-enhanced tagging
-
-For "Phased Implementation Roadmap", format each phase clearly separated like this:
-
-**Phase 1: Foundation (Week 1-2)**
-Set up Perplexity Pro account and API access. Configure Claude Sonnet 4 API integration. Create Notion workspace with competitor database structure. Establish Beautiful.ai account with healthcare templates. Define initial competitor list and search parameters.
-
-**Phase 2: Integration (Week 3-4)**
-Build Zapier workflows connecting Perplexity to Claude. Set up automated data flow from Claude to Notion. Configure Beautiful.ai template population. Test end-to-end automation with sample competitors.
-
-**Phase 3: Optimization (Month 2+)**
-Refine search queries and analysis prompts. Optimize slide templates for consistent branding. Implement error handling and monitoring. Add manual review checkpoints for quality control.
-
-For "Success Metrics", format each metric with bold field labels like this:
-
-### Time Savings on Competitive Analysis
-
-**What it is:** Reduction in hours spent on manual competitive research and report preparation
-
-**How to measure:** Track weekly hours before vs. after implementation across business analyst team
-
-**Target:** 75% reduction in manual research time (from 8 hours to 2 hours per week)
-
-**Why it matters:** Frees up analytical capacity for higher-value strategic work and faster decision-making
-
-**Example:** Business analyst previously spent full day gathering competitor news; now reviews AI-generated insights in 30 minutes
-
-For "Related Opportunities", format each opportunity with bold field labels like this:
-
-### Market Trend Prediction and Early Warning System
-
-**What it is:** Advanced AI system that analyzes competitive patterns to predict market shifts and emerging opportunities before they become obvious
-
-**How it connects:** Builds on competitive intelligence foundation to identify strategic patterns and market timing opportunities
-
-**Recommended tools:** Claude Pro for trend analysis, Perplexity Pro for market research, Notion AI for historical pattern tracking
-
-**Setup time:** 4-6 weeks after core system implementation
-
-**Potential impact:** 6-month competitive advantage through early identification of market opportunities and threats
+For "Related Opportunities", format clearly with proper spacing and make field labels bold (**What it is:**, **How it connects:**, **Recommended tools:**, **Setup time:**, **Potential impact:**).
 
 For "Risk Assessment", create a markdown table with columns: Risk | Category | Likelihood | Impact | Mitigation
 Use ONLY the words "Low", "Medium", or "High" for Likelihood and Impact (no emojis).
