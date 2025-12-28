@@ -229,11 +229,17 @@ TOOLS DATABASE:
 ⚠️⚠️⚠️ ABSOLUTE CRITICAL REQUIREMENT ⚠️⚠️⚠️
 For "Success Metrics" and "Related Opportunities" sections:
 - You MUST use SIMPLE NUMBERED LISTS (1. 2. 3. 4.)
+- EACH NUMBER MUST BE ON A NEW LINE (not all in one paragraph)
 - DO NOT use bullet points (•)
 - DO NOT use subsections (###)
 - DO NOT use "What it is / How to measure" format
 - Format: [Number]. **[Name]**: [One-line description]
+- Put a line break after EACH numbered item
 This is NON-NEGOTIABLE. Any other format will break the system.
+
+For "Phased Implementation Roadmap":
+- DO NOT use bullet points (•) in the implementation steps
+- List steps as regular text, not bullets
 
 TASK: Generate a comprehensive AI implementation report.
 
@@ -363,6 +369,13 @@ graph TD
 
 ## Phased Implementation Roadmap
 
+⚠️  CRITICAL FORMAT REQUIREMENT - PHASED IMPLEMENTATION ⚠️
+DO NOT use bullet points (•) in the implementation steps.
+Each phase should have:
+- Phase title on its own line: **Phase 1: Foundation (Week 1-2)**
+- Steps listed WITHOUT bullets, just regular text describing the steps
+- Blank line between phases
+
 **Phase 1: Foundation (Week 1-2)**
 [Setup steps]
 
@@ -373,10 +386,19 @@ graph TD
 [Optimization steps]
 
 ⚠️  CRITICAL FORMAT REQUIREMENT - SUCCESS METRICS ⚠️
-Success Metrics MUST use this EXACT format - simple numbered list with ONE line per metric:
+Success Metrics MUST use this EXACT format - simple numbered list with EACH NUMBER ON A NEW LINE:
 Format: [Number]. **[Metric Name]**: [One-line description]
 DO NOT use bullet points, DO NOT use subsections, DO NOT use "What it is/How to measure" format.
+DO NOT put all metrics in one paragraph - EACH metric MUST be on its OWN LINE.
 ONLY use the simple numbered list format shown below.
+
+CORRECT FORMAT (each number on new line):
+1. **Time Reduction**: 80% reduction in manual competitive research time
+2. **Coverage Increase**: 3x more competitors monitored regularly
+3. **Report Frequency**: Weekly automated reports vs. monthly manual reports
+
+WRONG FORMAT (all in one paragraph):
+1. **Time Reduction**: 80% reduction 2. **Coverage Increase**: 3x more competitors 3. **Report Frequency**: Weekly
 
 ## Success Metrics
 
@@ -393,10 +415,19 @@ ONLY use the simple numbered list format shown below.
 | [Risk 2] | Low | Medium | [Strategy] |
 
 ⚠️  CRITICAL FORMAT REQUIREMENT - RELATED OPPORTUNITIES ⚠️
-Related Opportunities MUST use this EXACT format - simple numbered list with ONE line per opportunity:
+Related Opportunities MUST use this EXACT format - simple numbered list with EACH NUMBER ON A NEW LINE:
 Format: [Number]. **[Opportunity Name]**: [One-line description]
 DO NOT use bullet points, DO NOT use subsections, DO NOT use "What it is/How it connects" format.
+DO NOT put all opportunities in one paragraph - EACH opportunity MUST be on its OWN LINE.
 ONLY use the simple numbered list format shown below.
+
+CORRECT FORMAT (each number on new line):
+1. **Patient Sentiment Analysis**: Extend competitor monitoring
+2. **Clinical Trial Intelligence**: Monitor competitor trials
+3. **Partnership Mapping**: Track competitor partnerships
+
+WRONG FORMAT (all in one paragraph):
+1. **Patient Sentiment** 2. **Clinical Trial** 3. **Partnership**
 
 ## Related Opportunities
 
