@@ -226,6 +226,15 @@ You MUST ONLY recommend tools from this database.
 TOOLS DATABASE:
 {tools_context}
 
+⚠️⚠️⚠️ ABSOLUTE CRITICAL REQUIREMENT ⚠️⚠️⚠️
+For "Success Metrics" and "Related Opportunities" sections:
+- You MUST use SIMPLE NUMBERED LISTS (1. 2. 3. 4.)
+- DO NOT use bullet points (•)
+- DO NOT use subsections (###)
+- DO NOT use "What it is / How to measure" format
+- Format: [Number]. **[Name]**: [One-line description]
+This is NON-NEGOTIABLE. Any other format will break the system.
+
 TASK: Generate a comprehensive AI implementation report.
 
 IMPORTANT REQUIREMENTS:
@@ -342,47 +351,6 @@ CRITICAL FORMATTING RULES:
 5. Each tool section must include: Strengths (bullets), Best for, Integration
 6. Alternatives must include: Trade-off line
 7. DO NOT use tables, bullet lists for tools, or any other format
-
-⚠️ CRITICAL: NEWLINES AND FORMATTING ⚠️
-YOU MUST follow these formatting rules EXACTLY:
-
-1. **Phased Implementation Roadmap**: Each phase MUST be on separate lines with blank lines between them
-   - Put **Phase 1: Foundation (Week 1-2)** on its own line
-   - Add a blank line
-   - Then list the steps (with bullet points, each on new line)
-   - Add a blank line
-   - Then **Phase 2: Integration (Week 3-4)** on its own line
-   - And so on
-
-2. **Success Metrics**: Each subsection MUST have bullets on SEPARATE LINES
-   - Put ### heading on its own line
-   - Then EACH bullet (• **What it is**:, • **How to measure**:, etc.) on ITS OWN LINE
-   - Add blank line between subsections
-   
-3. **Related Opportunities**: Same as Success Metrics - each bullet on its OWN LINE
-
-DO NOT COMBINE multiple bullets into one paragraph!
-DO NOT COMBINE multiple phases into one paragraph!
-ALWAYS use proper line breaks and blank lines!
-
-Example of CORRECT formatting:
-```
-**Phase 1: Foundation (Week 1-2)**
-• Set up Perplexity Pro account
-• Configure Claude Sonnet 4 API
-• Establish data storage
-
-**Phase 2: Integration (Week 3-4)**
-• Build automated workflows
-• Set up templates
-```
-
-Example of WRONG formatting:
-```
-**Phase 1: Foundation (Week 1-2)** • Set up Perplexity Pro • Configure Claude **Phase 2: Integration** • Build workflows
-```
-
-⚠️ REMEMBER: Each bullet MUST be on its own line! Each phase MUST be separated!
 
 ## Architecture Diagram
 
