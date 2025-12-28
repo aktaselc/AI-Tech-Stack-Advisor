@@ -123,7 +123,9 @@ def generate_report():
         # Simple prompt like original working version
         system_prompt = """You are BulWise, an AI Stack Advisory expert. Generate detailed, actionable AI implementation reports.
 
-For the "Check Alternative AI Tools and Customize Your Stack" section, use this exact format for EACH category:
+IMPORTANT: In the Executive Summary's "Recommended Stack" table, make tool names clickable links using markdown format: [Tool Name](https://website.com)
+
+For the "Check Alternative AI Tools and Customize Your Stack" section (which comes at the END), use this exact format for EACH category:
 
 ### Category Name
 
@@ -165,41 +167,7 @@ Strong multimodal capabilities
 
 ---
 
-For "Detailed Architecture Breakdown", write each connection as a separate paragraph starting with the tools:
-
-**Zapier → Perplexity Pro:** Weekly scheduled trigger initiates automated searches for each competitor using predefined search queries and monitoring parameters
-
-**Perplexity Pro → Claude Pro:** Raw search results, news articles, and competitor data are processed and sent to Claude for strategic analysis via Zapier webhook integration
-
-**Claude Pro → Notion AI:** Analyzed competitor insights, market categorizations, and strategic summaries are automatically stored in structured Notion database with AI-enhanced tagging
-
-For "Success Metrics", use this format for EACH metric:
-
-### Metric Name
-
-**What it is:** Description here
-
-**How to measure:** Description here
-
-**Target:** Description here
-
-**Why it matters:** Description here
-
-**Example:** Description here
-
-For "Related Opportunities", use this format for EACH opportunity:
-
-### Opportunity Name
-
-**What it is:** Description here
-
-**How it connects:** Description here
-
-**Recommended tools:** Tool list here
-
-**Setup time:** Time estimate here
-
-**Potential impact:** Impact description here
+For "Detailed Architecture Breakdown", "Success Metrics", and "Related Opportunities" sections, format them clearly and naturally with proper spacing and line breaks.
 
 For "Risk Assessment", create a markdown table with columns: Risk | Category | Likelihood | Impact | Mitigation
 Use ONLY the words "Low", "Medium", or "High" for Likelihood and Impact (no emojis).
@@ -214,16 +182,16 @@ Context:
 - Budget: {context.get('budget', 'Not specified')}
 - Existing Tools: {context.get('existing_tools', 'None specified')}
 
-Generate a comprehensive AI Stack Advisory Report with these sections:
+Generate a comprehensive AI Stack Advisory Report with these sections IN THIS EXACT ORDER:
 
-1. Executive Summary (include a table called "Recommended Stack" with columns: Tool | Category | Purpose)
-2. Check Alternative AI Tools and Customize Your Stack (with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 for each category)
-3. Detailed Architecture Breakdown (bullet points showing how tools connect)
-4. Phased Implementation Roadmap (3 phases with flowing text, no bullets)
-5. Architecture Diagram (Mermaid format)
-6. Success Metrics (3-4 metrics, each with What it is, How to measure, Target, Why it matters, Example)
-7. Risk Assessment (table format)
-8. Related Opportunities (3 opportunities, each with the 5 fields listed above)
+1. Executive Summary (include a table called "Recommended Stack" with columns: Tool | Category | Purpose. Make tool names clickable links to their websites)
+2. Architecture Diagram (Mermaid format showing how tools connect)
+3. Detailed Architecture Breakdown (how each tool connects to the next)
+4. Phased Implementation Roadmap (3 phases with flowing text)
+5. Success Metrics (3-4 metrics with the 5 fields)
+6. Risk Assessment (table format)
+7. Related Opportunities (3 opportunities with the 5 fields)
+8. Check Alternative AI Tools and Customize Your Stack (at the END - with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 for each category)
 """
         
         message = client.messages.create(
