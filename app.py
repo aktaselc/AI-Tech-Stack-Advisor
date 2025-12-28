@@ -145,15 +145,20 @@ def generate_report():
         query = data.get('query')
         context = data.get('context', {})
         
-        # Format tools for the prompt
-        tools_context = "\n".join([
-            f"- {tool['name']}: {tool.get('description', 'AI tool')}"
-            for tool in all_tools[:100]  # First 100 tools to keep prompt size manageable
-        ])
+        # Format tools for the prompt (if available)
+        tools_context = ""
+        if len(all_tools) > 0:
+            tools_context = "\n".join([
+                f"- {tool['name']}: {tool.get('description', 'AI tool')}"
+                for tool in all_tools[:100]  # First 100 tools
+            ])
+            tools_available_text = f"You have access to a database of {len(all_tools)} AI tools. Use ONLY these tools in your recommendations.\n\nTools available:\n{tools_context}"
+        else:
+            tools_available_text = "Select appropriate AI tools for the user's needs."
         
         system_prompt = f"""You are an AI Stack Advisory expert. Generate detailed, actionable AI implementation reports.
 
-You have access to a database of {len(all_tools)} AI tools. Use ONLY these tools in your recommendations.
+{tools_available_text}
 
 CRITICAL: The Recommended Stack section MUST use this EXACT format:
 
@@ -210,9 +215,6 @@ CRITICAL FORMATTING RULES:
 5. Each tool section must include: Strengths (bullets), Best for, Integration
 6. Alternatives must include: Trade-off line
 7. DO NOT use tables or any other format
-
-Tools available:
-{tools_context}
 """
         
         user_prompt = f"""
@@ -271,8 +273,11 @@ Generate a comprehensive AI Stack Advisory Report with:
         return jsonify({"error": f"AI service error: {str(e)}"}), 500
     
     except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
         print(f"Unexpected error: {e}")
-        return jsonify({"error": "An unexpected error occurred. Please try again."}), 500
+        print(f"Full traceback:\n{error_trace}")
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
