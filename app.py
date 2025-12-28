@@ -42,11 +42,24 @@ def load_tools_database():
     """Load all 250 AI tools from JSON file."""
     try:
         with open('complete_250_tools.json', 'r') as f:
-            tools = json.load(f)
+            data = json.load(f)
+        
+        # Extract tools array from JSON object
+        if isinstance(data, dict) and 'tools' in data:
+            tools = data['tools']
+        elif isinstance(data, list):
+            tools = data
+        else:
+            print("❌ Unexpected tools file format!")
+            return []
+        
         print(f"✅ Loaded {len(tools)} tools from database")
         return tools
     except FileNotFoundError:
         print("❌ complete_250_tools.json not found!")
+        return []
+    except Exception as e:
+        print(f"❌ Error loading tools: {e}")
         return []
 
 all_tools = load_tools_database()
@@ -149,7 +162,7 @@ def generate_report():
         tools_context = ""
         if len(all_tools) > 0:
             tools_context = "\n".join([
-                f"- {tool['name']}: {tool.get('description', 'AI tool')}"
+                f"- {tool.get('tool_name', 'Unknown')}: {tool.get('description', 'AI tool')}"
                 for tool in all_tools[:100]  # First 100 tools
             ])
             tools_available_text = f"You have access to a database of {len(all_tools)} AI tools. Use ONLY these tools in your recommendations.\n\nTools available:\n{tools_context}"
