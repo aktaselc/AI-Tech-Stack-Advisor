@@ -123,14 +123,6 @@ def generate_report():
         # Simple prompt like original working version
         system_prompt = """You are BulWise, an AI Stack Advisory expert. Generate detailed, actionable AI implementation reports.
 
-⚠️ CRITICAL FORMATTING RULE ⚠️
-When you use bullets (•), each bullet MUST start on a NEW LINE.
-NEVER write: "• Item 1 • Item 2 • Item 3" (all on one line)
-ALWAYS write:
-• Item 1
-• Item 2
-• Item 3
-
 For the "Check Alternative AI Tools and Customize Your Stack" section, use this exact format for EACH category:
 
 ### Category Name
@@ -138,9 +130,9 @@ For the "Check Alternative AI Tools and Customize Your Stack" section, use this 
 **PRIMARY TOOL: Tool Name**
 
 **Strengths:**
-• Strength 1
-• Strength 2
-• Strength 3
+Real-time web search with citations
+Best-in-class accuracy for research
+API available for automation
 
 **Best for:** Use cases
 
@@ -149,8 +141,9 @@ For the "Check Alternative AI Tools and Customize Your Stack" section, use this 
 **ALTERNATIVE 1: Tool Name**
 
 **Strengths:**
-• Strength 1
-• Strength 2
+Excellent for creative ideation
+Large plugin ecosystem
+DALL-E image generation
 
 **Best for:** Use cases
 
@@ -161,8 +154,8 @@ For the "Check Alternative AI Tools and Customize Your Stack" section, use this 
 **ALTERNATIVE 2: Tool Name**
 
 **Strengths:**
-• Strength 1
-• Strength 2
+Deep Google Workspace integration
+Strong multimodal capabilities
 
 **Best for:** Use cases
 
@@ -172,35 +165,44 @@ For the "Check Alternative AI Tools and Customize Your Stack" section, use this 
 
 ---
 
-For "Detailed Architecture Breakdown", write each connection on a NEW LINE:
-• Tool A → Tool B: How they connect
-• Tool B → Tool C: How they connect
-• Tool C → Tool D: How they connect
+For "Detailed Architecture Breakdown", write each connection as a separate paragraph starting with the tools:
 
-For "Success Metrics", use this format for EACH metric (each bullet on NEW LINE):
+**Zapier → Perplexity Pro:** Weekly scheduled trigger initiates automated searches for each competitor using predefined search queries and monitoring parameters
+
+**Perplexity Pro → Claude Pro:** Raw search results, news articles, and competitor data are processed and sent to Claude for strategic analysis via Zapier webhook integration
+
+**Claude Pro → Notion AI:** Analyzed competitor insights, market categorizations, and strategic summaries are automatically stored in structured Notion database with AI-enhanced tagging
+
+For "Success Metrics", use this format for EACH metric:
 
 ### Metric Name
 
-• **What it is**: Description
-• **How to measure**: Description
-• **Target**: Description
-• **Why it matters**: Description
-• **Example**: Description
+**What it is:** Description here
 
-For "Related Opportunities", use this format for EACH opportunity (each bullet on NEW LINE):
+**How to measure:** Description here
+
+**Target:** Description here
+
+**Why it matters:** Description here
+
+**Example:** Description here
+
+For "Related Opportunities", use this format for EACH opportunity:
 
 ### Opportunity Name
 
-• **What it is**: Description
-• **How it connects**: Description
-• **Recommended tools**: Tool list
-• **Setup time**: Time estimate
-• **Potential impact**: Impact description
+**What it is:** Description here
+
+**How it connects:** Description here
+
+**Recommended tools:** Tool list here
+
+**Setup time:** Time estimate here
+
+**Potential impact:** Impact description here
 
 For "Risk Assessment", create a markdown table with columns: Risk | Category | Likelihood | Impact | Mitigation
 Use ONLY the words "Low", "Medium", or "High" for Likelihood and Impact (no emojis).
-
-REMEMBER: Each bullet (•) must be on its OWN line!
 """
         
         user_prompt = f"""
