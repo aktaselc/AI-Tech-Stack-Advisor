@@ -235,21 +235,29 @@ Generate a comprehensive, detailed AI Stack Advisory Report using this EXACT str
 ## Detailed Architecture Breakdown
 
 • **Zapier → Perplexity Pro**: Weekly scheduled trigger initiates automated searches for each competitor using predefined search queries and monitoring parameters
+
 • **Perplexity Pro → Claude Pro**: Raw search results, news articles, and competitor data are processed and sent to Claude for strategic analysis via Zapier webhook integration
+
 • **Claude Pro → Notion AI**: Analyzed competitor insights, market categorizations, and strategic summaries are automatically stored in structured Notion database with AI-enhanced tagging
+
 • **Notion AI → Beautiful.ai**: Database triggers Beautiful.ai template population using Zapier integration, automatically formatting competitive intelligence into presentation slides
+
 • **Beautiful.ai → HubSpot**: Completed slide decks are automatically uploaded to HubSpot deal records and distributed to relevant stakeholders via email automation
+
 • **HubSpot Integration**: Existing CRM data enriches competitor analysis by matching prospects to competitive landscape and deal intelligence
 
 ## Phased Implementation Roadmap
 
 **Phase 1: Foundation (Week 1-2)**
+
 Set up Perplexity Pro account and API access. Configure Claude Sonnet 4 API integration. Create Notion workspace with competitor database structure. Establish Beautiful.ai account with healthcare templates. Define initial competitor list and search parameters
 
 **Phase 2: Integration (Week 3-4)**
+
 Build Zapier workflows connecting Perplexity to Claude. Set up automated data flow from Claude to Notion. Configure Beautiful.ai template population. Test end-to-end automation with sample competitors. Create categorization framework in Claude
 
 **Phase 3: Optimization (Month 2+)**
+
 Refine search queries and analysis prompts. Optimize slide templates for consistent branding. Implement error handling and monitoring. Add manual review checkpoints for quality control. Scale to full competitor list monitoring
 
 ## Architecture Diagram
@@ -298,10 +306,10 @@ graph TD
 
 | Risk | Category | Likelihood | Impact | Mitigation |
 |------|----------|------------|--------|------------|
-| Data accuracy and reliability concerns from automated web scraping | Technical | ⚠️ Medium | 🔴 High | Implement multiple source verification, citation tracking, and manual review processes for critical insights |
-| API rate limits and service disruptions affecting automation reliability | Technical | ⚠️ Medium | 🟡 Medium | Configure backup data sources, implement retry logic, and establish service level monitoring with alerting systems |
-| Competitive intelligence sharing compliance and confidentiality risks | Business | 🟢 Low | 🔴 High | Establish clear data governance policies, implement access controls, and ensure compliance with healthcare industry regulations |
-| Over-reliance on AI analysis leading to strategic blind spots | Business | ⚠️ Medium | 🟡 Medium | Maintain human oversight processes, regular analysis validation, and diverse analytical perspectives in decision-making |
+| Data accuracy and reliability concerns from automated web scraping | Technical | Medium | High | Implement multiple source verification, citation tracking, and manual review processes for critical insights |
+| API rate limits and service disruptions affecting automation reliability | Technical | Medium | Medium | Configure backup data sources, implement retry logic, and establish service level monitoring with alerting systems |
+| Competitive intelligence sharing compliance and confidentiality risks | Business | Low | High | Establish clear data governance policies, implement access controls, and ensure compliance with healthcare industry regulations |
+| Over-reliance on AI analysis leading to strategic blind spots | Business | Medium | Medium | Maintain human oversight processes, regular analysis validation, and diverse analytical perspectives in decision-making |
 
 ## Related Opportunities
 
@@ -333,11 +341,15 @@ CRITICAL FORMATTING RULES:
 1. Executive Summary must include the Recommended Stack table with clickable links
 2. "Check Alternative AI Tools" section MUST use PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 format
 3. Use --- separators between categories in Check Alternative AI Tools section
-4. Detailed Architecture Breakdown uses bullet points starting with •
-5. Success Metrics must have exactly 5 fields per metric (What it is, How to measure, Target, Why it matters, Example)
-6. Risk Assessment must be a table with Risk, Category, Likelihood, Impact, Mitigation columns
-7. Related Opportunities must have exactly 3 items with 4 fields each (What it is, How it connects, Recommended tools, Setup time, Potential impact)
-8. Make "Strengths:", "Best for:", "Integration:" bold in the Check Alternative AI Tools section
+4. Each field (Strengths, Best for, Integration, Trade-off) MUST be on its own line with proper line breaks
+5. Detailed Architecture Breakdown: Each bullet (•) MUST start on a NEW LINE - do not put multiple bullets on the same line
+6. Phased Implementation: Each phase title MUST be followed by a blank line before the description
+7. Success Metrics: Each field (What it is, How to measure, Target, Why it matters, Example) MUST start on a NEW LINE with bullet (•)
+8. Risk Assessment: Table with Risk, Category, Likelihood, Impact, Mitigation columns. Use ONLY "Low", "Medium", or "High" for Likelihood and Impact (NO EMOJIS)
+9. Related Opportunities: Each field (What it is, How it connects, Recommended tools, Setup time, Potential impact) MUST start on a NEW LINE with bullet (•)
+10. Make "Strengths:", "Best for:", "Integration:", "Trade-off:" bold in the Check Alternative AI Tools section
+
+CRITICAL: Put line breaks between bullet points. Do NOT combine multiple bullets on one line.
 """
         
         user_prompt = f"""
