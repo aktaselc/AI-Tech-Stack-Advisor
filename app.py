@@ -1,5 +1,5 @@
 """
-BulWise Flask Backend - WITH 166 TOOLS INTEGRATION 
+BulWise Flask Backend - WITH 166 TOOLS INTEGRATION
 ==================================================
 
 This version properly integrates your 166-tool database with Claude API.
@@ -404,6 +404,12 @@ graph TD
 **Phase 3: Optimization (Month 2+)**
 [Optimization steps]
 
+⚠️  CRITICAL FORMAT REQUIREMENT - SUCCESS METRICS ⚠️
+Success Metrics MUST use this EXACT format - simple numbered list with ONE line per metric:
+Format: [Number]. **[Metric Name]**: [One-line description]
+DO NOT use bullet points, DO NOT use subsections, DO NOT use "What it is/How to measure" format.
+ONLY use the simple numbered list format shown below.
+
 ## Success Metrics
 
 1. **Time Reduction**: 80% reduction in manual competitive research time
@@ -417,6 +423,12 @@ graph TD
 |------|-----------|--------|------------|
 | [Risk 1] | Medium | High | [Strategy] |
 | [Risk 2] | Low | Medium | [Strategy] |
+
+⚠️  CRITICAL FORMAT REQUIREMENT - RELATED OPPORTUNITIES ⚠️
+Related Opportunities MUST use this EXACT format - simple numbered list with ONE line per opportunity:
+Format: [Number]. **[Opportunity Name]**: [One-line description]
+DO NOT use bullet points, DO NOT use subsections, DO NOT use "What it is/How it connects" format.
+ONLY use the simple numbered list format shown below.
 
 ## Related Opportunities
 
