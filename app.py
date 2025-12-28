@@ -369,36 +369,31 @@ graph TD
 
 ## Phased Implementation Roadmap
 
-⚠️  CRITICAL FORMAT REQUIREMENT - PHASED IMPLEMENTATION ⚠️
-DO NOT use bullet points (•) in the implementation steps.
-Each phase should have:
-- Phase title on its own line: **Phase 1: Foundation (Week 1-2)**
-- Steps listed WITHOUT bullets, just regular text describing the steps
-- Blank line between phases
+⚠️  CRITICAL: DO NOT use bullet points (•) anywhere in this section ⚠️
+Format each phase like this:
 
 **Phase 1: Foundation (Week 1-2)**
-[Setup steps]
+Set up Perplexity Pro account and API access. Configure Claude Sonnet 4 API integration. Create Notion workspace with competitor database structure. Establish Beautiful.ai account with healthcare templates. Define initial competitor list and search parameters.
 
 **Phase 2: Integration (Week 3-4)**
-[Integration steps]
+[Integration steps WITHOUT bullets]
 
 **Phase 3: Optimization (Month 2+)**
-[Optimization steps]
+[Optimization steps WITHOUT bullets]
+
+Write steps as flowing sentences, NOT as bullet points.
 
 ⚠️  CRITICAL FORMAT REQUIREMENT - SUCCESS METRICS ⚠️
-Success Metrics MUST use this EXACT format - simple numbered list with EACH NUMBER ON A NEW LINE:
-Format: [Number]. **[Metric Name]**: [One-line description]
-DO NOT use bullet points, DO NOT use subsections, DO NOT use "What it is/How to measure" format.
-DO NOT put all metrics in one paragraph - EACH metric MUST be on its OWN LINE.
-ONLY use the simple numbered list format shown below.
+IMPORTANT: After each numbered item, you MUST press Enter/Return to start a new line.
+Do NOT write items on the same line separated by spaces.
 
-CORRECT FORMAT (each number on new line):
+Output format (copy this EXACTLY):
 1. **Time Reduction**: 80% reduction in manual competitive research time
-2. **Coverage Increase**: 3x more competitors monitored regularly
+2. **Coverage Increase**: 3x more competitors monitored regularly  
 3. **Report Frequency**: Weekly automated reports vs. monthly manual reports
+4. **Insight Quality**: 90% of strategic insights validated by stakeholders
 
-WRONG FORMAT (all in one paragraph):
-1. **Time Reduction**: 80% reduction 2. **Coverage Increase**: 3x more competitors 3. **Report Frequency**: Weekly
+Each "1.", "2.", "3.", "4." must start on a NEW LINE (not the same line).
 
 ## Success Metrics
 
@@ -415,19 +410,16 @@ WRONG FORMAT (all in one paragraph):
 | [Risk 2] | Low | Medium | [Strategy] |
 
 ⚠️  CRITICAL FORMAT REQUIREMENT - RELATED OPPORTUNITIES ⚠️
-Related Opportunities MUST use this EXACT format - simple numbered list with EACH NUMBER ON A NEW LINE:
-Format: [Number]. **[Opportunity Name]**: [One-line description]
-DO NOT use bullet points, DO NOT use subsections, DO NOT use "What it is/How it connects" format.
-DO NOT put all opportunities in one paragraph - EACH opportunity MUST be on its OWN LINE.
-ONLY use the simple numbered list format shown below.
+IMPORTANT: After each numbered item, you MUST press Enter/Return to start a new line.
+Do NOT write items on the same line separated by spaces.
 
-CORRECT FORMAT (each number on new line):
-1. **Patient Sentiment Analysis**: Extend competitor monitoring
-2. **Clinical Trial Intelligence**: Monitor competitor trials
-3. **Partnership Mapping**: Track competitor partnerships
+Output format (copy this EXACTLY):
+1. **Patient Sentiment Analysis**: Extend competitor monitoring to include patient reviews
+2. **Clinical Trial Intelligence**: Monitor competitor clinical trial activities and filings
+3. **Partnership Mapping**: Track competitor partnerships, acquisitions, and alliances
+4. **Technology Stack Analysis**: Monitor competitor technology adoptions
 
-WRONG FORMAT (all in one paragraph):
-1. **Patient Sentiment** 2. **Clinical Trial** 3. **Partnership**
+Each "1.", "2.", "3.", "4." must start on a NEW LINE (not the same line).
 
 ## Related Opportunities
 
