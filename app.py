@@ -162,7 +162,7 @@ The markdown_report should contain:
 3. Risk Assessment (table with Risk | Category | Likelihood | Impact | Mitigation, use only "Low", "Medium", "High" - no emojis)
 4. Check Alternative AI Tools and Customize Your Stack - LIVE UPDATES (at the END, with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 for each category)
 
-For the Check Alternative AI Tools section in markdown, use this format:
+For the Check Alternative AI Tools section in markdown, use this EXACT format with markdown syntax:
 
 ### Category Name
 
@@ -203,7 +203,20 @@ Strength 2
 
 ---
 
+CRITICAL MARKDOWN FORMATTING RULES for Check Alternative AI Tools section:
+- Category names MUST start with ### (three hashes)
+- PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 MUST be wrapped in ** (double asterisks)
+- Field names (Strengths, Best for, Integration, Trade-off) MUST be wrapped in ** (double asterisks) followed by colon
+- Use --- (three dashes) to separate categories
+
+---
+
 Include 3-4 success metrics, 3-5 architecture connections, 3 phases, 3 related opportunities, 4 risk items, and 3-5 tool categories with alternatives.
+
+REMEMBER: In the markdown_report's "Check Alternative AI Tools" section, you MUST use proper markdown syntax:
+- ### for category headers
+- ** around PRIMARY TOOL:, ALTERNATIVE 1:, ALTERNATIVE 2:
+- ** around field names (Strengths:, Best for:, etc.)
 """
         
         user_prompt = f"""
