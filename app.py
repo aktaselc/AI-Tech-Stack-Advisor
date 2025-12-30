@@ -177,9 +177,19 @@ Return a JSON object with this structure:
 }
 
 The markdown_report should contain ONLY:
-1. Executive Summary (with Recommended Stack table with clickable links)
+1. Executive Summary (with Recommended Stack table with clickable links - DO NOT include pricing/cost columns, only Tool | Category | Purpose)
 2. Architecture Diagram (Mermaid format)
 3. Risk Assessment (table with Risk | Category | Likelihood | Impact | Mitigation, use only "Low", "Medium", "High" - no emojis)
+
+CRITICAL RULE - NO PRICING ANYWHERE:
+- DO NOT include pricing, cost, fees, or monthly charges in ANY section
+- DO NOT mention "$" amounts or pricing tiers
+- Focus only on tool capabilities, features, and use cases
+- If budget context is provided, acknowledge it but don't estimate costs
+
+In the Executive Summary Recommended Stack table:
+- Columns: Tool | Category | Purpose
+- NO pricing columns
 
 The other sections (detailed_architecture, phased_implementation, success_metrics, related_opportunities, check_alternative_tools) are in structured JSON format.
 
