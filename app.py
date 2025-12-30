@@ -153,70 +153,37 @@ Return a JSON object with this structure:
       "potential_impact": "Expected impact"
     }
   ],
-  "markdown_report": "Full markdown report with ALL sections including Executive Summary, Architecture Diagram (Mermaid), Risk Assessment, and Check Alternative AI Tools section with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 format"
+  "check_alternative_tools": [
+    {
+      "category": "Category Name",
+      "primary_tool": {
+        "name": "Tool Name",
+        "strengths": ["Strength 1", "Strength 2", "Strength 3"],
+        "best_for": "Use cases description",
+        "integration": "Integration options"
+      },
+      "alternatives": [
+        {
+          "name": "Alternative Tool Name",
+          "strengths": ["Strength 1", "Strength 2"],
+          "best_for": "Use cases description",
+          "integration": "Integration options",
+          "trade_off": "What you give up vs primary"
+        }
+      ]
+    }
+  ],
+  "markdown_report": "Full markdown report with Executive Summary, Architecture Diagram (Mermaid), and Risk Assessment"
 }
 
-The markdown_report should contain:
+The markdown_report should contain ONLY:
 1. Executive Summary (with Recommended Stack table with clickable links)
 2. Architecture Diagram (Mermaid format)
 3. Risk Assessment (table with Risk | Category | Likelihood | Impact | Mitigation, use only "Low", "Medium", "High" - no emojis)
-4. Check Alternative AI Tools and Customize Your Stack - LIVE UPDATES (at the END, with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 for each category)
 
-For the Check Alternative AI Tools section in markdown, use this EXACT format with markdown syntax:
+The other sections (detailed_architecture, phased_implementation, success_metrics, related_opportunities, check_alternative_tools) are in structured JSON format.
 
-### Category Name
-
-**PRIMARY TOOL: Tool Name**
-
-**Strengths:**
-Strength 1
-Strength 2
-Strength 3
-
-**Best for:** Use cases
-
-**Integration:** Integration options
-
-**ALTERNATIVE 1: Tool Name**
-
-**Strengths:**
-Strength 1
-Strength 2
-
-**Best for:** Use cases
-
-**Integration:** Integration options
-
-**Trade-off:** What you give up
-
-**ALTERNATIVE 2: Tool Name**
-
-**Strengths:**
-Strength 1
-Strength 2
-
-**Best for:** Use cases
-
-**Integration:** Integration options
-
-**Trade-off:** What you give up
-
----
-
-CRITICAL MARKDOWN FORMATTING RULES for Check Alternative AI Tools section:
-- Category names MUST start with ### (three hashes)
-- PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 MUST be wrapped in ** (double asterisks)
-- Field names (Strengths, Best for, Integration, Trade-off) MUST be wrapped in ** (double asterisks) followed by colon
-- Use --- (three dashes) to separate categories
-
----
-
-Include 3-4 success metrics, 3-5 architecture connections, 3 phases, 3 related opportunities, 4 risk items, and 3-5 tool categories with alternatives.
-
-REMEMBER: In the markdown_report's "Check Alternative AI Tools" section, you MUST use proper markdown syntax:
-- ### for category headers
-- ** around PRIMARY TOOL:, ALTERNATIVE 1:, ALTERNATIVE 2:
-- ** around field names (Strengths:, Best for:, etc.)
+For check_alternative_tools, include 3-5 tool categories, each with 1 primary tool and exactly 2 alternatives.
 """
         
         user_prompt = f"""
