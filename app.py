@@ -3,7 +3,7 @@ BulWise Flask Backend - Hybrid Approach (Markdown + Structured JSON)
 ====================================================================
 """
 
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, Response, stream_with_context
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -258,6 +258,173 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         print(f"Error: {e}")
         print(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/generate-stream', methods=['POST'])
+@limiter.limit("3 per day")
+def generate_report_stream():
+    """Streaming version of generate_report using Server-Sent Events"""
+    def generate():
+        try:
+            data = request.json
+            
+            is_valid, error_message = validate_input(data)
+            if not is_valid:
+                yield f"data: {json.dumps({'error': error_message})}\n\n"
+                return
+            
+            if not check_budget():
+                yield f"data: {json.dumps({'error': 'Monthly budget cap reached. Contact hello@bulwise.io'})}\n\n"
+                return
+            
+            client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+            
+            query = data.get('query')
+            context = data.get('context', {})
+            
+            system_prompt = """You are BulWise, an AI Stack Advisory expert.
+
+CRITICAL: You must respond with ONLY valid JSON. No markdown, no code blocks, no preamble - ONLY the JSON object.
+
+Return a JSON object with this structure:
+
+{
+  "detailed_architecture": [
+    {"from": "Tool A", "to": "Tool B", "description": "How they connect"}
+  ],
+  "phased_implementation": [
+    {"phase": "Phase 1: Foundation (Week 1-2)", "description": "What to do in this phase"}
+  ],
+  "success_metrics": [
+    {
+      "name": "Metric Name",
+      "what_it_is": "Description",
+      "how_to_measure": "Measurement method",
+      "target": "Target value",
+      "why_it_matters": "Business impact",
+      "example": "Concrete example"
+    }
+  ],
+  "related_opportunities": [
+    {
+      "name": "Opportunity Name",
+      "what_it_is": "Description",
+      "how_it_connects": "How it builds on implementation",
+      "recommended_tools": "Tool names",
+      "setup_time": "Time estimate",
+      "potential_impact": "Expected impact"
+    }
+  ],
+  "check_alternative_tools": [
+    {
+      "category": "Category Name",
+      "primary_tool": {
+        "name": "Tool Name",
+        "strengths": ["Strength 1", "Strength 2", "Strength 3"],
+        "best_for": "Use cases description",
+        "integration": "Integration options"
+      },
+      "alternatives": [
+        {
+          "name": "Alternative Tool Name",
+          "strengths": ["Strength 1", "Strength 2"],
+          "best_for": "Use cases description",
+          "integration": "Integration options",
+          "trade_off": "What you give up vs primary"
+        }
+      ]
+    }
+  ],
+  "markdown_report": "Full markdown report with Executive Summary, Architecture Diagram (Mermaid), and Risk Assessment"
+}
+
+The markdown_report should contain ONLY:
+1. Executive Summary (with Recommended Stack table with clickable links - DO NOT include pricing/cost columns, only Tool | Category | Purpose)
+2. Architecture Diagram (Mermaid format)
+3. Risk Assessment (table with Risk | Category | Likelihood | Impact | Mitigation, use only "Low", "Medium", "High" - no emojis)
+
+CRITICAL RULE - NO PRICING ANYWHERE:
+- DO NOT include pricing, cost, fees, or monthly charges in ANY section
+- DO NOT mention "$" amounts or pricing tiers
+- Focus only on tool capabilities, features, and use cases
+- If budget context is provided, acknowledge it but don't estimate costs
+
+In the Executive Summary Recommended Stack table:
+- Columns: Tool | Category | Purpose
+- NO pricing columns
+
+The other sections (detailed_architecture, phased_implementation, success_metrics, related_opportunities, check_alternative_tools) are in structured JSON format.
+
+For check_alternative_tools, include 3-5 tool categories, each with 1 primary tool and exactly 2 alternatives.
+"""
+            
+            user_prompt = f"""
+Problem/Goal: {query}
+
+Context:
+- Report Purpose: {context.get('report_purpose', 'Not specified')}
+- Primary Audience: {context.get('primary_audience', 'Not specified')}
+- Budget: {context.get('budget', 'Not specified')}
+- Existing Tools: {context.get('existing_tools', 'None specified')}
+
+Generate a comprehensive AI Stack Advisory Report with structured data for the 4 sections and full markdown for remaining sections.
+"""
+            
+            # Send initial status
+            yield f"data: {json.dumps({'status': 'generating', 'progress': 10})}\n\n"
+            
+            # Use streaming API
+            full_response = ""
+            with client.messages.stream(
+                model="claude-sonnet-4-20250514",
+                max_tokens=8000,
+                temperature=0.7,
+                system=system_prompt,
+                messages=[{"role": "user", "content": user_prompt}]
+            ) as stream:
+                for text in stream.text_stream:
+                    full_response += text
+                    # Send chunks as they arrive
+                    yield f"data: {json.dumps({'chunk': text, 'progress': min(90, 10 + len(full_response) // 100)})}\n\n"
+            
+            # Parse the complete response
+            response_text = full_response
+            
+            # Remove potential markdown code blocks
+            if response_text.strip().startswith('```'):
+                response_text = response_text.strip()
+                lines = response_text.split('\n')
+                if lines[0].startswith('```'):
+                    lines = lines[1:]
+                if lines[-1].strip() == '```':
+                    lines = lines[:-1]
+                response_text = '\n'.join(lines)
+            
+            try:
+                report_data = json.loads(response_text)
+            except json.JSONDecodeError as e:
+                yield f"data: {json.dumps({'error': 'Failed to parse AI response as JSON'})}\n\n"
+                return
+            
+            # Get usage stats
+            message = stream.get_final_message()
+            input_tokens = message.usage.input_tokens
+            output_tokens = message.usage.output_tokens
+            cost = calculate_cost(input_tokens, output_tokens)
+            total_cost = log_request(input_tokens, output_tokens, cost)
+            
+            # Send complete report
+            yield f"data: {json.dumps({'status': 'complete', 'report': report_data, 'progress': 100, 'metadata': {'input_tokens': input_tokens, 'output_tokens': output_tokens, 'cost': f'${cost:.4f}'}})}\n\n"
+            
+        except Exception as e:
+            import traceback
+            print(f"Streaming Error: {e}")
+            print(traceback.format_exc())
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+    
+    return Response(stream_with_context(generate()), mimetype='text/event-stream', headers={
+        'Cache-Control': 'no-cache',
+        'X-Accel-Buffering': 'no'
+    })
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
