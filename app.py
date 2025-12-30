@@ -1,6 +1,6 @@
 """
-BulWise Flask Backend - Simple Version Like Original
-====================================================
+BulWise Flask Backend - Hybrid Approach (Markdown + Structured JSON)
+====================================================================
 """
 
 from flask import Flask, request, jsonify, make_response
@@ -120,21 +120,58 @@ def generate_report():
         query = data.get('query')
         context = data.get('context', {})
         
-        # Simple prompt like original working version
-        system_prompt = """You are BulWise, an AI Stack Advisory expert. Generate detailed, actionable AI implementation reports.
+        system_prompt = """You are BulWise, an AI Stack Advisory expert.
 
-IMPORTANT: In the Executive Summary's "Recommended Stack" table, make tool names clickable links using markdown format: [Tool Name](https://website.com)
+CRITICAL: You must respond with ONLY valid JSON. No markdown, no code blocks, no preamble - ONLY the JSON object.
 
-For the "Check Alternative AI Tools and Customize Your Stack" section (which comes at the END), use this exact format for EACH category:
+Return a JSON object with this structure:
+
+{
+  "detailed_architecture": [
+    {"from": "Tool A", "to": "Tool B", "description": "How they connect"}
+  ],
+  "phased_implementation": [
+    {"phase": "Phase 1: Foundation (Week 1-2)", "description": "What to do in this phase"}
+  ],
+  "success_metrics": [
+    {
+      "name": "Metric Name",
+      "what_it_is": "Description",
+      "how_to_measure": "Measurement method",
+      "target": "Target value",
+      "why_it_matters": "Business impact",
+      "example": "Concrete example"
+    }
+  ],
+  "related_opportunities": [
+    {
+      "name": "Opportunity Name",
+      "what_it_is": "Description",
+      "how_it_connects": "How it builds on implementation",
+      "recommended_tools": "Tool names",
+      "setup_time": "Time estimate",
+      "potential_impact": "Expected impact"
+    }
+  ],
+  "markdown_report": "Full markdown report with ALL sections including Executive Summary, Architecture Diagram (Mermaid), Risk Assessment, and Check Alternative AI Tools section with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 format"
+}
+
+The markdown_report should contain:
+1. Executive Summary (with Recommended Stack table with clickable links)
+2. Architecture Diagram (Mermaid format)
+3. Risk Assessment (table with Risk | Category | Likelihood | Impact | Mitigation, use only "Low", "Medium", "High" - no emojis)
+4. Check Alternative AI Tools and Customize Your Stack - LIVE UPDATES (at the END, with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 for each category)
+
+For the Check Alternative AI Tools section in markdown, use this format:
 
 ### Category Name
 
 **PRIMARY TOOL: Tool Name**
 
 **Strengths:**
-Real-time web search with citations
-Best-in-class accuracy for research
-API available for automation
+Strength 1
+Strength 2
+Strength 3
 
 **Best for:** Use cases
 
@@ -143,53 +180,30 @@ API available for automation
 **ALTERNATIVE 1: Tool Name**
 
 **Strengths:**
-Excellent for creative ideation
-Large plugin ecosystem
-DALL-E image generation
+Strength 1
+Strength 2
 
 **Best for:** Use cases
 
 **Integration:** Integration options
 
-**Trade-off:** What you give up compared to primary tool
+**Trade-off:** What you give up
 
 **ALTERNATIVE 2: Tool Name**
 
 **Strengths:**
-Deep Google Workspace integration
-Strong multimodal capabilities
+Strength 1
+Strength 2
 
 **Best for:** Use cases
 
 **Integration:** Integration options
 
-**Trade-off:** What you give up compared to primary tool
+**Trade-off:** What you give up
 
 ---
 
-For "Detailed Architecture Breakdown", format each connection on its own line like this:
-
-**Zapier → Perplexity Pro:** Weekly scheduled trigger initiates automated searches for each competitor using predefined search queries and monitoring parameters
-
-**Perplexity Pro → Claude Pro:** Raw search results, news articles, and competitor data are processed and sent to Claude for strategic analysis via Zapier webhook integration
-
-**Claude Pro → Notion AI:** Analyzed competitor insights, market categorizations, and strategic summaries are automatically stored in structured Notion database with AI-enhanced tagging
-
-For "Phased Implementation Roadmap", format each phase clearly separated like this:
-
-**Phase 1: Foundation (Week 1-2)**
-Set up Perplexity Pro account and API access. Configure Claude Sonnet 4 API integration. Create Notion workspace with competitor database structure. Establish Beautiful.ai account with healthcare templates. Define initial competitor list and search parameters.
-
-**Phase 2: Integration (Week 3-4)**
-Build Zapier workflows connecting Perplexity to Claude. Set up automated data flow from Claude to Notion. Configure Beautiful.ai template population. Test end-to-end automation with sample competitors.
-
-**Phase 3: Optimization (Month 2+)**
-Refine search queries and analysis prompts. Optimize slide templates for consistent branding. Implement error handling and monitoring. Add manual review checkpoints for quality control.
-
-For "Success Metrics" and "Related Opportunities" sections, format them clearly and naturally with proper spacing and line breaks.
-
-For "Risk Assessment", create a markdown table with columns: Risk | Category | Likelihood | Impact | Mitigation
-Use ONLY the words "Low", "Medium", or "High" for Likelihood and Impact (no emojis).
+Include 3-4 success metrics, 3-5 architecture connections, 3 phases, 3 related opportunities, 4 risk items, and 3-5 tool categories with alternatives.
 """
         
         user_prompt = f"""
@@ -201,27 +215,36 @@ Context:
 - Budget: {context.get('budget', 'Not specified')}
 - Existing Tools: {context.get('existing_tools', 'None specified')}
 
-Generate a comprehensive AI Stack Advisory Report with these sections IN THIS EXACT ORDER:
-
-1. Executive Summary (include a table called "Recommended Stack" with columns: Tool | Category | Purpose. Make tool names clickable links to their websites)
-2. Architecture Diagram (Mermaid format showing how tools connect)
-3. Detailed Architecture Breakdown (how each tool connects to the next)
-4. Phased Implementation Roadmap (3 phases with flowing text)
-5. Success Metrics (3-4 metrics with the 5 fields)
-6. Risk Assessment (table format)
-7. Related Opportunities (3 opportunities with the 5 fields)
-8. Check Alternative AI Tools and Customize Your Stack (at the END - with PRIMARY TOOL, ALTERNATIVE 1, ALTERNATIVE 2 for each category)
+Generate a comprehensive AI Stack Advisory Report with structured data for the 4 sections and full markdown for remaining sections.
 """
         
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
-            max_tokens=4000,
+            max_tokens=8000,
             temperature=0.7,
             system=system_prompt,
             messages=[{"role": "user", "content": user_prompt}]
         )
         
-        report_content = message.content[0].text
+        response_text = message.content[0].text
+        
+        # Try to parse JSON, handle potential markdown wrapper
+        try:
+            # Remove potential markdown code blocks
+            if response_text.strip().startswith('```'):
+                response_text = response_text.strip()
+                lines = response_text.split('\n')
+                if lines[0].startswith('```'):
+                    lines = lines[1:]
+                if lines[-1].strip() == '```':
+                    lines = lines[:-1]
+                response_text = '\n'.join(lines)
+            
+            report_data = json.loads(response_text)
+        except json.JSONDecodeError as e:
+            print(f"JSON Parse Error: {e}")
+            print(f"Response preview: {response_text[:500]}")
+            return jsonify({"error": "Failed to parse AI response as JSON"}), 500
         
         input_tokens = message.usage.input_tokens
         output_tokens = message.usage.output_tokens
@@ -230,7 +253,7 @@ Generate a comprehensive AI Stack Advisory Report with these sections IN THIS EX
         
         return jsonify({
             "success": True,
-            "report": report_content,
+            "report": report_data,
             "metadata": {
                 "input_tokens": input_tokens,
                 "output_tokens": output_tokens,
@@ -284,6 +307,6 @@ def ratelimit_handler(e):
     return jsonify({"error": "Rate limit exceeded"}), 429
 
 if __name__ == '__main__':
-    print("BulWise API - Simple Version")
+    print("BulWise API - Hybrid Approach (Markdown + Structured JSON)")
     print(f"Tools: {len(all_tools)}")
     app.run(debug=True, host='0.0.0.0', port=5000)
