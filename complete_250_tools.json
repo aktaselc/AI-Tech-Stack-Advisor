@@ -453,7 +453,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Gemini Advanced"
     },
     {
       "name": "Llama 3",
@@ -471,7 +472,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Llama 3"
     },
     {
       "name": "Mistral AI",
@@ -489,7 +491,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Mistral AI"
     },
     {
       "name": "Cohere",
@@ -507,7 +510,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Cohere"
     },
     {
       "name": "Anthropic Claude API",
@@ -525,7 +529,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Anthropic Claude API"
     },
     {
       "name": "OpenAI API",
@@ -543,7 +548,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "OpenAI API"
     },
     {
       "name": "Perplexity API",
@@ -561,7 +567,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Perplexity API"
     },
     {
       "name": "Leonardo.ai",
@@ -579,7 +586,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Leonardo.ai"
     },
     {
       "name": "Ideogram",
@@ -597,7 +605,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Ideogram"
     },
     {
       "name": "Adobe Firefly",
@@ -615,7 +624,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Adobe Firefly"
     },
     {
       "name": "Canva AI",
@@ -633,7 +643,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Canva AI"
     },
     {
       "name": "Artbreeder",
@@ -651,7 +662,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Artbreeder"
     },
     {
       "name": "NightCafe",
@@ -669,7 +681,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "NightCafe"
     },
     {
       "name": "Craiyon",
@@ -687,7 +700,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Craiyon"
     },
     {
       "name": "DreamStudio",
@@ -705,7 +719,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "DreamStudio"
     },
     {
       "name": "Fotor AI",
@@ -723,7 +738,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Fotor AI"
     },
     {
       "name": "Photoleap",
@@ -741,7 +757,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Photoleap"
     },
     {
       "name": "Pictory",
@@ -759,7 +776,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Pictory"
     },
     {
       "name": "InVideo AI",
@@ -777,7 +795,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "InVideo AI"
     },
     {
       "name": "Fliki",
@@ -795,7 +814,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Fliki"
     },
     {
       "name": "HeyGen",
@@ -813,7 +833,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "HeyGen"
     },
     {
       "name": "Lumen5",
@@ -831,7 +852,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Lumen5"
     },
     {
       "name": "Kapwing",
@@ -849,7 +871,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Kapwing"
     },
     {
       "name": "Colossyan",
@@ -867,7 +890,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Colossyan"
     },
     {
       "name": "Vidyo.ai",
@@ -885,7 +909,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Vidyo.ai"
     },
     {
       "name": "Murf.ai",
@@ -903,7 +928,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Murf.ai"
     },
     {
       "name": "Resemble.ai",
@@ -921,7 +947,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Resemble.ai"
     },
     {
       "name": "Speechify",
@@ -939,7 +966,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Speechify"
     },
     {
       "name": "Podcastle",
@@ -957,7 +985,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Podcastle"
     },
     {
       "name": "Descript Overdub",
@@ -975,7 +1004,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Descript Overdub"
     },
     {
       "name": "Suno AI",
@@ -993,7 +1023,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Suno AI"
     },
     {
       "name": "Soundraw",
@@ -1011,7 +1042,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Soundraw"
     },
     {
       "name": "AIVA",
@@ -1029,7 +1061,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "AIVA"
     },
     {
       "name": "Writesonic",
@@ -1047,7 +1080,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Writesonic"
     },
     {
       "name": "Rytr",
@@ -1065,7 +1099,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Rytr"
     },
     {
       "name": "Wordtune",
@@ -1083,7 +1118,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Wordtune"
     },
     {
       "name": "QuillBot",
@@ -1101,7 +1137,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "QuillBot"
     },
     {
       "name": "Surfer SEO",
@@ -1119,7 +1156,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Surfer SEO"
     },
     {
       "name": "Frase",
@@ -1137,7 +1175,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Frase"
     },
     {
       "name": "Anyword",
@@ -1155,7 +1194,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Anyword"
     },
     {
       "name": "Hemingway Editor",
@@ -1173,7 +1213,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Hemingway Editor"
     },
     {
       "name": "Tabnine",
@@ -1191,7 +1232,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Tabnine"
     },
     {
       "name": "Codeium",
@@ -1209,7 +1251,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Codeium"
     },
     {
       "name": "Replit Ghostwriter",
@@ -1227,7 +1270,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Replit Ghostwriter"
     },
     {
       "name": "Amazon CodeWhisperer",
@@ -1245,7 +1289,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Amazon CodeWhisperer"
     },
     {
       "name": "Sourcegraph Cody",
@@ -1263,7 +1308,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Sourcegraph Cody"
     },
     {
       "name": "Mintlify",
@@ -1281,7 +1327,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Mintlify"
     },
     {
       "name": "Phind",
@@ -1299,7 +1346,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Phind"
     },
     {
       "name": "v0 by Vercel",
@@ -1317,7 +1365,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "v0 by Vercel"
     },
     {
       "name": "n8n",
@@ -1335,7 +1384,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "n8n"
     },
     {
       "name": "Tray.io",
@@ -1353,7 +1403,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Tray.io"
     },
     {
       "name": "Workato",
@@ -1371,7 +1422,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Workato"
     },
     {
       "name": "Integrately",
@@ -1389,7 +1441,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Integrately"
     },
     {
       "name": "Bardeen",
@@ -1407,7 +1460,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Bardeen"
     },
     {
       "name": "Tableau",
@@ -1425,7 +1479,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Tableau"
     },
     {
       "name": "Looker",
@@ -1443,7 +1498,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Looker"
     },
     {
       "name": "Julius AI",
@@ -1461,7 +1517,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Julius AI"
     },
     {
       "name": "Rows.com",
@@ -1479,7 +1536,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Rows.com"
     },
     {
       "name": "Hex",
@@ -1497,7 +1555,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Hex"
     },
     {
       "name": "Mode Analytics",
@@ -1515,7 +1574,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Mode Analytics"
     },
     {
       "name": "Polymer",
@@ -1533,7 +1593,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Polymer"
     },
     {
       "name": "Patterns",
@@ -1551,7 +1612,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Patterns"
     },
     {
       "name": "Seek.ai",
@@ -1569,7 +1631,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Seek.ai"
     },
     {
       "name": "DataRobot",
@@ -1587,7 +1650,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "DataRobot"
     },
     {
       "name": "You.com",
@@ -1605,7 +1669,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "You.com"
     },
     {
       "name": "Brave Search",
@@ -1623,7 +1688,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Brave Search"
     },
     {
       "name": "Consensus",
@@ -1641,7 +1707,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Consensus"
     },
     {
       "name": "Elicit",
@@ -1659,7 +1726,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Elicit"
     },
     {
       "name": "Scite.ai",
@@ -1677,7 +1745,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Scite.ai"
     },
     {
       "name": "ClickUp AI",
@@ -1695,7 +1764,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "ClickUp AI"
     },
     {
       "name": "Todoist AI",
@@ -1713,7 +1783,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Todoist AI"
     },
     {
       "name": "Mem.ai",
@@ -1731,7 +1802,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Mem.ai"
     },
     {
       "name": "Reflect",
@@ -1749,7 +1821,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Reflect"
     },
     {
       "name": "Reclaim.ai",
@@ -1767,7 +1840,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Reclaim.ai"
     },
     {
       "name": "Motion",
@@ -1785,7 +1859,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Motion"
     },
     {
       "name": "Uizard",
@@ -1803,7 +1878,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Uizard"
     },
     {
       "name": "Framer AI",
@@ -1821,7 +1897,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Framer AI"
     },
     {
       "name": "Relume",
@@ -1839,7 +1916,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Relume"
     },
     {
       "name": "Khroma",
@@ -1857,7 +1935,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Khroma"
     },
     {
       "name": "Remove.bg",
@@ -1875,7 +1954,8 @@
         "Web",
         "API"
       ],
-      "trade_offs": "Standard limitations apply"
+      "trade_offs": "Standard limitations apply",
+      "tool_name": "Remove.bg"
     },
     {
       "tool_name": "Viz.ai",
