@@ -27,8 +27,48 @@ MONTHLY_BUDGET_CAP = 50.00
 COST_PER_1K_INPUT_TOKENS = 0.003
 COST_PER_1K_OUTPUT_TOKENS = 0.015
 COST_TRACKING_FILE = "cost_tracking.json"
+ANALYTICS_FILE = "analytics_data.json"
 MAX_QUERY_LENGTH = 2000
 MAX_CONTEXT_LENGTH = 500
+
+def load_analytics_data():
+    """Load analytics data from JSON file"""
+    if not Path(ANALYTICS_FILE).exists():
+        return {"reports": []}
+    try:
+        with open(ANALYTICS_FILE, 'r') as f:
+            return json.load(f)
+    except:
+        return {"reports": []}
+
+def save_analytics_data(data):
+    """Save analytics data to JSON file"""
+    with open(ANALYTICS_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def log_analytics(query, context, recommended_stack, customizations=None, success=True, error=None):
+    """Log report generation analytics"""
+    data = load_analytics_data()
+    
+    analytics_entry = {
+        "timestamp": datetime.now().isoformat(),
+        "query": query,
+        "context": {
+            "report_purpose": context.get('report_purpose'),
+            "primary_audience": context.get('primary_audience'),
+            "budget": context.get('budget'),
+            "existing_tools": context.get('existing_tools')
+        },
+        "recommended_stack": recommended_stack,  # List of {category, primary_tool, alternatives}
+        "customizations": customizations or {},  # {category: selected_tool}
+        "success": success,
+        "error": error
+    }
+    
+    data["reports"].append(analytics_entry)
+    save_analytics_data(data)
+    print(f"📊 Analytics logged: {len(data['reports'])} total reports")
+    return True
 
 def load_tools_database():
     try:
@@ -241,6 +281,26 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         cost = calculate_cost(input_tokens, output_tokens)
         total_cost = log_request(input_tokens, output_tokens, cost)
         
+        # Extract recommended stack for analytics
+        recommended_stack = []
+        if 'check_alternative_tools' in report_data:
+            for cat in report_data['check_alternative_tools']:
+                recommended_stack.append({
+                    'category': cat.get('category'),
+                    'primary_tool': cat.get('primary_tool', {}).get('name'),
+                    'alternatives': [alt.get('name') for alt in cat.get('alternatives', [])]
+                })
+        
+        # Log analytics
+        log_analytics(
+            query=query,
+            context=context,
+            recommended_stack=recommended_stack,
+            customizations=None,  # Will be updated when user customizes
+            success=True,
+            error=None
+        )
+        
         return jsonify({
             "success": True,
             "report": report_data,
@@ -412,6 +472,26 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
             cost = calculate_cost(input_tokens, output_tokens)
             total_cost = log_request(input_tokens, output_tokens, cost)
             
+            # Extract recommended stack for analytics
+            recommended_stack = []
+            if 'check_alternative_tools' in report_data:
+                for cat in report_data['check_alternative_tools']:
+                    recommended_stack.append({
+                        'category': cat.get('category'),
+                        'primary_tool': cat.get('primary_tool', {}).get('name'),
+                        'alternatives': [alt.get('name') for alt in cat.get('alternatives', [])]
+                    })
+            
+            # Log analytics
+            log_analytics(
+                query=query,
+                context=context,
+                recommended_stack=recommended_stack,
+                customizations=None,
+                success=True,
+                error=None
+            )
+            
             # Send complete report
             yield f"data: {json.dumps({'status': 'complete', 'report': report_data, 'progress': 100, 'metadata': {'input_tokens': input_tokens, 'output_tokens': output_tokens, 'cost': f'${cost:.4f}'}})}\n\n"
             
@@ -433,6 +513,30 @@ def health_check():
         "status": "healthy",
         "tools_in_database": len(all_tools)
     })
+
+@app.route('/api/track-customization', methods=['POST'])
+def track_customization():
+    """Track when users customize tool selections"""
+    try:
+        data = request.json
+        customizations = data.get('customizations', {})  # {category: selected_tool}
+        query = data.get('query', 'Unknown')
+        
+        # Load latest analytics entry and update with customizations
+        analytics_data = load_analytics_data()
+        if analytics_data['reports']:
+            # Find most recent matching report (by query)
+            for report in reversed(analytics_data['reports']):
+                if report.get('query') == query:
+                    report['customizations'] = customizations
+                    save_analytics_data(analytics_data)
+                    print(f"📊 Updated customizations: {customizations}")
+                    break
+        
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Customization tracking error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
