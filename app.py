@@ -88,6 +88,40 @@ def load_tools_database():
 
 all_tools = load_tools_database()
 
+def get_tool_url(tool_name):
+    """Get actual tool URL from database"""
+    # Create tool lookup dict for fast access
+    for tool in all_tools:
+        if tool.get('tool_name', '').lower() == tool_name.lower() or tool.get('name', '').lower() == tool_name.lower():
+            return tool.get('website') or tool.get('url') or ''
+    return ''
+
+def fix_tool_urls_in_markdown(markdown_text):
+    """Replace markdown links with actual tool URLs from database"""
+    import re
+    
+    def replace_link(match):
+        text = match.group(1)
+        url = match.group(2)
+        
+        # If URL looks like it has a tool name appended (contains the link text), fix it
+        # Example: [ChatGPT](https://google.com/ChatGPT) -> [ChatGPT](https://chatgpt.com)
+        
+        # Get actual URL from database
+        actual_url = get_tool_url(text)
+        
+        if actual_url:
+            # Use database URL
+            return f'[{text}]({actual_url})'
+        else:
+            # Keep original if not found
+            return match.group(0)
+    
+    # Replace markdown links: [text](url)
+    fixed_markdown = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', replace_link, markdown_text)
+    
+    return fixed_markdown
+
 def get_current_month():
     return datetime.now().strftime("%Y-%m")
 
@@ -281,6 +315,10 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         cost = calculate_cost(input_tokens, output_tokens)
         total_cost = log_request(input_tokens, output_tokens, cost)
         
+        # Fix tool URLs in markdown report
+        if 'markdown_report' in report_data:
+            report_data['markdown_report'] = fix_tool_urls_in_markdown(report_data['markdown_report'])
+        
         # Extract recommended stack for analytics
         recommended_stack = []
         if 'check_alternative_tools' in report_data:
@@ -472,6 +510,10 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
             cost = calculate_cost(input_tokens, output_tokens)
             total_cost = log_request(input_tokens, output_tokens, cost)
             
+            # Fix tool URLs in markdown report
+            if 'markdown_report' in report_data:
+                report_data['markdown_report'] = fix_tool_urls_in_markdown(report_data['markdown_report'])
+            
             # Extract recommended stack for analytics
             recommended_stack = []
             if 'check_alternative_tools' in report_data:
@@ -537,6 +579,15 @@ def track_customization():
     except Exception as e:
         print(f"Customization tracking error: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/download-analytics', methods=['GET'])
+def download_analytics():
+    """Download analytics data as JSON"""
+    try:
+        analytics_data = load_analytics_data()
+        return jsonify(analytics_data)
+    except Exception as e:
+        return jsonify({"error": str(e), "reports": []}), 500
 
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
