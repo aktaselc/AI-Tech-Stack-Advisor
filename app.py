@@ -23,6 +23,13 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return jsonify({
+        "error": "Rate limit exceeded. You can generate up to 10 reports per day. Please try again later.",
+        "retry_after": "Try again in a few hours or tomorrow"
+    }), 429
+
 MONTHLY_BUDGET_CAP = 50.00
 COST_PER_1K_INPUT_TOKENS = 0.003
 COST_PER_1K_OUTPUT_TOKENS = 0.015
@@ -174,7 +181,7 @@ def validate_input(data):
     return True, None
 
 @app.route('/api/generate', methods=['POST'])
-@limiter.limit("3 per day")
+@limiter.limit("10 per day")
 def generate_report():
     try:
         data = request.json
@@ -358,7 +365,7 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/generate-stream', methods=['POST'])
-@limiter.limit("3 per day")
+@limiter.limit("10 per day")
 def generate_report_stream():
     """Streaming version of generate_report using Server-Sent Events"""
     def generate():
@@ -578,6 +585,73 @@ def track_customization():
         return jsonify({"success": True})
     except Exception as e:
         print(f"Customization tracking error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/followup', methods=['POST'])
+@limiter.limit("10 per hour")
+def followup_question():
+    """Answer follow-up questions about a generated report"""
+    try:
+        data = request.json
+        question = data.get('question', '')
+        original_report = data.get('original_report', {})
+        
+        if not question.strip():
+            return jsonify({"error": "Question cannot be empty"}), 400
+        
+        if not check_budget():
+            return jsonify({
+                "error": f"Monthly budget cap reached. Contact hello@bulwise.io"
+            }), 503
+        
+        client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+        
+        # Extract markdown report for context
+        markdown_report = original_report.get('markdown_report', '')
+        
+        system_prompt = """You are BulWise, an AI Stack Advisory expert. 
+A user has received an AI implementation report and now has a follow-up question. 
+Answer their question directly and concisely based on the report context.
+Keep answers focused and actionable."""
+        
+        user_prompt = f"""Here is the original report I generated:
+
+{markdown_report}
+
+User's follow-up question: {question}
+
+Please answer their question based on this report."""
+        
+        message = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2000,
+            temperature=0.7,
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_prompt}]
+        )
+        
+        answer = message.content[0].text
+        
+        # Track cost
+        input_tokens = message.usage.input_tokens
+        output_tokens = message.usage.output_tokens
+        cost = calculate_cost(input_tokens, output_tokens)
+        total_cost = log_request(input_tokens, output_tokens, cost)
+        
+        return jsonify({
+            "success": True,
+            "answer": answer,
+            "metadata": {
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "cost": f"${cost:.4f}"
+            }
+        })
+        
+    except Exception as e:
+        import traceback
+        print(f"Followup Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/download-analytics', methods=['GET'])
