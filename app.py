@@ -663,6 +663,80 @@ def download_analytics():
     except Exception as e:
         return jsonify({"error": str(e), "reports": []}), 500
 
+@app.route('/api/test-analytics', methods=['POST'])
+def test_analytics():
+    """Test endpoint to verify analytics is working"""
+    try:
+        # Create a test report entry
+        test_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "query": "TEST: Verify analytics is working",
+            "context": {
+                "report_purpose": "Testing",
+                "primary_audience": "Developers",
+                "budget": "$1,000",
+                "existing_tools": "None"
+            },
+            "recommended_stack": [
+                {
+                    "category": "Test Category",
+                    "primary_tool": "Test Tool",
+                    "alternatives": ["Alt 1", "Alt 2"]
+                }
+            ],
+            "customizations": {},
+            "success": True,
+            "error": None
+        }
+        
+        # Load existing data
+        data = load_analytics_data()
+        data["reports"].append(test_entry)
+        save_analytics_data(data)
+        
+        return jsonify({
+            "success": True,
+            "message": "Test analytics entry created",
+            "total_reports": len(data["reports"])
+        })
+    except Exception as e:
+        import traceback
+        print(f"Test analytics error: {e}")
+        print(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/analytics-debug', methods=['GET'])
+def analytics_debug():
+    """Debug endpoint to check analytics file status"""
+    import os
+    try:
+        file_path = os.path.abspath(ANALYTICS_FILE)
+        file_exists = os.path.exists(ANALYTICS_FILE)
+        
+        debug_info = {
+            "analytics_file": ANALYTICS_FILE,
+            "full_path": file_path,
+            "file_exists": file_exists,
+            "current_directory": os.getcwd(),
+            "directory_contents": os.listdir('.'),
+        }
+        
+        if file_exists:
+            file_size = os.path.getsize(ANALYTICS_FILE)
+            debug_info["file_size_bytes"] = file_size
+            
+            with open(ANALYTICS_FILE, 'r') as f:
+                data = json.load(f)
+                debug_info["reports_count"] = len(data.get("reports", []))
+        
+        return jsonify(debug_info)
+    except Exception as e:
+        import traceback
+        return jsonify({
+            "error": str(e),
+            "traceback": traceback.format_exc()
+        }), 500
+
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
     try:
