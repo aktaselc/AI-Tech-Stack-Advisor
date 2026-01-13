@@ -291,7 +291,7 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
-            max_tokens=8000,
+            max_tokens=4000,  # Reduced from 8000 for faster generation
             temperature=0.7,
             system=system_prompt,
             messages=[{"role": "user", "content": user_prompt}]
@@ -481,7 +481,7 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
             full_response = ""
             with client.messages.stream(
                 model="claude-sonnet-4-20250514",
-                max_tokens=8000,
+                max_tokens=4000,  # Reduced from 8000 for faster generation
                 temperature=0.7,
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_prompt}]
