@@ -30,9 +30,10 @@ def ratelimit_handler(e):
         "retry_after": "Try again in a few hours or tomorrow"
     }), 429
 
-MONTHLY_BUDGET_CAP = 50.00
-COST_PER_1K_INPUT_TOKENS = 0.003
-COST_PER_1K_OUTPUT_TOKENS = 0.015
+MONTHLY_BUDGET_CAP = 200.00  # Increased to handle user growth
+# Pricing: Claude Sonnet 4
+COST_PER_1K_INPUT_TOKENS = 0.003   # $3 per 1M input tokens
+COST_PER_1K_OUTPUT_TOKENS = 0.015  # $15 per 1M output tokens
 COST_TRACKING_FILE = "cost_tracking.json"
 ANALYTICS_FILE = "analytics_data.json"
 MAX_QUERY_LENGTH = 2000
@@ -203,7 +204,15 @@ def generate_report():
         
         system_prompt = """You are BulWise, an AI Stack Advisory expert.
 
-CRITICAL: You must respond with ONLY valid JSON. No markdown, no code blocks, no preamble - ONLY the JSON object.
+CRITICAL INSTRUCTIONS - READ CAREFULLY:
+1. You MUST respond with ONLY valid JSON
+2. NO markdown code blocks (no ```json```)
+3. NO preamble or explanation before the JSON
+4. NO text after the JSON
+5. Your response must START with { and END with }
+6. Nothing else - just pure JSON
+
+Your FIRST character must be { and your LAST character must be }
 
 Return a JSON object with this structure:
 
@@ -291,7 +300,7 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
-            max_tokens=4000,  # Reduced from 8000 for faster generation
+            max_tokens=4000,
             temperature=0.7,
             system=system_prompt,
             messages=[{"role": "user", "content": user_prompt}]
@@ -301,15 +310,44 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
         
         # Try to parse JSON, handle potential markdown wrapper
         try:
-            # Remove potential markdown code blocks
-            if response_text.strip().startswith('```'):
-                response_text = response_text.strip()
+            # Extract JSON from response - handle various formats
+            response_text = response_text.strip()
+            
+            # Remove markdown code blocks if present
+            if '```json' in response_text:
+                # Find content between ```json and ```
+                start = response_text.find('```json')
+                end = response_text.find('```', start + 7)
+                if start != -1 and end != -1:
+                    response_text = response_text[start + 7:end].strip()
+            elif response_text.startswith('```'):
+                # Remove opening and closing ```
                 lines = response_text.split('\n')
                 if lines[0].startswith('```'):
                     lines = lines[1:]
-                if lines[-1].strip() == '```':
+                if lines and lines[-1].strip() == '```':
                     lines = lines[:-1]
-                response_text = '\n'.join(lines)
+                response_text = '\n'.join(lines).strip()
+            
+            # If there's text before JSON, try to find the JSON object
+            if not response_text.startswith('{'):
+                # Find first { and take everything from there
+                json_start = response_text.find('{')
+                if json_start != -1:
+                    response_text = response_text[json_start:]
+            
+            # Remove any trailing text after the JSON
+            if response_text.endswith('}'):
+                # Find the last } that closes the JSON
+                brace_count = 0
+                for i, char in enumerate(response_text):
+                    if char == '{':
+                        brace_count += 1
+                    elif char == '}':
+                        brace_count -= 1
+                        if brace_count == 0:
+                            response_text = response_text[:i+1]
+                            break
             
             report_data = json.loads(response_text)
         except json.JSONDecodeError as e:
@@ -378,7 +416,11 @@ def generate_report_stream():
                 return
             
             if not check_budget():
-                yield f"data: {json.dumps({'error': 'Monthly budget cap reached. Contact hello@bulwise.io'})}\n\n"
+                error_msg = {
+                    'error': 'Service temporarily unavailable due to high usage. Please try again in a few minutes or contact hello@bulwise.io',
+                    'status': 'budget_exceeded'
+                }
+                yield f"data: {json.dumps(error_msg)}\n\n"
                 return
             
             client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
@@ -388,7 +430,15 @@ def generate_report_stream():
             
             system_prompt = """You are BulWise, an AI Stack Advisory expert.
 
-CRITICAL: You must respond with ONLY valid JSON. No markdown, no code blocks, no preamble - ONLY the JSON object.
+CRITICAL INSTRUCTIONS - READ CAREFULLY:
+1. You MUST respond with ONLY valid JSON
+2. NO markdown code blocks (no ```json```)
+3. NO preamble or explanation before the JSON
+4. NO text after the JSON
+5. Your response must START with { and END with }
+6. Nothing else - just pure JSON
+
+Your FIRST character must be { and your LAST character must be }
 
 Return a JSON object with this structure:
 
@@ -477,11 +527,11 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
             # Send initial status
             yield f"data: {json.dumps({'status': 'generating', 'progress': 10})}\n\n"
             
-            # Use streaming API
+            # Use streaming API with Sonnet 4 (best quality)
             full_response = ""
             with client.messages.stream(
                 model="claude-sonnet-4-20250514",
-                max_tokens=4000,  # Reduced from 8000 for faster generation
+                max_tokens=4000,
                 temperature=0.7,
                 system=system_prompt,
                 messages=[{"role": "user", "content": user_prompt}]
@@ -492,22 +542,53 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
                     yield f"data: {json.dumps({'chunk': text, 'progress': min(90, 10 + len(full_response) // 100)})}\n\n"
             
             # Parse the complete response
-            response_text = full_response
+            response_text = full_response.strip()
             
-            # Remove potential markdown code blocks
-            if response_text.strip().startswith('```'):
-                response_text = response_text.strip()
+            # Extract JSON from response - handle various formats
+            # Claude might return: plain JSON, ```json...```, or text + JSON
+            
+            # Remove markdown code blocks if present
+            if '```json' in response_text:
+                # Find content between ```json and ```
+                start = response_text.find('```json')
+                end = response_text.find('```', start + 7)
+                if start != -1 and end != -1:
+                    response_text = response_text[start + 7:end].strip()
+            elif response_text.startswith('```'):
+                # Remove opening and closing ```
                 lines = response_text.split('\n')
                 if lines[0].startswith('```'):
                     lines = lines[1:]
-                if lines[-1].strip() == '```':
+                if lines and lines[-1].strip() == '```':
                     lines = lines[:-1]
-                response_text = '\n'.join(lines)
+                response_text = '\n'.join(lines).strip()
+            
+            # If there's text before JSON, try to find the JSON object
+            if not response_text.startswith('{'):
+                # Find first { and take everything from there
+                json_start = response_text.find('{')
+                if json_start != -1:
+                    response_text = response_text[json_start:]
+            
+            # Remove any trailing text after the JSON
+            if response_text.endswith('}'):
+                # Find the last } that closes the JSON
+                brace_count = 0
+                for i, char in enumerate(response_text):
+                    if char == '{':
+                        brace_count += 1
+                    elif char == '}':
+                        brace_count -= 1
+                        if brace_count == 0:
+                            response_text = response_text[:i+1]
+                            break
             
             try:
                 report_data = json.loads(response_text)
             except json.JSONDecodeError as e:
-                yield f"data: {json.dumps({'error': 'Failed to parse AI response as JSON'})}\n\n"
+                print(f"JSON Parse Error: {e}")
+                print(f"Response preview: {response_text[:500]}...")
+                yield f"data: {json.dumps({'error': 'Failed to parse AI response as JSON. Please try again.'})}\n\n"
                 return
             
             # Get usage stats
@@ -736,6 +817,26 @@ def analytics_debug():
             "error": str(e),
             "traceback": traceback.format_exc()
         }), 500
+
+@app.route('/api/cost-status', methods=['GET'])
+def cost_status():
+    """Check current cost usage and budget status"""
+    try:
+        data = load_cost_data()
+        total_cost = data.get("total_cost", 0)
+        budget_remaining = MONTHLY_BUDGET_CAP - total_cost
+        budget_percentage = (total_cost / MONTHLY_BUDGET_CAP) * 100
+        
+        return jsonify({
+            "total_cost": round(total_cost, 2),
+            "budget_cap": MONTHLY_BUDGET_CAP,
+            "budget_remaining": round(budget_remaining, 2),
+            "budget_used_percentage": round(budget_percentage, 1),
+            "status": "healthy" if budget_remaining > 10 else "warning" if budget_remaining > 0 else "exceeded",
+            "requests_count": len(data.get("requests", []))
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
