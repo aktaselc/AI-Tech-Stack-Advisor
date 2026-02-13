@@ -202,17 +202,34 @@ def generate_report():
         query = data.get('query')
         context = data.get('context', {})
         
-        system_prompt = """You are BulWise, an AI Stack Advisory expert.
+        # Prepare condensed tool list for Claude
+        tools_for_claude = []
+        for tool in all_tools:
+            tools_for_claude.append({
+                "name": tool.get("tool_name", tool.get("name", "Unknown")),
+                "category": tool.get("category", "Unknown"),
+                "description": tool.get("description", ""),
+                "best_for": tool.get("best_for", "")
+            })
+        
+        system_prompt = f"""You are BulWise, an AI Stack Advisory expert.
 
 CRITICAL INSTRUCTIONS - READ CAREFULLY:
 1. You MUST respond with ONLY valid JSON
 2. NO markdown code blocks (no ```json```)
 3. NO preamble or explanation before the JSON
 4. NO text after the JSON
-5. Your response must START with { and END with }
+5. Your response must START with {{ and END with }}
 6. Nothing else - just pure JSON
 
-Your FIRST character must be { and your LAST character must be }
+Your FIRST character must be {{ and your LAST character must be }}
+
+AVAILABLE TOOLS DATABASE:
+You have access to {len(tools_for_claude)} curated AI tools. ONLY recommend tools from this list.
+
+{json.dumps(tools_for_claude, indent=2)}
+
+CRITICAL: Only recommend tools from the above list. Do not recommend tools that are not in this database.
 
 Return a JSON object with this structure:
 
@@ -428,17 +445,34 @@ def generate_report_stream():
             query = data.get('query')
             context = data.get('context', {})
             
-            system_prompt = """You are BulWise, an AI Stack Advisory expert.
+            # Prepare condensed tool list for Claude
+            tools_for_claude = []
+            for tool in all_tools:
+                tools_for_claude.append({
+                    "name": tool.get("tool_name", tool.get("name", "Unknown")),
+                    "category": tool.get("category", "Unknown"),
+                    "description": tool.get("description", ""),
+                    "best_for": tool.get("best_for", "")
+                })
+            
+            system_prompt = f"""You are BulWise, an AI Stack Advisory expert.
 
 CRITICAL INSTRUCTIONS - READ CAREFULLY:
 1. You MUST respond with ONLY valid JSON
 2. NO markdown code blocks (no ```json```)
 3. NO preamble or explanation before the JSON
 4. NO text after the JSON
-5. Your response must START with { and END with }
+5. Your response must START with {{ and END with }}
 6. Nothing else - just pure JSON
 
-Your FIRST character must be { and your LAST character must be }
+Your FIRST character must be {{ and your LAST character must be }}
+
+AVAILABLE TOOLS DATABASE:
+You have access to {len(tools_for_claude)} curated AI tools. ONLY recommend tools from this list.
+
+{json.dumps(tools_for_claude, indent=2)}
+
+CRITICAL: Only recommend tools from the above list. Do not recommend tools that are not in this database.
 
 Return a JSON object with this structure:
 
