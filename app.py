@@ -233,55 +233,55 @@ CRITICAL: Only recommend tools from the above list. Do not recommend tools that 
 
 Return a JSON object with this structure:
 
-{
+{{
   "detailed_architecture": [
-    {"from": "Tool A", "to": "Tool B", "description": "How they connect"}
+    {{"from": "Tool A", "to": "Tool B", "description": "How they connect"}}
   ],
   "phased_implementation": [
-    {"phase": "Phase 1: Foundation (Week 1-2)", "description": "What to do in this phase"}
+    {{"phase": "Phase 1: Foundation (Week 1-2)", "description": "What to do in this phase"}}
   ],
   "success_metrics": [
-    {
+    {{
       "name": "Metric Name",
       "what_it_is": "Description",
       "how_to_measure": "Measurement method",
       "target": "Target value",
       "why_it_matters": "Business impact",
       "example": "Concrete example"
-    }
+    }}
   ],
   "related_opportunities": [
-    {
+    {{
       "name": "Opportunity Name",
       "what_it_is": "Description",
       "how_it_connects": "How it builds on implementation",
       "recommended_tools": "Tool names",
       "setup_time": "Time estimate",
       "potential_impact": "Expected impact"
-    }
+    }}
   ],
   "check_alternative_tools": [
-    {
+    {{
       "category": "Category Name",
-      "primary_tool": {
+      "primary_tool": {{
         "name": "Tool Name",
         "strengths": ["Strength 1", "Strength 2", "Strength 3"],
         "best_for": "Use cases description",
         "integration": "Integration options"
-      },
+      }},
       "alternatives": [
-        {
+        {{
           "name": "Alternative Tool Name",
           "strengths": ["Strength 1", "Strength 2"],
           "best_for": "Use cases description",
           "integration": "Integration options",
           "trade_off": "What you give up vs primary"
-        }
+        }}
       ]
-    }
+    }}
   ],
   "markdown_report": "Full markdown report with Executive Summary, Architecture Diagram (Mermaid), and Risk Assessment"
-}
+}}
 
 The markdown_report should contain ONLY:
 1. Executive Summary (with Recommended Stack table with clickable links - DO NOT include pricing/cost columns, only Tool | Category | Purpose)
@@ -476,55 +476,55 @@ CRITICAL: Only recommend tools from the above list. Do not recommend tools that 
 
 Return a JSON object with this structure:
 
-{
+{{
   "detailed_architecture": [
-    {"from": "Tool A", "to": "Tool B", "description": "How they connect"}
+    {{"from": "Tool A", "to": "Tool B", "description": "How they connect"}}
   ],
   "phased_implementation": [
-    {"phase": "Phase 1: Foundation (Week 1-2)", "description": "What to do in this phase"}
+    {{"phase": "Phase 1: Foundation (Week 1-2)", "description": "What to do in this phase"}}
   ],
   "success_metrics": [
-    {
+    {{
       "name": "Metric Name",
       "what_it_is": "Description",
       "how_to_measure": "Measurement method",
       "target": "Target value",
       "why_it_matters": "Business impact",
       "example": "Concrete example"
-    }
+    }}
   ],
   "related_opportunities": [
-    {
+    {{
       "name": "Opportunity Name",
       "what_it_is": "Description",
       "how_it_connects": "How it builds on implementation",
       "recommended_tools": "Tool names",
       "setup_time": "Time estimate",
       "potential_impact": "Expected impact"
-    }
+    }}
   ],
   "check_alternative_tools": [
-    {
+    {{
       "category": "Category Name",
-      "primary_tool": {
+      "primary_tool": {{
         "name": "Tool Name",
         "strengths": ["Strength 1", "Strength 2", "Strength 3"],
         "best_for": "Use cases description",
         "integration": "Integration options"
-      },
+      }},
       "alternatives": [
-        {
+        {{
           "name": "Alternative Tool Name",
           "strengths": ["Strength 1", "Strength 2"],
           "best_for": "Use cases description",
           "integration": "Integration options",
           "trade_off": "What you give up vs primary"
-        }
+        }}
       ]
-    }
+    }}
   ],
   "markdown_report": "Full markdown report with Executive Summary, Architecture Diagram (Mermaid), and Risk Assessment"
-}
+}}
 
 The markdown_report should contain ONLY:
 1. Executive Summary (with Recommended Stack table with clickable links - DO NOT include pricing/cost columns, only Tool | Category | Purpose)
@@ -572,12 +572,8 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
             ) as stream:
                 for text in stream.text_stream:
                     full_response += text
-                    # Send only progress updates — do NOT send raw chunks as SSE events.
-                    # Claude's JSON output contains newlines which break SSE line framing,
-                    # causing JSON.parse failures on the frontend.
-                    progress = min(90, 10 + len(full_response) // 100)
-                    if progress % 10 == 0:  # Only yield occasionally to reduce noise
-                        yield f"data: {json.dumps({'status': 'generating', 'progress': progress})}\n\n"
+                    # Send chunks as they arrive
+                    yield f"data: {json.dumps({'chunk': text, 'progress': min(90, 10 + len(full_response) // 100)})}\n\n"
             
             # Parse the complete response
             response_text = full_response.strip()
