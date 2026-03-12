@@ -572,8 +572,12 @@ Generate a comprehensive AI Stack Advisory Report with structured data for the 4
             ) as stream:
                 for text in stream.text_stream:
                     full_response += text
-                    # Send chunks as they arrive
-                    yield f"data: {json.dumps({'chunk': text, 'progress': min(90, 10 + len(full_response) // 100)})}\n\n"
+                    # Send only progress updates — do NOT send raw chunks as SSE events.
+                    # Claude's JSON output contains newlines which break SSE line framing,
+                    # causing JSON.parse failures on the frontend.
+                    progress = min(90, 10 + len(full_response) // 100)
+                    if progress % 10 == 0:  # Only yield occasionally to reduce noise
+                        yield f"data: {json.dumps({'status': 'generating', 'progress': progress})}\n\n"
             
             # Parse the complete response
             response_text = full_response.strip()
